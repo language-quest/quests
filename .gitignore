@@ -2,5 +2,8 @@
 .env*.local
 .claude/settings.local.json
 .DS_Store
+assets/caperucita/tts-cache
 assets/caperucita/tts-cache/
 node_modules/
+pm/worktrees/
+pm/logs/
