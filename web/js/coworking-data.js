@@ -38,20 +38,36 @@ export const STEPS = [
       P('s1.c', IMG.meeting, R('s1.c.r', 'Esta es una sala de reuniones. Aquí no dan tarjetas. La recepción está en la entrada.'), { card: true, peek: 'room' }, false, 'la sala de reuniones'),
     ] },
 
-  { id: 's2', scene: 2, type: 'choice', usage: ['puesto', 'enchufe'], battery: true,
-    lines: [L('s2.lucia', 'Lucía', 'Tu portátil no tiene batería. Busca un puesto con enchufe.')],
+  { id: 's2a', scene: 2, type: 'choice', usage: ['puesto'], battery: true,
+    lines: [L('s2a.lucia', 'Lucía', 'Tu portátil no tiene batería. Busca un puesto.')],
     cards: [
-      P('s2.a', IMG.windowDesk, R('s2.a.r', 'Este puesto no tiene enchufe. El portátil no carga. Usamos un cable largo.'), { desk: 'window', cable: 'long' }, false, 'un puesto sin enchufe'),
-      P('s2.b', IMG.outletDesk, R('s2.b.r', 'Este puesto tiene enchufe. El portátil carga.'), { desk: 'outlet', cable: 'direct', charge: true }, true, 'un puesto con enchufe'),
-      P('s2.c', IMG.sofa, R('s2.c.r', 'Un sofá no es un puesto de trabajo. Aquí no hay enchufe. Usamos un cable largo.'), { desk: 'sofa', cable: 'long' }, false, 'el sofá'),
+      P('s2a.a', IMG.windowDesk, R('s2a.a.r', 'Sí, este es un puesto. Aquí puedes trabajar.'), { desk: 'window' }, true, 'un puesto'),
+      P('s2a.b', IMG.sofa, R('s2a.b.r', 'Este es un sofá. No es un puesto de trabajo.'), { desk: 'sofa' }, false, 'el sofá'),
+      P('s2a.c', IMG.printer, R('s2a.c.r', 'Esta es una impresora. No es un puesto. Un puesto tiene mesa y silla.'), {}, false, 'la impresora'),
     ] },
 
-  { id: 's3', scene: 3, type: 'choice', usage: ['puesto', 'enchufe', 'libre'],
-    lines: [L('s3.dani', 'Dani', 'Perdona, ¿está libre este puesto? Necesito un enchufe.')],
+  { id: 's2b', scene: 2, type: 'choice', usage: ['enchufe'], battery: true,
+    lines: [L('s2b.lucia', 'Lucía', 'El portátil sigue sin batería. Busca un enchufe.')],
     cards: [
-      T('s3.a', 'Sí, está libre. Puedes usar este enchufe.', R('s3.a.r', 'Gracias. Conecto el teléfono al enchufe y me siento en el puesto libre.'), { phone: true }, true),
-      T('s3.b', 'Sí, está ocupado. Puedes usar la ventana.', R('s3.b.r', '“Libre” es: no hay nadie. Si no está libre, está ocupado. Y necesito un enchufe, no una ventana.'), { phone: true }),
-      T('s3.c', 'No. Puedes imprimir la batería.', R('s3.c.r', 'Una batería no se imprime. Necesito un enchufe.'), { phone: true }),
+      P('s2b.a', IMG.windowDesk, R('s2b.a.r', 'Este puesto no tiene enchufe. El portátil no carga. Usamos un cable largo.'), { desk: 'window', cable: 'long' }, false, 'un puesto sin enchufe'),
+      P('s2b.b', IMG.outletDesk, R('s2b.b.r', 'Este puesto tiene enchufe. El portátil carga.'), { desk: 'outlet', cable: 'direct', charge: true }, true, 'un puesto con enchufe'),
+      P('s2b.c', IMG.sofa, R('s2b.c.r', 'Aquí no hay enchufe. Usamos un cable largo.'), { desk: 'sofa', cable: 'long' }, false, 'el sofá'),
+    ] },
+
+  { id: 's3a', scene: 3, type: 'choice', usage: ['puesto', 'libre'],
+    lines: [L('s3a.dani', 'Dani', 'Perdona, ¿está libre este puesto?')],
+    cards: [
+      T('s3a.a', 'Sí, está libre.', R('s3a.a.r', 'Gracias. Me siento aquí.'), {}, true),
+      T('s3a.b', 'Sí, está ocupado.', R('s3a.b.r', '“Libre” es: no hay nadie. Si está ocupado, no puedo sentarme.'), {}),
+      T('s3a.c', 'Sí, está en la recepción.', R('s3a.c.r', 'El puesto no está en la recepción. Yo pregunto: ¿hay alguien? ¿Está libre?'), {}),
+    ] },
+
+  { id: 's3b', scene: 3, type: 'choice', usage: ['enchufe'],
+    lines: [L('s3b.dani', 'Dani', 'Mi teléfono no tiene batería. Necesito un enchufe.')],
+    cards: [
+      T('s3b.a', 'Aquí hay un enchufe.', R('s3b.a.r', 'Gracias. Conecto el teléfono al enchufe.'), { phone: true }, true),
+      T('s3b.b', 'Aquí hay una cabina.', R('s3b.b.r', 'Una cabina no carga el teléfono. Necesito un enchufe.'), { phone: true }),
+      T('s3b.c', 'Aquí hay una contraseña.', R('s3b.c.r', 'La contraseña es para el wifi. Para cargar necesito un enchufe.'), { phone: true }),
     ] },
 
   { id: 's4', scene: 4, type: 'choice', usage: ['contraseña'], offline: true,
