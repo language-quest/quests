@@ -471,7 +471,12 @@ function renderRecall(scene, S) {
     const ok = new RegExp(`\\b${S.answerPattern}\\b`).test(normalize(value));
     feedback("");
     reply(ok ? S.successEs : S.failEs, S.speaker, labelOf(S.speaker, S.speakerLabel), ok ? "ok" : "wrong");
-    if (!ok) shake(input);
+    if (!ok) {
+      shake(input);
+      // Следующая попытка — сразу печатать (или жать 🎙): старый текст выделен и затрётся.
+      input.focus({ preventScroll: true });
+      input.select();
+    }
   }
 }
 
