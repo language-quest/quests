@@ -127,7 +127,8 @@ function showStep() {
   $('reaction').hidden = true; $('reaction').className = 'reaction'; $('next').hidden = true; $('next').disabled = true;
   const lines = stepLines(step);
   const q = $('question');
-  q.innerHTML = lines.map(l => `<p class="line"><span class="who">${l.who === 'narr' ? '' : l.who}</span>${l.text}</p>`).join('');
+  const kind = l => l.who === 'narr' ? 'narr' : l.who === 'Lucía' ? 'lucia' : l.who === 'Tú' ? 'hero' : 'other';
+  q.innerHTML = lines.map(l => `<p class="line ${kind(l)}">${l.who === 'narr' ? '' : `<span class="who">${l.who}</span>`}${l.text}</p>`).join('');
   current = { ids: lines.map(l => l.id) };
   renderStage(step);
   const cards = $('cards');
