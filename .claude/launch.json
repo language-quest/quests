@@ -1,0 +1,19 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "language-quest-voice",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["tools/slng-proxy.mjs"],
+      "port": 5179,
+      "url": "http://localhost:5179"
+    },
+    {
+      "name": "language-quest-web",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "5178"],
+      "port": 5178,
+      "url": "http://localhost:5178"
+    }
+  ]
+}

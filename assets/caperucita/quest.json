@@ -1,0 +1,846 @@
+{
+  "schema": "lq.quest/1",
+  "id": "caperucita",
+  "title": {
+    "ru": "Корзинка Каперусины",
+    "es": "La cesta de Caperucita"
+  },
+  "learnLanguage": "es",
+  "uiLanguage": "ru",
+  "ageRange": [
+    3,
+    4
+  ],
+  "durationHintSec": {
+    "typical": 535,
+    "withHelp": 720
+  },
+  "art": {
+    "basePath": "illustrations",
+    "nativeSize": [
+      1536,
+      1024
+    ],
+    "aspect": "3:2",
+    "safeArea": {
+      "x": 0.125,
+      "y": 0.0,
+      "w": 0.75,
+      "h": 1.0
+    },
+    "note": "Хит-зоны нормализованы к 0..1 от размера изображения. Слои в арте не вырезаны, подсветка рисуется оверлеем поверх зоны."
+  },
+  "hintLadder": {
+    "sampleAvailableFromMs": 0,
+    "togetherAvailableFromMs": 0,
+    "autoHintAfterFirstFailure": true,
+    "modelPhraseAtMs": 45000,
+    "promoteTogetherAtMs": 75000,
+    "autoAdvanceAtMs": 120000,
+    "note": "Предел 120 с относится к ожиданию улики, не ко всей сцене."
+  },
+  "childVoice": {
+    "sayTogetherAtMs": 15000,
+    "tapFallbackAtMs": 30000,
+    "matchThreshold": 0.45
+  },
+  "speechFunctions": {
+    "louder": {
+      "labelRu": "Попросить говорить громче",
+      "canonical": "¿Puedes hablar más alto?",
+      "accept": [
+        "habla alto",
+        "habla fuerte",
+        "habla mas alto",
+        "habla mas fuerte",
+        "hablar mas alto",
+        "mas alto",
+        "mas alto por favor",
+        "mas fuerte",
+        "más alto",
+        "más fuerte",
+        "no le oigo",
+        "no se oye",
+        "no te escucho",
+        "no te oigo",
+        "no te oigo bien",
+        "puedes hablar mas alto",
+        "sube la voz",
+        "subir la voz"
+      ],
+      "labelEs": "Pídele que hable más alto"
+    },
+    "slower": {
+      "labelRu": "Попросить говорить медленнее",
+      "canonical": "Más despacio, por favor",
+      "accept": [
+        "despacio",
+        "despacio por favor",
+        "habla despacio",
+        "hablar mas despacio",
+        "ir mas despacio",
+        "mas despacio",
+        "mas despacio por favor",
+        "mas lento",
+        "mas lento por favor",
+        "más despacio",
+        "más lento",
+        "no entiendo",
+        "no entiendo nada",
+        "puedes hablar mas despacio"
+      ],
+      "labelEs": "Pídele que hable más despacio"
+    },
+    "repeat": {
+      "labelRu": "Попросить повторить",
+      "canonical": "¿Puedes repetir?",
+      "accept": [
+        "como",
+        "como dices",
+        "cómo",
+        "de nuevo",
+        "lo repites",
+        "me lo repites",
+        "otra vez",
+        "puedes repetir",
+        "puedes repetirlo",
+        "que dijiste",
+        "que has dicho",
+        "qué dijiste",
+        "repetir",
+        "repetirlo",
+        "repite",
+        "repite por favor",
+        "repitelo"
+      ],
+      "labelEs": "Pídele que lo repita"
+    }
+  },
+  "characters": {
+    "caperucita": {
+      "nameEs": "Caperucita",
+      "nameRu": "Каперусина",
+      "art": "00-character-reference.png",
+      "role": "guide"
+    },
+    "lolo": {
+      "nameEs": "Lobo Lolo",
+      "nameRu": "Волк Лоло",
+      "quirkRu": "Шепчет",
+      "speechFunction": "louder",
+      "clueModality": "sound",
+      "capability": [
+        "sound"
+      ],
+      "capabilityNote": "Волк ничего не видел — может нести только звуковой признак.",
+      "art": {
+        "hidden": "04-lolo-hidden.png",
+        "butterfly": "05-lolo-butterfly.png",
+        "reassured": "06-lolo-reassured.png",
+        "pathReturn": "29-lolo-path-return.png"
+      },
+      "childAction": {
+        "kind": "shoo",
+        "labelRu": "Прогони бабочку",
+        "zone": {
+          "x": 0.52,
+          "y": 0.1,
+          "w": 0.24,
+          "h": 0.26
+        },
+        "labelEs": "Espanta la mariposa"
+      },
+      "ambientActionRu": "Погладь Лоло",
+      "state1": {
+        "es": "Yo me escondí debajo de una hoja. No vi nada.",
+        "ru": "Я спрятался под листом. Я ничего не видел."
+      },
+      "ambientZone": {
+        "x": 0.2,
+        "y": 0.24,
+        "w": 0.44,
+        "h": 0.72
+      },
+      "ambientSayEs": "Gracias…",
+      "quirkEs": "Habla bajito",
+      "ambientActionEs": "Acaricia a Lolo"
+    },
+    "rita": {
+      "nameEs": "Ardilla Rita",
+      "nameRu": "Белка Рита",
+      "quirkRu": "Тараторит",
+      "speechFunction": "slower",
+      "clueModality": "count",
+      "capability": [
+        "count"
+      ],
+      "art": {
+        "witness": "07-rita-witness.png"
+      },
+      "childAction": {
+        "kind": "shake",
+        "labelRu": "Потряси ветку",
+        "zone": {
+          "x": 0.62,
+          "y": 0.08,
+          "w": 0.3,
+          "h": 0.28
+        },
+        "labelEs": "Sacude la rama"
+      },
+      "ambientActionRu": "Лови орешки",
+      "state1": {
+        "es": "¡Yo-lo-vi-todo-yo-siempre-lo-veo-todo-desde-arriba!",
+        "ru": "Я всё видела, я всегда всё вижу сверху!"
+      },
+      "ambientZone": {
+        "x": 0.28,
+        "y": 0.16,
+        "w": 0.42,
+        "h": 0.52
+      },
+      "ambientSayEs": "¡Eh!",
+      "quirkEs": "Habla muy rápido",
+      "ambientActionEs": "Recoge las bellotas"
+    },
+    "otto": {
+      "nameEs": "Búho Otto",
+      "nameRu": "Сова Отто",
+      "quirkRu": "Засыпает",
+      "speechFunction": "repeat",
+      "clueModality": "smell",
+      "capability": [
+        "smell"
+      ],
+      "art": {
+        "asleep": "08-otto-asleep.png",
+        "awake": "09-otto-awake.png"
+      },
+      "childAction": {
+        "kind": "wake",
+        "labelRu": "Разбуди Отто",
+        "zone": {
+          "x": 0.36,
+          "y": 0.26,
+          "w": 0.28,
+          "h": 0.36
+        },
+        "labelEs": "Despierta a Otto"
+      },
+      "ambientActionRu": "Покачай ветку",
+      "state1": {
+        "es": "Ah… sí… yo volé por allí… y…",
+        "ru": "А… да… я летел там… и…"
+      },
+      "ambientZone": {
+        "x": 0.3,
+        "y": 0.22,
+        "w": 0.4,
+        "h": 0.56
+      },
+      "ambientSayEs": "Mmm…",
+      "quirkEs": "Se duerme",
+      "ambientActionEs": "Mece la rama"
+    }
+  },
+  "attributes": {
+    "water": {
+      "labelRu": "Слышно воду",
+      "labelEs": "Se oye el agua",
+      "negEs": "No se oye el agua",
+      "negRu": "Воды не слышно",
+      "modality": "sound",
+      "channel": "audio",
+      "chipEs": "agua"
+    },
+    "trees": {
+      "labelRu": "Деревьев",
+      "labelEs": "árboles",
+      "modality": "count",
+      "channel": "highlight",
+      "countable": true,
+      "chipEs": "árboles"
+    },
+    "flowers": {
+      "labelRu": "Пахнет цветами",
+      "labelEs": "Huele a flores",
+      "negEs": "No huele a flores",
+      "negRu": "Цветами не пахнет",
+      "modality": "smell",
+      "channel": "animation",
+      "chipEs": "flores"
+    }
+  },
+  "places": {
+    "puente": {
+      "nameEs": "El puente viejo",
+      "nameRu": "Старый мост",
+      "art": "10-map-bridge-three-revision.png",
+      "props": {
+        "water": true,
+        "trees": 3,
+        "flowers": false
+      },
+      "sound": "stream",
+      "absenceShown": "dry-leaves",
+      "treeZones": [
+        {
+          "x": 0.005,
+          "y": 0.01,
+          "w": 0.295,
+          "h": 0.44
+        },
+        {
+          "x": 0.32,
+          "y": 0.01,
+          "w": 0.335,
+          "h": 0.4
+        },
+        {
+          "x": 0.7,
+          "y": 0.01,
+          "w": 0.3,
+          "h": 0.45
+        }
+      ],
+      "failArt": "22-fail-frogs-revision.png",
+      "failRu": "Под мостом лягушачий хор репетирует концерт и возмущённо квакает.",
+      "failEs": "Las ranas ensayan su concierto y protestan."
+    },
+    "prado": {
+      "nameEs": "El prado",
+      "nameRu": "Цветочная поляна",
+      "art": "11-map-meadow-three.png",
+      "props": {
+        "water": false,
+        "trees": 3,
+        "flowers": true
+      },
+      "sound": "wind-leaves",
+      "absenceShown": "wind-leaves",
+      "treeZones": [
+        {
+          "x": 0.0,
+          "y": 0.04,
+          "w": 0.36,
+          "h": 0.59
+        },
+        {
+          "x": 0.35,
+          "y": 0.1,
+          "w": 0.33,
+          "h": 0.54
+        },
+        {
+          "x": 0.68,
+          "y": 0.05,
+          "w": 0.32,
+          "h": 0.59
+        }
+      ],
+      "failArt": "23-fail-bees.png",
+      "failRu": "Пчёлы принимают игроков за цветы и с жужжанием провожают обратно.",
+      "failEs": "Las abejas os confunden con flores y os acompañan fuera."
+    },
+    "cascada": {
+      "nameEs": "La cascada",
+      "nameRu": "Водопад",
+      "art": "12-map-waterfall-two.png",
+      "props": {
+        "water": true,
+        "trees": 2,
+        "flowers": true
+      },
+      "sound": "waterfall",
+      "treeZones": [
+        {
+          "x": 0.0,
+          "y": 0.02,
+          "w": 0.44,
+          "h": 0.48
+        },
+        {
+          "x": 0.61,
+          "y": 0.02,
+          "w": 0.39,
+          "h": 0.6
+        }
+      ],
+      "failArt": "24-fail-splash-revision.png",
+      "failRu": "Всех окатывает водой, персонажи отряхиваются.",
+      "failEs": "¡Una ducha de agua! Todos se sacuden."
+    },
+    "claro": {
+      "nameEs": "El claro junto al río",
+      "nameRu": "Полянка у реки",
+      "art": "13-map-river-three.png",
+      "props": {
+        "water": true,
+        "trees": 3,
+        "flowers": true
+      },
+      "sound": "river",
+      "treeZones": [
+        {
+          "x": 0.0,
+          "y": 0.03,
+          "w": 0.38,
+          "h": 0.65
+        },
+        {
+          "x": 0.41,
+          "y": 0.14,
+          "w": 0.31,
+          "h": 0.5
+        },
+        {
+          "x": 0.74,
+          "y": 0.03,
+          "w": 0.26,
+          "h": 0.65
+        }
+      ],
+      "searchArt": "19-search-river.png"
+    },
+    "rincon": {
+      "nameEs": "El rincón seco",
+      "nameRu": "Сухой уголок",
+      "art": "14-map-dry-corner-two.png",
+      "props": {
+        "water": false,
+        "trees": 2,
+        "flowers": true
+      },
+      "sound": "wind-leaves",
+      "treeZones": [
+        {
+          "x": 0.03,
+          "y": 0.06,
+          "w": 0.4,
+          "h": 0.58
+        },
+        {
+          "x": 0.58,
+          "y": 0.06,
+          "w": 0.38,
+          "h": 0.58
+        }
+      ],
+      "failArt": "25-fail-hedgehog-revision.png",
+      "failRu": "Ёжик недовольно фыркает из-под сухих листьев.",
+      "failEs": "Un erizo resopla enfadado entre las hojas secas."
+    },
+    "bosquecillo": {
+      "nameEs": "El bosquecillo",
+      "nameRu": "Рощица",
+      "art": "15-map-grove-three.png",
+      "props": {
+        "water": false,
+        "trees": 3,
+        "flowers": false
+      },
+      "sound": "wind-leaves",
+      "absenceShown": "dry-leaves",
+      "treeZones": [
+        {
+          "x": 0.02,
+          "y": 0.05,
+          "w": 0.3,
+          "h": 0.6
+        },
+        {
+          "x": 0.35,
+          "y": 0.05,
+          "w": 0.3,
+          "h": 0.6
+        },
+        {
+          "x": 0.68,
+          "y": 0.05,
+          "w": 0.3,
+          "h": 0.6
+        }
+      ],
+      "failArt": "26-fail-woodpecker.png",
+      "failRu": "Дятел стучит так, что приходится зажать уши.",
+      "failEs": "Un pájaro carpintero golpea tan fuerte que hay que taparse los oídos."
+    },
+    "pradoDos": {
+      "nameEs": "El prado",
+      "nameRu": "Поляна с двумя деревьями",
+      "art": "16-map-meadow-two.png",
+      "props": {
+        "water": false,
+        "trees": 2,
+        "flowers": true
+      },
+      "sound": "wind-leaves",
+      "treeZones": [
+        {
+          "x": 0.04,
+          "y": 0.06,
+          "w": 0.38,
+          "h": 0.58
+        },
+        {
+          "x": 0.58,
+          "y": 0.06,
+          "w": 0.38,
+          "h": 0.58
+        }
+      ],
+      "failArt": "23-fail-bees.png",
+      "failRu": "Пчёлы принимают игроков за цветы и провожают обратно.",
+      "failEs": "Las abejas os confunden con flores y os acompañan fuera."
+    },
+    "puenteDos": {
+      "nameEs": "El puente viejo",
+      "nameRu": "Мост с двумя деревьями",
+      "art": "17-map-bridge-two.png",
+      "props": {
+        "water": true,
+        "trees": 2,
+        "flowers": false
+      },
+      "sound": "stream",
+      "absenceShown": "dry-leaves",
+      "treeZones": [
+        {
+          "x": 0.02,
+          "y": 0.02,
+          "w": 0.36,
+          "h": 0.46
+        },
+        {
+          "x": 0.62,
+          "y": 0.02,
+          "w": 0.36,
+          "h": 0.46
+        }
+      ],
+      "failArt": "27-fail-creaky-bridge.png",
+      "failRu": "Доски скрипят так, что все замирают.",
+      "failEs": "Las tablas crujen y todos se quedan quietos."
+    }
+  },
+  "variants": {
+    "A": {
+      "labelRu": "Знакомство — все признаки положительные",
+      "intro": true,
+      "clues": {
+        "water": {
+          "polarity": "positive",
+          "es": "¡Se oye el agua allí! El agua… se oye el agua.",
+          "ru": "Там слышно воду!"
+        },
+        "trees": {
+          "polarity": "positive",
+          "value": 3,
+          "es": "To-do ro-dó ha-cia a-llí. Don-de hay tres ár-bo-les. Tres.",
+          "ru": "Всё укатилось туда, где три дерева. Три."
+        },
+        "flowers": {
+          "polarity": "positive",
+          "es": "Huele a flores. A flo-res.",
+          "ru": "Там пахнет цветами."
+        }
+      },
+      "assign": {
+        "lolo": "water",
+        "rita": "trees",
+        "otto": "flowers"
+      },
+      "reinforce": {
+        "lolo": "river",
+        "rita": "count-3",
+        "otto": "petals"
+      },
+      "places": [
+        "puente",
+        "prado",
+        "cascada",
+        "claro"
+      ],
+      "target": "claro",
+      "searchArt": "19-search-river.png"
+    },
+    "B": {
+      "labelRu": "Один отрицательный признак",
+      "clues": {
+        "water": {
+          "polarity": "negative",
+          "es": "No se oye nada allí. No se oye el agua.",
+          "ru": "Там ничего не слышно. Воды не слышно."
+        },
+        "trees": {
+          "polarity": "positive",
+          "value": 3,
+          "es": "Don-de hay tres ár-bo-les. Tres.",
+          "ru": "Там, где три дерева."
+        },
+        "flowers": {
+          "polarity": "positive",
+          "es": "Huele a flores. A flo-res.",
+          "ru": "Там пахнет цветами."
+        }
+      },
+      "assign": {
+        "lolo": "water",
+        "rita": "trees",
+        "otto": "flowers"
+      },
+      "reinforce": {
+        "lolo": "wind-leaves",
+        "rita": "count-3",
+        "otto": "petals"
+      },
+      "places": [
+        "claro",
+        "rincon",
+        "bosquecillo",
+        "prado"
+      ],
+      "target": "prado",
+      "searchArt": "20-search-meadow.png"
+    },
+    "C": {
+      "labelRu": "Изменённое количество — два дерева",
+      "clues": {
+        "water": {
+          "polarity": "positive",
+          "es": "¡Se oye el agua allí!",
+          "ru": "Там слышно воду!"
+        },
+        "trees": {
+          "polarity": "positive",
+          "value": 2,
+          "es": "Don-de hay dos ár-bo-les. Dos.",
+          "ru": "Там, где два дерева. Два."
+        },
+        "flowers": {
+          "polarity": "positive",
+          "es": "Huele a flores.",
+          "ru": "Там пахнет цветами."
+        }
+      },
+      "assign": {
+        "lolo": "water",
+        "rita": "trees",
+        "otto": "flowers"
+      },
+      "reinforce": {
+        "lolo": "river",
+        "rita": "count-2",
+        "otto": "petals"
+      },
+      "places": [
+        "pradoDos",
+        "claro",
+        "puenteDos",
+        "cascada"
+      ],
+      "target": "cascada",
+      "searchArt": "21-search-waterfall.png",
+      "missingAssets": [
+        "clue-card-two-trees"
+      ]
+    }
+  },
+  "search": {
+    "spots": [
+      {
+        "id": "leaves",
+        "nameEs": "las hojas",
+        "nameRu": "листья",
+        "prepEs": "debajo de",
+        "zone": {
+          "x": 0.04,
+          "y": 0.37,
+          "w": 0.27,
+          "h": 0.19
+        }
+      },
+      {
+        "id": "log",
+        "nameEs": "el tronco",
+        "nameRu": "бревно",
+        "prepEs": "dentro de",
+        "zone": {
+          "x": 0.36,
+          "y": 0.36,
+          "w": 0.33,
+          "h": 0.18
+        }
+      },
+      {
+        "id": "moss",
+        "nameEs": "el musgo",
+        "nameRu": "мох на камне",
+        "prepEs": "debajo de",
+        "zone": {
+          "x": 0.755,
+          "y": 0.345,
+          "w": 0.22,
+          "h": 0.2
+        }
+      },
+      {
+        "id": "bush",
+        "nameEs": "el arbusto",
+        "nameRu": "куст",
+        "prepEs": "detrás de",
+        "zone": {
+          "x": 0.055,
+          "y": 0.58,
+          "w": 0.28,
+          "h": 0.27
+        }
+      },
+      {
+        "id": "roots",
+        "nameEs": "las raíces",
+        "nameRu": "корни",
+        "prepEs": "entre",
+        "zone": {
+          "x": 0.355,
+          "y": 0.6,
+          "w": 0.35,
+          "h": 0.25
+        }
+      },
+      {
+        "id": "stump",
+        "nameEs": "el tocón",
+        "nameRu": "пенёк",
+        "prepEs": "detrás de",
+        "zone": {
+          "x": 0.775,
+          "y": 0.6,
+          "w": 0.18,
+          "h": 0.26
+        }
+      }
+    ],
+    "items": [
+      {
+        "id": "pan",
+        "es": "pan",
+        "ru": "хлеб",
+        "spot": "leaves",
+        "hintEs": "El pan está debajo de las hojas",
+        "hintRu": "Хлеб под листьями"
+      },
+      {
+        "id": "queso",
+        "es": "queso",
+        "ru": "сыр",
+        "spot": "log",
+        "hintEs": "El queso está dentro del tronco",
+        "hintRu": "Сыр внутри бревна"
+      },
+      {
+        "id": "manzana",
+        "es": "manzana",
+        "ru": "яблоко",
+        "spot": "moss",
+        "hintEs": "La manzana está debajo del musgo",
+        "hintRu": "Яблоко под мхом"
+      }
+    ],
+    "itemsArt": "34-food-items.png",
+    "basketArt": "35-basket-progress.png"
+  },
+  "scenes": {
+    "prologue": {
+      "art": "01-welcome-revision.png",
+      "ritualEs": "¡Hola, bosque!",
+      "ritualRu": "Привет, лес!"
+    },
+    "wind": {
+      "art": "02-wind-and-basket-revision.png",
+      "lineEs": "¡Ay, no! El viento tiró mi cesta. ¡El pan, el queso y la manzana se fueron rodando hacia allá!",
+      "lineRu": "Ой, нет! Ветер опрокинул корзинку. Хлеб, сыр и яблоко укатились вон туда!"
+    },
+    "steps": {
+      "art": "03-forest-steps.png",
+      "chantEs": "un paso, dos pasos, tres pasos",
+      "chantRu": "один шаг, два шага, три шага"
+    },
+    "mapLocked": {
+      "art": "18-map-locked.png",
+      "lineEs": "Todavía no sabemos suficiente. Vamos a preguntar a todos.",
+      "lineRu": "Мы ещё мало знаем. Давай спросим всех."
+    },
+    "finale": {
+      "invitation": "30-finale-invitation.png",
+      "confident": "31-finale-confident.png",
+      "table": "32-finale-table.png",
+      "lineEs": "¡Gracias! ¡Qué cesta más bonita!",
+      "lineRu": "Спасибо! Какая красивая корзинка!"
+    },
+    "goodbye": {
+      "art": "37-goodbye.png",
+      "ritualEs": "¡Adiós, bosque!",
+      "ritualRu": "Пока, лес!"
+    },
+    "friends": {
+      "art": "33-friends-home.png"
+    },
+    "clueCards": {
+      "art": "36-clue-illustrations.png"
+    }
+  },
+  "trust": {
+    "events": [
+      "shooed_butterfly",
+      "petted_lolo",
+      "revisited_lolo"
+    ],
+    "confidentThreshold": 2
+  },
+  "vocabulary": {
+    "child": [
+      "pan",
+      "queso",
+      "manzana",
+      "uno",
+      "dos",
+      "tres",
+      "lobo",
+      "ardilla",
+      "cesta",
+      "bosque",
+      "abuela",
+      "hola",
+      "adiós"
+    ],
+    "parent": [
+      "¿Puedes hablar más alto?",
+      "Más despacio, por favor",
+      "¿Puedes repetir?",
+      "¿Se oye el agua?",
+      "¿Huele a flores?",
+      "¿Cuántos árboles hay?",
+      "debajo de",
+      "dentro de",
+      "detrás de"
+    ]
+  },
+  "intentLexicon": {
+    "vocatives": [
+      "Lolo",
+      "Rita",
+      "Otto",
+      "Caperucita",
+      "abuela",
+      "lobo",
+      "ardilla",
+      "buho"
+    ],
+    "markers": [],
+    "fillers": [
+      "hola",
+      "gracias"
+    ]
+  }
+}

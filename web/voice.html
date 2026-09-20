@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Language Quest · голосовой стенд SLNG</title>
+<style>
+  :root{
+    --bg:#f6f0e4; --ink:#2f2823; --muted:#7d6f60; --line:#ded2bd;
+    --card:#fffaf0; --accent:#b23a30; --ok:#3f7a4a; --warn:#a8721c;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; padding:16px; background:var(--bg); color:var(--ink);
+    font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:760px;margin:0 auto}
+  h1{font-size:19px;margin:0 0 2px;letter-spacing:-.01em}
+  .sub{color:var(--muted);font-size:13px;margin:0 0 16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
+  .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  button{
+    font:inherit;padding:9px 14px;border-radius:10px;border:1px solid var(--line);
+    background:#fff;color:var(--ink);cursor:pointer;transition:.12s;
+  }
+  button:hover:not(:disabled){border-color:var(--muted)}
+  button:disabled{opacity:.42;cursor:default}
+  button.on{background:var(--ink);color:var(--card);border-color:var(--ink)}
+  button.talk{
+    flex:1;min-width:220px;padding:22px;font-size:17px;font-weight:600;
+    background:var(--accent);color:#fff;border-color:var(--accent);
+    touch-action:none;user-select:none;-webkit-user-select:none;
+  }
+  button.talk.rec{background:#7d1d16;border-color:#7d1d16;animation:pulse 1s infinite}
+  @keyframes pulse{50%{opacity:.72}}
+  .quirk{color:var(--muted);font-size:13px}
+  .es{font-size:19px;margin:10px 0 2px;line-height:1.35}
+  .ru{color:var(--muted);font-size:13px}
+  .label{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:6px}
+  #log{font:12px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre-wrap;
+       max-height:260px;overflow:auto;margin:0;color:var(--muted)}
+  #log b{color:var(--ink);font-weight:600}
+  #log .g{color:var(--ok)} #log .r{color:var(--accent)} #log .y{color:var(--warn)}
+  .cfg{font:12px ui-monospace,Menlo,monospace;color:var(--muted)}
+  select,input[type=text]{font:inherit;padding:7px 9px;border-radius:9px;border:1px solid var(--line);background:#fff;color:var(--ink)}
+  @media (prefers-color-scheme:dark){
+    :root{--bg:#1c1916;--ink:#ece2d2;--muted:#9b8c7c;--line:#3b342c;--card:#252019;--accent:#d4564a;--ok:#6fae7c;--warn:#d0a04e}
+    button{background:#2e2820} button.talk{color:#fff}
+    select,input[type=text]{background:#2e2820}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Голосовой стенд</h1>
+  <p class="sub">Listen → интент-гейт → Think → валидатор → Speak. Говори с персонажем по-испански.</p>
+
+  <div class="card">
+    <div class="label">Персонаж</div>
+    <div class="row" id="picker"></div>
+    <div class="es" id="es">—</div>
+    <div class="ru" id="ru"></div>
+    <div class="row" style="margin-top:10px">
+      <button id="play">Услышать реплику</button>
+      <span class="quirk" id="quirk"></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="row">
+      <button class="talk" id="talk">Держи и говори</button>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <span class="quirk" id="heard">Нужна цель: <b id="goal"></b></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label">Конвейер</div>
+    <pre id="log">ожидание…</pre>
+  </div>
+
+  <div class="card">
+    <div class="label">Конфиг</div>
+    <div class="cfg" id="cfg">загрузка…</div>
+  </div>
+</div>
+<script type="module" src="./js/voice.js"></script>
+</body>
+</html>

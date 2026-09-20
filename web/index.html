@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>La cesta de Caperucita</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Karla:wght@400;500;700&display=swap">
+<style>
+:root{
+  --paper:#F6F7F2; --surface:#FFF; --surface-2:#EFF1E9;
+  --ink:#231D18; --ink-2:#4A423A; --muted:#8A8578;
+  --line:#DCDED2; --line-2:#C8CBBB;
+  --hood:#C1272D; --hood-soft:#F6E3E2;
+  --moss:#5A6B4A; --moss-soft:#E6EBDD;
+  --display:"Fraunces",Georgia,serif; --body:"Karla",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);
+  font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+button{font-family:inherit}
+[hidden]{display:none!important}
+
+.app{max-width:1120px;margin:0 auto;padding:0 16px env(safe-area-inset-bottom,0px);
+  display:flex;flex-direction:column;min-height:100%;gap:10px}
+
+/* ---------- РОДИТЕЛЬСКАЯ ПОЛОСА ---------- */
+.parent{background:var(--surface);border:1px solid var(--line);border-radius:4px;
+  padding:10px 14px;margin-top:calc(10px + env(safe-area-inset-top,0px));
+  display:flex;flex-direction:column;gap:8px}
+.parent-top{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.who{font-family:var(--display);font-size:18px;font-weight:600}
+.quirk{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--moss)}
+.zone-tag{margin-left:auto;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.caption{font-family:var(--display);font-style:italic;font-size:17px;line-height:1.35;min-height:1.4em}
+.caption-ru{font-size:13px;color:var(--muted);min-height:1.2em}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.btn{appearance:none;border:1px solid var(--line-2);background:var(--surface);color:var(--ink-2);
+  font-size:13.5px;font-weight:700;padding:9px 13px;border-radius:4px;cursor:pointer;
+  transition:background .15s,border-color .15s,color .15s;white-space:nowrap}
+.btn:hover{border-color:var(--moss);color:var(--moss)}
+.btn:focus-visible{outline:2px solid var(--hood);outline-offset:2px}
+.btn.primary{border-color:var(--hood);color:var(--hood)}
+.btn.primary:hover{background:var(--hood);color:#fff}
+.btn.mic{border-color:var(--moss);color:var(--moss)}
+.btn.mic.live{background:var(--hood);border-color:var(--hood);color:#fff;animation:pulse 1.1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.62}}
+.btn:disabled{opacity:.4;cursor:default}
+.hintbox{background:var(--hood-soft);border:1px solid var(--hood);border-radius:4px;
+  padding:8px 12px;font-size:14px;color:var(--hood);font-weight:700}
+.heard{font-size:12px;color:var(--muted);font-style:italic;min-height:1em}
+
+/* ---------- СЦЕНА (ДЕТСКАЯ ЗОНА) ---------- */
+.stage{position:relative;width:100%;aspect-ratio:3/2;border-radius:6px;overflow:hidden;
+  background:var(--surface-2);border:1px solid var(--line);flex:none;margin-inline:auto}
+.stage img{width:100%;height:100%;object-fit:cover;display:block}
+.zone{position:absolute;border-radius:10px;cursor:pointer;border:3px solid transparent;
+  transition:border-color .15s,background .15s;background:transparent}
+.zone:hover{border-color:rgba(193,39,45,.55);background:rgba(255,255,255,.14)}
+.zone.pulse{animation:zp 1.6s infinite}
+@keyframes zp{0%,100%{border-color:rgba(193,39,45,.25)}50%{border-color:rgba(193,39,45,.9)}}
+.zone.lit{border-color:#fff;background:rgba(255,255,255,.35);box-shadow:0 0 24px rgba(255,255,255,.85)}
+.zone.found{border-color:var(--moss);background:rgba(230,235,221,.5)}
+.zone .num{position:absolute;inset:auto auto 6px 8px;font-family:var(--display);font-size:34px;
+  font-weight:700;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.6);opacity:0;transition:opacity .2s}
+.zone.lit .num{opacity:1}
+
+.bubble{position:absolute;left:50%;transform:translateX(-50%);bottom:12px;max-width:min(88%,640px);
+  background:rgba(255,255,255,.94);border:1px solid var(--line);border-radius:6px;padding:10px 14px;
+  font-family:var(--display);font-style:italic;font-size:17px;line-height:1.35;text-align:center;
+  backdrop-filter:blur(3px)}
+.bubble b{font-style:normal;font-weight:700}
+.thinking{position:absolute;right:12px;top:12px;background:rgba(255,255,255,.92);
+  border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:12px;color:var(--muted);font-weight:700}
+
+/* ---------- ДЕТСКАЯ ПОДСКАЗКА ---------- */
+.childbar{background:var(--hood-soft);border:1px solid var(--hood);border-radius:4px;
+  padding:9px 14px;display:flex;align-items:center;gap:10px;font-size:15px;font-weight:700;color:var(--hood)}
+.childbar .dot{width:9px;height:9px;border-radius:50%;background:var(--hood);flex:none;animation:pulse 1.2s infinite}
+
+/* ---------- УЛИКИ ---------- */
+.clues{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.clue{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);
+  border-radius:4px;padding:7px 11px;font-size:13px;font-weight:700;color:var(--muted);min-width:132px}
+.clue.got{border-color:var(--moss);background:var(--moss-soft);color:var(--moss)}
+.clue .ic{font-size:17px;filter:grayscale(1);opacity:.45}
+.clue.got .ic{filter:none;opacity:1}
+.clue .neg{text-decoration:line-through}
+
+/* ---------- ВЫБОР / КАРТА ---------- */
+.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:6px;overflow:hidden;
+  cursor:pointer;text-align:left;padding:0;transition:border-color .15s,transform .12s}
+.card:hover{border-color:var(--moss);transform:translateY(-2px)}
+.card:disabled{opacity:.5;cursor:default;transform:none}
+.card img{width:100%;aspect-ratio:3/2;object-fit:cover;display:block}
+.card .body{padding:9px 12px}
+.card .t{font-family:var(--display);font-size:16px;font-weight:600}
+.card .s{font-size:12px;color:var(--muted);margin-top:2px}
+.card.done{opacity:.55}
+.card.done .t::after{content:" ✓";color:var(--moss)}
+
+.checks{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}
+.chk{border:1px solid var(--line-2);background:var(--surface);border-radius:999px;padding:6px 11px;
+  font-size:12.5px;font-weight:700;color:var(--ink-2);cursor:pointer}
+.chk:hover{border-color:var(--moss);color:var(--moss)}
+.chk.yes{border-color:var(--moss);background:var(--moss-soft);color:var(--moss)}
+.chk.no{border-color:var(--line-2);color:var(--muted);text-decoration:line-through}
+
+.title{font-family:var(--display);font-size:22px;font-weight:600;margin:2px 0 0}
+.sub{font-size:13.5px;color:var(--muted)}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.basket{display:flex;gap:6px;align-items:center;font-size:13px;color:var(--muted);font-weight:700}
+.slot{width:30px;height:30px;border:2px dashed var(--line-2);border-radius:6px;display:grid;place-items:center;font-size:16px}
+.slot.full{border-style:solid;border-color:var(--moss);background:var(--moss-soft)}
+footer{padding:8px 0 20px;font-size:11.5px;color:var(--muted);text-align:center}
+
+@media (max-width:640px){
+  .caption{font-size:15.5px}
+  .bubble{font-size:15px;bottom:8px;padding:8px 11px}
+  .zone .num{font-size:26px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- РОДИТЕЛЬСКАЯ ЗОНА -->
+  <div class="parent">
+    <div class="parent-top">
+      <span class="who" id="who">La cesta de Caperucita</span>
+      <span class="quirk" id="quirk"></span>
+      <span class="zone-tag" id="engine">para el adulto</span>
+    </div>
+    <div class="caption" id="cap">La cesta de Caperucita</div>
+    <div class="caption-ru" id="capru">Aventura para un adulto y un niño de 3 a 4 años</div>
+    <div class="hintbox" id="hint" hidden></div>
+    <div class="controls" id="controls"></div>
+    <div class="heard" id="heard"></div>
+  </div>
+
+  <!-- ДЕТСКАЯ ЗОНА -->
+  <div id="main"></div>
+
+  <footer>Language Quests · demo · variante A · <a href="./rocodromo.html" style="color:inherit">La ruta secreta (adultos)</a></footer>
+</div>
+
+<script type="module" src="./js/app.js?v=16"></script>
+</body>
+</html>

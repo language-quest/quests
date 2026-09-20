@@ -1,0 +1,473 @@
+{
+  "schema": "lq.scenes/1",
+  "id": "rocodromo",
+  "title": { "es": "La ruta secreta", "ru": "Секретная трасса" },
+  "learnLanguage": "es",
+  "uiLanguage": "es",
+  "audience": "adult-solo",
+  "level": "A1-A2",
+  "durationHintSec": { "typical": 1020, "withHelp": 1380 },
+  "disclaimerEs": "Ficción · no es un curso de seguridad.",
+  "voices": {
+    "recepcionista": "aura-2-celeste-es",
+    "carlos": "aura-2-javier-es",
+    "escalador": "aura-2-javier-es"
+  },
+  "speakerLabels": {
+    "recepcionista": "Recepcionista",
+    "carlos": "Carlos",
+    "escalador": "Un escalador"
+  },
+  "ui": {
+    "listen": "Escuchar",
+    "speak": "Responder hablando",
+    "speaking": "Escuchando…",
+    "heardPrefix": "Has dicho:",
+    "noMatch": "No te he entendido. Toca una respuesta o inténtalo otra vez.",
+    "micOff": "El micrófono no está disponible. Toca una respuesta.",
+    "continue": "Continuar",
+    "ready": "Estoy listo",
+    "restart": "Jugar otra vez",
+    "answer": "Responder",
+    "vocab": "vocabulario",
+    "recallPlaceholder": "Escribe una palabra…"
+  },
+  "intentLexicon": {
+    "vocatives": ["Carlos", "entrenador", "recepcionista"],
+    "markers": [
+      "quiero", "voy", "necesito", "dame", "pilla", "bajame", "cojo", "uso",
+      "elijo", "prefiero", "creo", "primero", "ponme", "pongo", "llevo",
+      "pared", "via", "presa", "presas", "mano", "arnes", "cuerda", "casco",
+      "gato", "gatos", "pies", "roja", "amarilla", "azul", "verde",
+      "izquierda", "derecha", "subir", "bajar", "descansar", "bulder", "escalar",
+      "primera", "vez", "nudo", "nudos", "ocho", "mosqueton", "atada", "suelta",
+      "ballestrinque", "pescador"
+    ],
+    "fillers": [
+      "hola", "gracias", "vale", "bueno", "entonces", "tambien", "claro",
+      "ok", "okey", "hoy", "mucho", "por", "supuesto", "mi", "mis", "los", "las", "de", "del",
+      "es", "soy", "nuevo", "nueva"
+    ]
+  },
+
+  "scenes": [
+    {
+      "id": "recepcion",
+      "eyebrow": "Escena 1 · La recepción",
+      "title": "Una pared. Un secreto.",
+      "lead": "Entra al rocódromo y encuentra la ruta que nadie ha terminado.",
+      "art": "reception",
+      "speaker": "recepcionista",
+      "speakerLabel": "Recepcionista",
+      "dialogEs": "¡Hola! Bienvenido al rocódromo. Hoy tenemos una ruta secreta. ¿Qué tipo de escalada quieres hacer?",
+      "questionEs": "¿Qué le dices?",
+      "kind": "choice",
+      "options": [
+        {
+          "id": "bulder",
+          "es": "Quiero hacer búlder.",
+          "accept": ["quiero hacer bulder", "hacer bulder", "bulder", "bulgar", "buldear"],
+          "feedbackEs": "¿Búlder? ¿Sin cuerda? Hoy buscamos una vía con cuerda."
+        },
+        {
+          "id": "cuerda",
+          "es": "Quiero escalar con cuerda.",
+          "accept": ["quiero escalar con cuerda", "escalar con cuerda", "con cuerda"],
+          "correct": true,
+          "feedbackEs": "¡Perfecto! Para participar, necesitas encontrar al entrenador. Se llama Carlos."
+        },
+        {
+          "id": "primera",
+          "es": "No lo sé, es mi primera vez aquí.",
+          "accept": ["no lo se", "no se", "es mi primera vez", "primera vez", "soy nuevo"],
+          "feedbackEs": "¡Tranquilo! Mira: el búlder es sin cuerda y es bajo. Con cuerda subes hasta arriba. La ruta secreta de hoy es con cuerda. ¿Qué eliges?"
+        }
+      ]
+    },
+
+    {
+      "id": "entrenador",
+      "eyebrow": "Escena 2 · El entrenador",
+      "title": "Busca a Carlos.",
+      "lead": "Junto a cada pared hay una persona. Escucha bien dónde está Carlos.",
+      "speaker": "recepcionista",
+      "speakerLabel": "Recepcionista",
+      "dialogEs": "Carlos, tu entrenador, está junto a la pared roja. ¡Ve a buscarlo!",
+      "questionEs": "¿Adónde vas?",
+      "kind": "choice",
+      "options": [
+        {
+          "id": "amarilla",
+          "art": "wall:amarilla",
+          "es": "A",
+          "sayEs": "La pared amarilla.",
+          "accept": ["la pared amarilla", "pared amarilla", "amarilla"],
+          "speaker": "escalador",
+          "feedbackEs": "¡Hola! No soy Carlos. Carlos está junto a la pared roja."
+        },
+        {
+          "id": "roja",
+          "art": "wall:roja",
+          "es": "B",
+          "sayEs": "La pared roja.",
+          "accept": ["la pared roja", "pared roja", "roja"],
+          "correct": true,
+          "speaker": "carlos",
+          "feedbackEs": "¡Hola! Soy Carlos. ¿Has escalado con cuerda antes? ¡Has encontrado al entrenador!"
+        },
+        {
+          "id": "azul",
+          "art": "wall:azul",
+          "es": "C",
+          "sayEs": "La pared azul.",
+          "accept": ["la pared azul", "pared azul", "azul"],
+          "speaker": "escalador",
+          "feedbackEs": "¡Hola! No soy Carlos. Carlos está junto a la pared roja."
+        }
+      ]
+    },
+
+    {
+      "id": "equipo",
+      "eyebrow": "Escena 3 · El equipo",
+      "title": "Prepárate.",
+      "lead": "Escucha a Carlos y elige los objetos. No hay nombres debajo.",
+      "speaker": "carlos",
+      "speakerLabel": "Carlos",
+      "dialogEs": "¡Genial! Entonces podemos empezar. Pero antes, ponte el arnés y los pies de gato. Después, ven conmigo.",
+      "questionEs": "Selecciona lo que tienes que ponerte.",
+      "kind": "multi",
+      "correctSet": ["arnes", "gato"],
+      "successEs": "¡Perfecto! El arnés y los pies de gato. Ahora vamos a buscar la vía secreta.",
+      "failEs": "Ponte el arnés y los pies de gato. ¿Qué objetos puedes llevar puestos?",
+      "confirm": {
+        "accept": ["estoy listo", "ya estoy listo", "listo", "vamos"]
+      },
+      "options": [
+        {
+          "id": "arnes",
+          "art": "gear:arnes",
+          "sayEs": "El arnés.",
+          "accept": ["el arnes", "arnes", "un arnes", "armes", "arne"]
+        },
+        {
+          "id": "cuerda",
+          "art": "gear:cuerda",
+          "sayEs": "La cuerda.",
+          "accept": ["la cuerda", "cuerda", "una cuerda"]
+        },
+        {
+          "id": "gato",
+          "art": "gear:gato",
+          "sayEs": "Los pies de gato.",
+          "accept": ["los pies de gato", "pies de gato", "unos pies de gato", "gato", "gatos"]
+        },
+        {
+          "id": "casco",
+          "art": "gear:casco",
+          "sayEs": "El casco.",
+          "accept": ["el casco", "casco", "un casco"]
+        }
+      ]
+    },
+
+    {
+      "id": "via",
+      "eyebrow": "Escena 4 · La vía secreta",
+      "title": "Encuéntrala.",
+      "lead": "Tres vías, tres colores de presas. Solo una es la secreta.",
+      "speaker": "carlos",
+      "speakerLabel": "Carlos",
+      "dialogEs": "La vía secreta tiene presas verdes. Está entre la vía amarilla y la vía azul. ¡Encuéntrala!",
+      "questionEs": "¿Cuál es la vía secreta?",
+      "kind": "choice",
+      "options": [
+        {
+          "id": "via-amarilla",
+          "art": "route:amarilla",
+          "es": "A",
+          "sayEs": "La vía amarilla.",
+          "accept": ["la via amarilla", "via amarilla", "amarilla"],
+          "feedbackEs": "Esta vía tiene presas amarillas. La secreta tiene presas verdes."
+        },
+        {
+          "id": "via-verde",
+          "art": "route:verde",
+          "es": "B",
+          "sayEs": "La vía verde.",
+          "accept": ["la via verde", "via verde", "verde"],
+          "correct": true,
+          "feedbackEs": "¡Muy bien! Presas verdes, entre la amarilla y la azul. Esta vía es de nivel 5b."
+        },
+        {
+          "id": "via-azul",
+          "art": "route:azul",
+          "es": "C",
+          "sayEs": "La vía azul.",
+          "accept": ["la via azul", "via azul", "azul"],
+          "feedbackEs": "Esta vía tiene presas azules. La secreta tiene presas verdes."
+        }
+      ]
+    },
+
+    {
+      "id": "nudo",
+      "eyebrow": "Escena 5 · El nudo",
+      "title": "Mira tu arnés.",
+      "lead": "Carlos señala tu cintura. Tres fotos de cerca: solo en una la cuerda aguanta.",
+      "speaker": "carlos",
+      "speakerLabel": "Carlos",
+      "dialogEs": "Espera. Antes de subir, comprueba el nudo. La cuerda tiene que estar atada a tu arnés.",
+      "questionEs": "¿Cuál es el nudo?",
+      "kind": "choice",
+      "options": [
+        {
+          "id": "suelta",
+          "art": "knot:suelta",
+          "es": "A",
+          "sayEs": "La cuerda suelta.",
+          "accept": ["la cuerda suelta", "cuerda suelta", "suelta"],
+          "feedbackEs": "Ahí no hay nudo: la cuerda solo pasa por el arnés y está suelta."
+        },
+        {
+          "id": "ocho",
+          "art": "knot:ocho",
+          "es": "B",
+          "sayEs": "La cuerda atada al arnés.",
+          "accept": ["la cuerda atada al arnes", "la cuerda atada", "cuerda atada", "atada", "el nudo", "la cuerda atala", "cuerda atala", "atala"],
+          "correct": true,
+          "feedbackEs": "¡Eso es un nudo! La cuerda está atada a tu arnés. Ese nudo se llama «ocho»."
+        },
+        {
+          "id": "mosqueton",
+          "art": "knot:mosqueton",
+          "es": "C",
+          "sayEs": "El mosquetón.",
+          "accept": ["el mosqueton", "mosqueton", "un mosqueton", "mosquito"],
+          "feedbackEs": "Eso es un mosquetón, no un nudo. Un nudo se hace con la cuerda."
+        }
+      ]
+    },
+
+    {
+      "id": "tres-nudos",
+      "eyebrow": "Escena 6 · Tres nudos",
+      "title": "¿Con cuál te atas?",
+      "lead": "Los tres son nudos de verdad, pero cada uno sirve para una cosa.",
+      "speaker": "carlos",
+      "speakerLabel": "Carlos",
+      "dialogEs": "Muy bien. Ahora el nudo correcto: para atarte al arnés se usa el ocho. ¿Cuál de los tres es?",
+      "questionEs": "¿Cuál es el ocho?",
+      "kind": "choice",
+      "options": [
+        {
+          "id": "ballestrinque",
+          "art": "knot:ballestrinque",
+          "es": "A",
+          "sayEs": "El ballestrinque.",
+          "accept": ["el ballestrinque", "ballestrinque", "ballestrique", "el ballestrique", "vallestrinque", "el vallestrinque", "valle strinte", "ballestrinte"],
+          "feedbackEs": "Ese es el ballestrinque. Sirve para asegurarte arriba, en la reunión. Para atarte al arnés usa el ocho."
+        },
+        {
+          "id": "ocho",
+          "art": "knot:ocho8",
+          "es": "B",
+          "sayEs": "El ocho.",
+          "accept": ["el ocho", "ocho", "el nudo de ocho", "nudo de ocho"],
+          "correct": true,
+          "feedbackEs": "¡Exacto! El ocho. Con este nudo te atas a la cuerda. ¡Ya puedes subir!"
+        },
+        {
+          "id": "pescador",
+          "art": "knot:pescador",
+          "es": "C",
+          "sayEs": "El pescador doble.",
+          "accept": ["el pescador doble", "pescador doble", "el pescador", "pescador"],
+          "feedbackEs": "Ese es el pescador doble. Sirve para unir dos cuerdas. Para atarte al arnés usa el ocho."
+        }
+      ]
+    },
+
+    {
+      "id": "desafio",
+      "eyebrow": "Escena 7 · El desafío",
+      "title": "¿Estás listo?",
+      "lead": "Carlos ya tiene la cuerda. Tú decides.",
+      "art": "belay",
+      "speaker": "carlos",
+      "speakerLabel": "Carlos",
+      "dialogEs": "Nudo comprobado. Yo voy a asegurarte. ¿Quieres intentarlo?",
+      "questionEs": "¿Qué le dices a Carlos?",
+      "kind": "choice",
+      "options": [
+        {
+          "id": "subir",
+          "es": "Quiero subir.",
+          "accept": ["quiero subir", "subir", "voy a subir"],
+          "correct": true,
+          "feedbackEs": "¡Perfecto! Te aseguro. ¡Puedes subir!"
+        },
+        {
+          "id": "bajar",
+          "es": "Quiero bajar.",
+          "accept": ["quiero bajar", "bajar", "voy a bajar"],
+          "feedbackEs": "¿Bajar? Todavía estás en el suelo. Primero hay que subir."
+        },
+        {
+          "id": "descansar",
+          "es": "Quiero descansar.",
+          "accept": ["quiero descansar", "descansar"],
+          "feedbackEs": "Todavía no has escalado nada. ¿Quieres subir?"
+        }
+      ]
+    },
+
+    {
+      "id": "escalar",
+      "eyebrow": "Escena 8 · ¡A escalar!",
+      "title": "La presa está lejos.",
+      "lead": "Subes unos metros. La siguiente presa queda lejos y la cuerda está tensa.",
+      "art": "climb-low",
+      "speaker": "carlos",
+      "speakerLabel": "Carlos",
+      "dialogEs": "Estoy asegurándote. ¡Puedes subir! La siguiente presa está lejos y necesitas más cuerda.",
+      "questionEs": "¿Qué le dices a Carlos?",
+      "kind": "choice",
+      "options": [
+        {
+          "id": "dame",
+          "es": "¡Dame cuerda!",
+          "accept": ["dame cuerda", "mas cuerda", "dame mas cuerda"],
+          "correct": true,
+          "feedbackEs": "¡Voy! Te doy cuerda. Coge la presa."
+        },
+        {
+          "id": "pilla",
+          "es": "¡Pilla!",
+          "accept": ["pilla"],
+          "feedbackEs": "«¡Pilla!» significa que recojo la cuerda. Pero ahora necesitas más cuerda."
+        },
+        {
+          "id": "bajame",
+          "es": "¡Bájame!",
+          "accept": ["bajame", "quiero bajar"],
+          "feedbackEs": "«¡Bájame!» significa que quieres bajar. Todavía te queda vía."
+        }
+      ]
+    },
+
+    {
+      "id": "descanso",
+      "eyebrow": "Escena 9 · Casi arriba",
+      "title": "Estás cansado.",
+      "lead": "Quieres colgarte de la cuerda y descansar un momento.",
+      "art": "climb-high",
+      "speaker": "carlos",
+      "speakerLabel": "Carlos",
+      "dialogEs": "¡Muy bien! Ya estás casi arriba. Estás cansado y quieres descansar colgado de la cuerda.",
+      "questionEs": "¿Qué le dices a Carlos?",
+      "kind": "choice",
+      "options": [
+        {
+          "id": "dame2",
+          "es": "¡Dame cuerda!",
+          "accept": ["dame cuerda", "mas cuerda", "dame mas cuerda"],
+          "feedbackEs": "Con más cuerda no puedes descansar. Pídele que recoja la cuerda."
+        },
+        {
+          "id": "pilla2",
+          "es": "¡Pilla! Necesito descansar.",
+          "accept": ["pilla", "pilla necesito descansar", "necesito descansar"],
+          "correct": true,
+          "feedbackEs": "¡Te tengo! Tranquilo, el nudo aguanta. Descansa y después llegas hasta arriba."
+        },
+        {
+          "id": "bajame2",
+          "es": "¡Bájame!",
+          "accept": ["bajame"],
+          "feedbackEs": "«¡Bájame!» te lleva al suelo. Solo quieres descansar."
+        }
+      ]
+    },
+
+    {
+      "id": "movimiento",
+      "eyebrow": "Escena 10 · El último movimiento",
+      "title": "Un movimiento más.",
+      "lead": "Dos presas: una verde y una roja. Escucha a Carlos.",
+      "speaker": "carlos",
+      "speakerLabel": "Carlos",
+      "dialogEs": "¡Solo queda un movimiento! La presa verde está a tu izquierda. ¡Cógela con la mano izquierda!",
+      "questionEs": "¿Qué presa coges?",
+      "kind": "choice",
+      "options": [
+        {
+          "id": "izquierda",
+          "art": "hold:izquierda",
+          "es": "A",
+          "sayEs": "La presa de la izquierda.",
+          "accept": ["la izquierda", "izquierda", "la presa verde", "presa verde", "la mano izquierda"],
+          "correct": true,
+          "feedbackEs": "¡Perfecto! La presa verde. ¡Sigues subiendo hasta arriba!"
+        },
+        {
+          "id": "derecha",
+          "art": "hold:derecha",
+          "es": "B",
+          "sayEs": "La presa de la derecha.",
+          "accept": ["la derecha", "derecha", "la presa roja", "presa roja", "la mano derecha"],
+          "feedbackEs": "Esa es la presa roja. La verde está a tu izquierda."
+        }
+      ]
+    },
+
+    {
+      "id": "final",
+      "eyebrow": "Ruta completada",
+      "title": "¡Lo has conseguido!",
+      "lead": "Una última pregunta antes de bajar.",
+      "art": "badge",
+      "speaker": "carlos",
+      "speakerLabel": "Carlos",
+      "dialogEs": "¡Muy bien! Has terminado la vía secreta. ¡Buen trabajo!",
+      "questionEs": "¿Cómo se llama el lugar donde has escalado?",
+      "kind": "recall",
+      "answerPattern": "rocodromo",
+      "successEs": "¡Exacto! Un rocódromo. Has completado La ruta secreta.",
+      "failEs": "Piensa en el nombre que viste en la recepción: «Bienvenido al r…»."
+    }
+  ],
+
+  "vocabulary": [
+    { "es": "rocódromo", "ru": "скалодром" },
+    { "es": "vía", "ru": "трасса" },
+    { "es": "presas", "ru": "зацепки" },
+    { "es": "pared", "ru": "стена" },
+    { "es": "cuerda", "ru": "верёвка" },
+    { "es": "arnés", "ru": "страховочная система" },
+    { "es": "pies de gato", "ru": "скальные туфли" },
+    { "es": "casco", "ru": "каска" },
+    { "es": "mosquetón", "ru": "карабин" },
+    { "es": "nudo", "ru": "узел" },
+    { "es": "atarse", "ru": "привязываться" },
+    { "es": "el ocho", "ru": "восьмёрка (узел)" },
+    { "es": "el ballestrinque", "ru": "стремя (узел)" },
+    { "es": "el pescador doble", "ru": "грейпвайн (узел)" },
+    { "es": "asegurar", "ru": "страховать" },
+    { "es": "asegurador", "ru": "страхующий" },
+    { "es": "entrenador", "ru": "тренер" },
+    { "es": "recepcionista", "ru": "администратор" },
+    { "es": "búlder", "ru": "боулдеринг" },
+    { "es": "dificultad", "ru": "сложность" },
+    { "es": "reunión", "ru": "верхняя станция" },
+    { "es": "subir", "ru": "подниматься" },
+    { "es": "bajar", "ru": "спускаться" },
+    { "es": "descansar", "ru": "отдыхать" },
+    { "es": "¡Pilla!", "ru": "выбери слабину" },
+    { "es": "¡Dame cuerda!", "ru": "выдай верёвку" },
+    { "es": "¡Bájame!", "ru": "спусти меня" },
+    { "es": "izquierda", "ru": "лево" },
+    { "es": "derecha", "ru": "право" },
+    { "es": "amarilla · roja · azul · verde", "ru": "жёлтая · красная · синяя · зелёная" }
+  ]
+}
