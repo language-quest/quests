@@ -74,13 +74,13 @@ function sceneSvg(st, final) {
   if (st.chair) s.push('<rect x="404" y="140" width="18" height="18" rx="3" fill="#a7562f"/><circle cx="392" cy="132" r="8" fill="#e8b98a"/><circle cx="436" cy="132" r="8" fill="#d99a72"/><circle cx="414" cy="118" r="8" fill="#c9835f"/>');
   if (st.call || final) s.push('<rect x="260" y="40" width="170" height="100" rx="10" fill="#c9d9c8" stroke="#213b32" stroke-width="2"/><circle cx="300" cy="100" r="10" fill="#e8b98a"/><circle cx="345" cy="100" r="10" fill="#d99a72"/><circle cx="390" cy="100" r="10" fill="#c9835f"/><rect x="282" y="55" width="126" height="26" rx="3" fill="#213b32"/>');
   if (st.newDesk || st.newcomerSeen) s.push('<circle cx="215" cy="126" r="9" fill="#e8b98a"/><rect x="207" y="136" width="16" height="24" rx="6" fill="#c05c32"/>');
-  return `<svg viewBox="0 0 480 250" aria-hidden="true" focusable="false">${s.join('')}</svg>`;
+  return `<svg viewBox="0 0 480 250" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">${s.join('')}</svg>`;
 }
 function renderStage(step) {
   const bk = [];
   if (state.book) bk.push(`<span class="slot">${state.book}</span>`);
   if (state.fixed) bk.push('<span class="slot fixed">16:00–16:30</span>');
-  const has = ['card', 'desk', 'phone', 'papers', 'crowd', 'chair', 'call', 'newDesk', 'net', 'book'].some(k => state[k]);
+  const has = ['desk', 'phone', 'papers', 'crowd', 'chair', 'call', 'newDesk'].some(k => state[k]);
   const st = $('stage');
   if (step && step.id === 's0') st.innerHTML = `<img class="opening" src="${imgSrc(IMG.cover)}" alt="">`;
   else st.innerHTML = has ? sceneSvg(state, false) + (bk.length ? `<div class="slots">${bk.join('')}</div>` : '') : '';
