@@ -11,7 +11,8 @@
  *   node tools/pm-run.mjs status  [T-007]           # сводка по доске
  *
  * Флаги: --dry показать команду сессии и не запускать её,
- *        --skip-health не требовать поднятого прокси на 5179.
+ *        --skip-health не требовать поднятого прокси на 5179,
+ *        --model <alias> переопределить модель для этого запуска.
  *
  * Три вещи, которые здесь неочевидны и появились не просто так.
  *
@@ -53,6 +54,19 @@ const CLAUDE = ["claude", "/opt/homebrew/bin/claude", "/usr/local/bin/claude"].f
 });
 
 const die = (msg) => { console.error(`✗ ${msg}`); process.exit(1); };
+
+// Разработчик реализует уже написанное ТЗ — реплики и содержимое карточек в нём
+// заданы дословно, это работа по спецификации. QA работает без спецификации на то,
+// КАК искать дефект, и должен сопротивляться соблазну поставить PASS там, где
+// «вроде работает»: ложный PASS проходит в accept и обесценивает весь конвейер.
+// Отсюда асимметрия. Если ТЗ оставило испанский на усмотрение разработчика —
+// придумать реплику-ловушку не реализация, запускай его с --model opus.
+const MODEL = { dev: "sonnet", qa: "opus" };
+
+function modelFor(role) {
+  const i = process.argv.indexOf("--model");
+  return i > 0 && process.argv[i + 1] ? process.argv[i + 1] : MODEL[role];
+}
 
 // ── состояние задачи ──────────────────────────────────────────────────────────
 
@@ -159,7 +173,7 @@ function runSession({ id, role, cwd, sessionId, fresh, round, note }) {
   const args = [
     "-p",
     fresh ? "--session-id" : "--resume", sessionId,
-    "--model", "opus",
+    "--model", modelFor(role),
     "--permission-mode", "acceptEdits",
     "--add-dir", MAIN,
     "--allowedTools",
