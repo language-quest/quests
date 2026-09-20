@@ -23,15 +23,16 @@ export const STEPS = [
       L('s0.intro', 'narr', 'Es tu primer día en un coworking. Hoy, a las cuatro, tienes una videollamada.'),
       L('s0.lucia', 'Lucía', 'Hola, soy Lucía. Si no sabes algo, pregunta.'),
       L('s0.client', 'Cliente', 'Hola. Hoy la reunión es a las cuatro.'),
+      L('s0.lucia2', 'Lucía', '¿Qué haces?'),
     ],
     cards: [
       T('s0.a', 'Me voy a casa.', R('s0.a.r', 'Tu casa está lejos. Mejor te quedas aquí.')),
-      T('s0.b', 'Me quedo. Voy paso a paso.', R('s0.b.r', 'Me quedo. Voy paso a paso.'), {}, true),
-      T('s0.c', 'Espero aquí.', R('s0.c.r', 'Esperar no ayuda. Vamos a empezar.')),
+      T('s0.b', 'Me quedo aquí.', R('s0.b.r', 'Me quedo aquí.'), {}, true),
+      T('s0.c', 'No hago nada.', R('s0.c.r', 'Si no haces nada, no pasa nada. Vamos a empezar.')),
     ] },
 
   { id: 's1', scene: 1, type: 'choice', usage: ['recepción'],
-    lines: [L('s1.hero', 'Tú', 'Me quedo. Voy paso a paso.'), L('s1.lucia', 'Lucía', 'Ve a la recepción.')],
+    lines: [L('s1.hero', 'Tú', 'Me quedo aquí.'), L('s1.lucia', 'Lucía', 'Ve a la recepción.')],
     cards: [
       P('s1.a', IMG.reception, R('s1.a.r', 'Sí, esta es la recepción. Aquí te dan la tarjeta.'), { card: true }, true, 'la recepción'),
       P('s1.b', IMG.booth, R('s1.b.r', 'Esta es una cabina. Aquí no dan tarjetas. La recepción está en la entrada.'), { card: true, peek: 'booth' }, false, 'la cabina'),
