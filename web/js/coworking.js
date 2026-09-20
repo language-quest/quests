@@ -6,6 +6,8 @@ const AUDIO_DIR = '../assets/coworking/audio/';
 
 let idx = 0, state, locked, order, current, audioToken = 0, audioEl = null, started = false;
 const blobs = {};
+// Solo para pruebas: ?hint=1 marca la mejor opción. Sin el parámetro no hay ninguna marca.
+const DEBUG_HINT = new URLSearchParams(location.search).has('hint');
 
 const freshState = () => ({ log: [], mistakes: 0, book: null });
 const shuffle = arr => { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
@@ -115,6 +117,7 @@ function showStep() {
         b.setAttribute('aria-label', 'Opción ' + 'ABC'[i]);
         b.innerHTML = `<img src="${imgSrc(c.img)}" alt="" draggable="false"><span class="letter" aria-hidden="true">${'ABC'[i]}</span>`;
       } else b.textContent = c.text;
+      if (DEBUG_HINT && c.best) b.classList.add('dbg-best');
       b.addEventListener('click', () => choose(step, c, b));
       cards.appendChild(b);
     });
