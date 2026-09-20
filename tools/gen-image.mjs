@@ -45,6 +45,7 @@ const seed = flag("seed", undefined);
 const n = Number(flag("n", "1"));
 const imageArg = flag("image", undefined); // референс: файл -> image_url (для правки и image-to-video)
 const duration = flag("duration", undefined);
+const resolution = flag("resolution", undefined); // для видео: 480p дешевле 720p
 const [prompt, out] = args;
 
 if (!prompt || !out) {
@@ -66,6 +67,7 @@ if (imageArg) {
   body.num_images = n;
 }
 if (duration) body.duration = duration;
+if (resolution) body.resolution = resolution;
 if (seed !== undefined) body.seed = Number(seed);
 
 const res = await fetch(`https://fal.run/${model}`, {

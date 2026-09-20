@@ -21,6 +21,8 @@ const COPY = [
   "assets/rocodromo/place-banco.png",
   "assets/rocodromo/place-pared.png",
   "assets/rocodromo/place-taquilla.png",
+  "assets/rocodromo/recepcion.mp4",
+  "assets/rocodromo/diego",
   "assets/caperucita/quest.json",
   "assets/caperucita/web",
 ];

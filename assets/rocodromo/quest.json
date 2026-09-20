@@ -215,6 +215,8 @@
       "questionEs": "¿Qué le dices a Diego?",
       "kind": "choice",
       "options": [
+      "image": "diego/companero.png",
+      "video": "diego/companero.mp4",
         {
           "id": "juntos",
           "es": "Sí, vamos juntos.",

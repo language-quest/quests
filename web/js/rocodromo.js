@@ -269,6 +269,7 @@ function render() {
     box.className = "stageart clip";
     const v = document.createElement("video");
     v.src = `../assets/rocodromo/${S.video}`;
+    if (S.image) v.poster = `../assets/rocodromo/${S.image}`;
     v.playsInline = true;
     v.preload = "auto";
     const btn = document.createElement("button");
@@ -293,6 +294,14 @@ function render() {
     // до первого жеста озвучка заблокирована, поэтому ролик стартует сам только после него; иначе — кнопка ▶
     if (gestured) start();
     sync();
+  } else if (S.image) {
+    const box = document.createElement("div");
+    box.className = "stageart photo";
+    const im = document.createElement("img");
+    im.src = `../assets/rocodromo/${S.image}`;
+    im.alt = "";
+    box.appendChild(im);
+    scene.appendChild(box);
   } else if (S.art && art(S.art)) {
     const box = document.createElement("div");
     box.className = "stageart";
