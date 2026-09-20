@@ -367,8 +367,8 @@ function renderChoice(scene, S) {
 /** Кнопка «Ocultar respuestas». Выбор помнится между сценами; без хранилища просто не запоминается. */
 const HIDE_KEY = "rocodromo.hideAnswers";
 function hideToggle(grid) {
-  let hidden = false;
-  try { hidden = localStorage.getItem(HIDE_KEY) === "1"; } catch {}
+  let hidden = true;   // по умолчанию скрыты; явный выбор «показать» ("0") помнится
+  try { hidden = localStorage.getItem(HIDE_KEY) !== "0"; } catch {}
   const b = document.createElement("button");
   b.className = "mic hide-toggle";
   b.type = "button";
@@ -417,9 +417,7 @@ function renderMulti(scene, S) {
   ready.textContent = UI.ready;
   ready.onclick = check;
   row.appendChild(ready);
-  // Голосом можно и называть предметы, и сказать «estoy listo».
-  const functions = { ...functionsOf(S.options), __confirm: { accept: S.confirm.accept } };
-  row.appendChild(micButton(functions, (fn) => (fn === "__confirm" ? check() : toggle(fn))));
+  // Голоса здесь нет: выбор предметов — только касанием.
   scene.appendChild(row);
 
   function toggle(id) {
