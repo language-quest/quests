@@ -38,7 +38,9 @@
     "restart": "Jugar otra vez",
     "answer": "Responder",
     "vocab": "vocabulario",
-    "recallPlaceholder": "Escribe una palabra…"
+    "recallPlaceholder": "Escribe una palabra…",
+    "hideAnswers": "Ocultar respuestas",
+    "showAnswers": "Mostrar respuestas"
   },
   "intentLexicon": {
     "vocatives": [

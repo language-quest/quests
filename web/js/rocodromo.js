@@ -340,6 +340,9 @@ function renderChoice(scene, S) {
   const row = document.createElement("div");
   row.className = "row";
   row.appendChild(micButton(functionsOf(S.options), choose));
+  // Режим «отвечаю голосом»: фразы прячутся, остаётся только микрофон. Картинные карточки
+  // прятать нельзя — без них ответить нечем, а голос тогда не проверяет ничего.
+  if (!S.options.some((o) => o.art) && asrAvailable()) row.appendChild(hideToggle(grid));
   scene.appendChild(row);
 
   function choose(id) {
@@ -359,6 +362,31 @@ function renderChoice(scene, S) {
       }
     }
   }
+}
+
+/** Кнопка «Ocultar respuestas». Выбор помнится между сценами; без хранилища просто не запоминается. */
+const HIDE_KEY = "rocodromo.hideAnswers";
+function hideToggle(grid) {
+  let hidden = false;
+  try { hidden = localStorage.getItem(HIDE_KEY) === "1"; } catch {}
+  const b = document.createElement("button");
+  b.className = "mic hide-toggle";
+  b.type = "button";
+  b.id = "hideToggle";
+  const apply = () => {
+    grid.hidden = hidden;
+    b.setAttribute("aria-pressed", String(hidden));
+    b.setAttribute("aria-controls", "choices");
+    b.textContent = hidden ? UI.showAnswers : UI.hideAnswers;
+  };
+  grid.id = "choices";
+  b.onclick = () => {
+    hidden = !hidden;
+    try { localStorage.setItem(HIDE_KEY, hidden ? "1" : "0"); } catch {}
+    apply();
+  };
+  apply();
+  return b;
 }
 
 /** Снаряжение: несколько предметов, подписей под картинками нет. */
