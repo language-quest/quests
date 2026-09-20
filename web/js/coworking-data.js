@@ -14,7 +14,7 @@ export { IMG };
 
 const L = (id, who, text) => ({ id, who, text });
 const T = (id, text, react, fx, best) => ({ id, kind: 'text', text, best: !!best, react, fx: fx || {} });
-const P = (id, img, react, fx, best) => ({ id, kind: 'img', img, best: !!best, react, fx: fx || {} });
+const P = (id, img, react, fx, best, gag) => ({ id, kind: 'img', img, best: !!best, react, fx: fx || {}, gag });
 const R = (id, text) => ({ id, text });
 
 export const STEPS = [
@@ -34,8 +34,8 @@ export const STEPS = [
     lines: [L('s1.hero', 'Tú', 'Me quedo. Voy paso a paso.'), L('s1.lucia', 'Lucía', 'Recoge tu tarjeta en recepción.')],
     cards: [
       P('s1.a', IMG.reception, R('s1.a.r', 'Sí, esta es la recepción. Aquí te dan la tarjeta de entrada.'), { card: true }, true),
-      P('s1.b', IMG.booth, R('s1.b.r', 'Esta es una cabina para hablar a solas. Aquí no dan tarjetas. La recepción está junto a la entrada.'), { card: true, peek: 'booth' }),
-      P('s1.c', IMG.meeting, R('s1.c.r', 'Esta es una sala de reuniones para trabajar en grupo. La tarjeta se recoge en recepción.'), { card: true, peek: 'room' }),
+      P('s1.b', IMG.booth, R('s1.b.r', 'Esta es una cabina para hablar a solas. Aquí no dan tarjetas. La recepción está junto a la entrada.'), { card: true, peek: 'booth' }, false, { kind: 'booth', lines: [L('s1.b.g1', 'Tú', 'Perdona, ¿esta es la recepción?'), L('s1.b.g2', 'Persona en la cabina', '¿Recepción? Aquí solo estoy yo y mi llamada. Shhh.')] }),
+      P('s1.c', IMG.meeting, R('s1.c.r', 'Esta es una sala de reuniones para trabajar en grupo. La tarjeta se recoge en recepción.'), { card: true, peek: 'room' }, false, { kind: 'room', lines: [L('s1.c.g1', 'Tú', 'Perdona, ¿esta es la recepción?'), L('s1.c.g2', 'Todos', 'No… esto es una reunión. ¿Quieres un café?')] }),
     ] },
 
   { id: 's2', scene: 2, type: 'choice', usage: ['puesto', 'enchufe'], battery: true,
