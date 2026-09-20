@@ -1,22 +1,30 @@
 {
   "schema": "lq.scenes/1",
   "id": "rocodromo",
-  "title": { "es": "La ruta secreta", "ru": "Секретная трасса" },
+  "title": {
+    "es": "La ruta secreta",
+    "ru": "Секретная трасса"
+  },
   "learnLanguage": "es",
   "uiLanguage": "es",
   "audience": "adult-solo",
   "level": "A1-A2",
-  "durationHintSec": { "typical": 1020, "withHelp": 1380 },
+  "durationHintSec": {
+    "typical": 1300,
+    "withHelp": 1760
+  },
   "disclaimerEs": "Ficción · no es un curso de seguridad.",
   "voices": {
     "recepcionista": "aura-2-celeste-es",
     "carlos": "aura-2-javier-es",
-    "escalador": "aura-2-javier-es"
+    "escalador": "aura-2-javier-es",
+    "diego": "aura-2-luciano-es"
   },
   "speakerLabels": {
     "recepcionista": "Recepcionista",
     "carlos": "Carlos",
-    "escalador": "Un escalador"
+    "escalador": "Un escalador",
+    "diego": "Diego"
   },
   "ui": {
     "listen": "Escuchar",
@@ -30,70 +38,217 @@
     "restart": "Jugar otra vez",
     "answer": "Responder",
     "vocab": "vocabulario",
-    "recallPlaceholder": "Escribe una palabra…"
+    "recallPlaceholder": "Escribe una palabra…",
+    "hideAnswers": "Ocultar respuestas",
+    "showAnswers": "Mostrar respuestas"
   },
   "intentLexicon": {
-    "vocatives": ["Carlos", "entrenador", "recepcionista"],
+    "vocatives": [
+      "Carlos",
+      "entrenador",
+      "recepcionista"
+    ],
     "markers": [
-      "quiero", "voy", "necesito", "dame", "pilla", "bajame", "cojo", "uso",
-      "elijo", "prefiero", "creo", "primero", "ponme", "pongo", "llevo",
-      "pared", "via", "presa", "presas", "mano", "arnes", "cuerda", "casco",
-      "gato", "gatos", "pies", "roja", "amarilla", "azul", "verde",
-      "izquierda", "derecha", "subir", "bajar", "descansar", "bulder", "escalar",
-      "primera", "vez", "nudo", "nudos", "ocho", "mosqueton", "atada", "suelta",
-      "ballestrinque", "pescador"
+      "quiero",
+      "voy",
+      "necesito",
+      "dame",
+      "pilla",
+      "bajame",
+      "cojo",
+      "uso",
+      "elijo",
+      "prefiero",
+      "creo",
+      "primero",
+      "ponme",
+      "pongo",
+      "llevo",
+      "pared",
+      "via",
+      "presa",
+      "presas",
+      "mano",
+      "arnes",
+      "cuerda",
+      "casco",
+      "gato",
+      "gatos",
+      "pies",
+      "roja",
+      "amarilla",
+      "azul",
+      "verde",
+      "izquierda",
+      "derecha",
+      "subir",
+      "bajar",
+      "descansar",
+      "bulder",
+      "escalar",
+      "primera",
+      "vez",
+      "nudo",
+      "nudos",
+      "ocho",
+      "mosqueton",
+      "atada",
+      "suelta",
+      "ballestrinque",
+      "pescador",
+      "juntos",
+      "solo",
+      "companero",
+      "companeros",
+      "despues",
+      "toca",
+      "ayuda",
+      "ayudame",
+      "casa",
+      "tu",
+      "yo"
     ],
     "fillers": [
-      "hola", "gracias", "vale", "bueno", "entonces", "tambien", "claro",
-      "ok", "okey", "hoy", "mucho", "por", "supuesto", "mi", "mis", "los", "las", "de", "del",
-      "es", "soy", "nuevo", "nueva"
+      "hola",
+      "gracias",
+      "vale",
+      "bueno",
+      "entonces",
+      "tambien",
+      "claro",
+      "ok",
+      "okey",
+      "hoy",
+      "mucho",
+      "por",
+      "supuesto",
+      "mi",
+      "mis",
+      "los",
+      "las",
+      "de",
+      "del",
+      "es",
+      "soy",
+      "nuevo",
+      "nueva"
     ]
   },
-
   "scenes": [
     {
       "id": "recepcion",
       "eyebrow": "Escena 1 · La recepción",
-      "title": "Una pared. Un secreto.",
-      "lead": "Entra al rocódromo y encuentra la ruta que nadie ha terminado.",
-      "art": "reception",
+      "title": "Una pared. Dos compañeros.",
+      "lead": "Entra al rocódromo y descubre quién hará el reto contigo.",
+      "art": "reception-with-diego",
       "speaker": "recepcionista",
       "speakerLabel": "Recepcionista",
-      "dialogEs": "¡Hola! Bienvenido al rocódromo. Hoy tenemos una ruta secreta. ¿Qué tipo de escalada quieres hacer?",
+      "dialogEs": "¡Hola! Bienvenido al rocódromo. Hoy tenemos una ruta secreta. Diego también quiere participar. Primero dime: ¿qué tipo de escalada quieres hacer?",
       "questionEs": "¿Qué le dices?",
       "kind": "choice",
       "options": [
         {
           "id": "bulder",
           "es": "Quiero hacer búlder.",
-          "accept": ["quiero hacer bulder", "hacer bulder", "bulder", "bulgar", "buldear"],
-          "feedbackEs": "¿Búlder? ¿Sin cuerda? Hoy buscamos una vía con cuerda."
+          "accept": [
+            "quiero hacer bulder",
+            "hacer bulder",
+            "bulder",
+            "bulgar",
+            "buldear",
+            "hacer bulldog",
+            "bulldog"
+          ],
+          "feedbackEs": "¿Búlder? ¿Sin cuerda? Hoy buscamos una vía con cuerda. Diego y tú necesitáis encontrar esa vía."
         },
         {
           "id": "cuerda",
           "es": "Quiero escalar con cuerda.",
-          "accept": ["quiero escalar con cuerda", "escalar con cuerda", "con cuerda"],
+          "accept": [
+            "quiero escalar con cuerda",
+            "escalar con cuerda",
+            "con cuerda"
+          ],
           "correct": true,
-          "feedbackEs": "¡Perfecto! Para participar, necesitas encontrar al entrenador. Se llama Carlos."
+          "feedbackEs": "¡Perfecto! La ruta secreta es con cuerda. Diego tiene una mitad de la insignia y tú, la otra."
         },
         {
           "id": "primera",
           "es": "No lo sé, es mi primera vez aquí.",
-          "accept": ["no lo se", "no se", "es mi primera vez", "primera vez", "soy nuevo"],
-          "feedbackEs": "¡Tranquilo! Mira: el búlder es sin cuerda y es bajo. Con cuerda subes hasta arriba. La ruta secreta de hoy es con cuerda. ¿Qué eliges?"
+          "accept": [
+            "no lo se",
+            "no se",
+            "es mi primera vez",
+            "primera vez",
+            "soy nuevo"
+          ],
+          "feedbackEs": "¡Tranquilo! El búlder es bajo y sin cuerda. En la ruta de hoy se sube con cuerda. Diego también está aprendiendo. ¿Qué eliges?"
         }
       ]
     },
-
+    {
+      "id": "companero",
+      "eyebrow": "Escena 2 · Tu compañero",
+      "title": "Dos mitades de una pista.",
+      "lead": "Diego levanta una mitad de la insignia. La tuya encaja con ella.",
+      "speaker": "diego",
+      "speakerLabel": "Diego",
+      "speakerState": "normal",
+      "dialogEs": "Hola, soy Diego. Parece que somos compañeros. ¿Buscamos juntos la ruta secreta?",
+      "questionEs": "¿Qué le dices a Diego?",
+      "kind": "choice",
+      "options": [
+        {
+          "id": "juntos",
+          "es": "Sí, vamos juntos.",
+          "accept": [
+            "sí vamos juntos",
+            "vamos juntos",
+            "buscamos juntos",
+            "juntos",
+            "sí juntos"
+          ],
+          "correct": true,
+          "speakerState": "contento",
+          "feedbackEs": "¡Genial! Juntos tenemos la pista completa. Primero tenemos que encontrar al entrenador."
+        },
+        {
+          "id": "solo",
+          "es": "Prefiero ir solo.",
+          "accept": [
+            "prefiero ir solo",
+            "ir solo",
+            "voy solo",
+            "solo"
+          ],
+          "speakerState": "pensativo",
+          "feedbackEs": "Solo tienes media pista y yo tengo la otra mitad. Si vamos juntos, podemos continuar."
+        },
+        {
+          "id": "despues",
+          "es": "Tú primero. Yo voy después.",
+          "accept": [
+            "tu primero yo voy despues",
+            "tu primero yo despues",
+            "tu primero",
+            "yo voy despues",
+            "yo despues",
+            "despues"
+          ],
+          "speakerState": "pensativo",
+          "feedbackEs": "Todavía no toca subir. Primero buscamos juntos a Carlos, el entrenador."
+        }
+      ]
+    },
     {
       "id": "entrenador",
-      "eyebrow": "Escena 2 · El entrenador",
+      "eyebrow": "Escena 3 · El entrenador",
       "title": "Busca a Carlos.",
-      "lead": "Junto a cada pared hay una persona. Escucha bien dónde está Carlos.",
+      "lead": "Junto a cada pared hay una persona. Diego escucha contigo.",
       "speaker": "recepcionista",
       "speakerLabel": "Recepcionista",
-      "dialogEs": "Carlos, tu entrenador, está junto a la pared roja. ¡Ve a buscarlo!",
-      "questionEs": "¿Adónde vas?",
+      "dialogEs": "Carlos, vuestro entrenador, está junto a la pared roja. ¡Id a buscarlo!",
+      "questionEs": "¿Adónde vais?",
       "kind": "choice",
       "options": [
         {
@@ -101,84 +256,122 @@
           "art": "wall:amarilla",
           "es": "A",
           "sayEs": "La pared amarilla.",
-          "accept": ["la pared amarilla", "pared amarilla", "amarilla"],
+          "accept": [
+            "la pared amarilla",
+            "pared amarilla",
+            "amarilla"
+          ],
           "speaker": "escalador",
-          "feedbackEs": "¡Hola! No soy Carlos. Carlos está junto a la pared roja."
+          "feedbackEs": "¡Hola! No soy Carlos. Carlos está junto a la pared roja. Diego vuelve contigo para buscarlo."
         },
         {
           "id": "roja",
           "art": "wall:roja",
           "es": "B",
           "sayEs": "La pared roja.",
-          "accept": ["la pared roja", "pared roja", "roja"],
+          "accept": [
+            "la pared roja",
+            "pared roja",
+            "roja"
+          ],
           "correct": true,
           "speaker": "carlos",
-          "feedbackEs": "¡Hola! Soy Carlos. ¿Has escalado con cuerda antes? ¡Has encontrado al entrenador!"
+          "feedbackEs": "¡Hola! Soy Carlos. Veo que ya has encontrado a tu compañero. ¿Listos para buscar la ruta?"
         },
         {
           "id": "azul",
           "art": "wall:azul",
           "es": "C",
           "sayEs": "La pared azul.",
-          "accept": ["la pared azul", "pared azul", "azul"],
+          "accept": [
+            "la pared azul",
+            "pared azul",
+            "azul"
+          ],
           "speaker": "escalador",
-          "feedbackEs": "¡Hola! No soy Carlos. Carlos está junto a la pared roja."
+          "feedbackEs": "¡Hola! No soy Carlos. Carlos está junto a la pared roja. Diego vuelve contigo para buscarlo."
         }
       ]
     },
-
     {
       "id": "equipo",
-      "eyebrow": "Escena 3 · El equipo",
+      "eyebrow": "Escena 4 · El equipo",
       "title": "Prepárate.",
-      "lead": "Escucha a Carlos y elige los objetos. No hay nombres debajo.",
+      "lead": "Carlos prepara el equipo. Diego mira los objetos contigo.",
       "speaker": "carlos",
       "speakerLabel": "Carlos",
-      "dialogEs": "¡Genial! Entonces podemos empezar. Pero antes, ponte el arnés y los pies de gato. Después, ven conmigo.",
+      "dialogEs": "Antes de buscar la vía, ponte el arnés y los pies de gato. Diego, tú irás después.",
       "questionEs": "Selecciona lo que tienes que ponerte.",
       "kind": "multi",
-      "correctSet": ["arnes", "gato"],
-      "successEs": "¡Perfecto! El arnés y los pies de gato. Ahora vamos a buscar la vía secreta.",
-      "failEs": "Ponte el arnés y los pies de gato. ¿Qué objetos puedes llevar puestos?",
+      "correctSet": [
+        "arnes",
+        "gato"
+      ],
+      "successEs": "¡Perfecto! El arnés y los pies de gato. Diego ya sabe qué ponerse después.",
+      "failEs": "Esos objetos no son el arnés y los pies de gato. Mira qué puedes llevar puesto para escalar.",
       "confirm": {
-        "accept": ["estoy listo", "ya estoy listo", "listo", "vamos"]
+        "accept": [
+          "estoy listo",
+          "ya estoy listo",
+          "listo",
+          "vamos"
+        ]
       },
       "options": [
         {
           "id": "arnes",
           "art": "gear:arnes",
           "sayEs": "El arnés.",
-          "accept": ["el arnes", "arnes", "un arnes", "armes", "arne"]
+          "accept": [
+            "el arnes",
+            "arnes",
+            "un arnes",
+            "armes",
+            "arne"
+          ]
         },
         {
           "id": "cuerda",
           "art": "gear:cuerda",
           "sayEs": "La cuerda.",
-          "accept": ["la cuerda", "cuerda", "una cuerda"]
+          "accept": [
+            "la cuerda",
+            "cuerda",
+            "una cuerda"
+          ]
         },
         {
           "id": "gato",
           "art": "gear:gato",
           "sayEs": "Los pies de gato.",
-          "accept": ["los pies de gato", "pies de gato", "unos pies de gato", "gato", "gatos"]
+          "accept": [
+            "los pies de gato",
+            "pies de gato",
+            "unos pies de gato",
+            "gato",
+            "gatos"
+          ]
         },
         {
           "id": "casco",
           "art": "gear:casco",
           "sayEs": "El casco.",
-          "accept": ["el casco", "casco", "un casco"]
+          "accept": [
+            "el casco",
+            "casco",
+            "un casco"
+          ]
         }
       ]
     },
-
     {
       "id": "via",
-      "eyebrow": "Escena 4 · La vía secreta",
+      "eyebrow": "Escena 5 · La vía secreta",
       "title": "Encuéntrala.",
-      "lead": "Tres vías, tres colores de presas. Solo una es la secreta.",
+      "lead": "Carlos describe la vía. Diego cree que ya la ha visto, pero no está seguro.",
       "speaker": "carlos",
       "speakerLabel": "Carlos",
-      "dialogEs": "La vía secreta tiene presas verdes. Está entre la vía amarilla y la vía azul. ¡Encuéntrala!",
+      "dialogEs": "La vía secreta tiene presas verdes. Está entre la vía amarilla y la vía azul. Diego, no señales: dejad que la pista os guíe.",
       "questionEs": "¿Cuál es la vía secreta?",
       "kind": "choice",
       "options": [
@@ -187,7 +380,11 @@
           "art": "route:amarilla",
           "es": "A",
           "sayEs": "La vía amarilla.",
-          "accept": ["la via amarilla", "via amarilla", "amarilla"],
+          "accept": [
+            "la via amarilla",
+            "via amarilla",
+            "amarilla"
+          ],
           "feedbackEs": "Esta vía tiene presas amarillas. La secreta tiene presas verdes."
         },
         {
@@ -195,29 +392,36 @@
           "art": "route:verde",
           "es": "B",
           "sayEs": "La vía verde.",
-          "accept": ["la via verde", "via verde", "verde"],
+          "accept": [
+            "la via verde",
+            "via verde",
+            "verde"
+          ],
           "correct": true,
-          "feedbackEs": "¡Muy bien! Presas verdes, entre la amarilla y la azul. Esta vía es de nivel 5b."
+          "feedbackEs": "¡Muy bien! Presas verdes, entre la amarilla y la azul. Diego y tú habéis encontrado la vía."
         },
         {
           "id": "via-azul",
           "art": "route:azul",
           "es": "C",
           "sayEs": "La vía azul.",
-          "accept": ["la via azul", "via azul", "azul"],
+          "accept": [
+            "la via azul",
+            "via azul",
+            "azul"
+          ],
           "feedbackEs": "Esta vía tiene presas azules. La secreta tiene presas verdes."
         }
       ]
     },
-
     {
       "id": "nudo",
-      "eyebrow": "Escena 5 · El nudo",
+      "eyebrow": "Escena 6 · El nudo",
       "title": "Mira tu arnés.",
-      "lead": "Carlos señala tu cintura. Tres fotos de cerca: solo en una la cuerda aguanta.",
+      "lead": "Carlos comprueba el equipo. Diego observa: después tendrá que reconocerlo.",
       "speaker": "carlos",
       "speakerLabel": "Carlos",
-      "dialogEs": "Espera. Antes de subir, comprueba el nudo. La cuerda tiene que estar atada a tu arnés.",
+      "dialogEs": "Espera. Antes de subir, compruebo el nudo. La cuerda tiene que estar atada al arnés.",
       "questionEs": "¿Cuál es el nudo?",
       "kind": "choice",
       "options": [
@@ -226,7 +430,11 @@
           "art": "knot:suelta",
           "es": "A",
           "sayEs": "La cuerda suelta.",
-          "accept": ["la cuerda suelta", "cuerda suelta", "suelta"],
+          "accept": [
+            "la cuerda suelta",
+            "cuerda suelta",
+            "suelta"
+          ],
           "feedbackEs": "Ahí no hay nudo: la cuerda solo pasa por el arnés y está suelta."
         },
         {
@@ -234,29 +442,42 @@
           "art": "knot:ocho",
           "es": "B",
           "sayEs": "La cuerda atada al arnés.",
-          "accept": ["la cuerda atada al arnes", "la cuerda atada", "cuerda atada", "atada", "el nudo", "la cuerda atala", "cuerda atala", "atala"],
+          "accept": [
+            "la cuerda atada al arnes",
+            "la cuerda atada",
+            "cuerda atada",
+            "atada",
+            "el nudo",
+            "la cuerda atala",
+            "cuerda atala",
+            "atala"
+          ],
           "correct": true,
-          "feedbackEs": "¡Eso es un nudo! La cuerda está atada a tu arnés. Ese nudo se llama «ocho»."
+          "feedbackEs": "¡Eso es un nudo! La cuerda está atada al arnés. Se llama «ocho». Diego lo mira con atención."
         },
         {
           "id": "mosqueton",
           "art": "knot:mosqueton",
           "es": "C",
           "sayEs": "El mosquetón.",
-          "accept": ["el mosqueton", "mosqueton", "un mosqueton", "mosquito"],
+          "accept": [
+            "el mosqueton",
+            "mosqueton",
+            "un mosqueton",
+            "mosquito"
+          ],
           "feedbackEs": "Eso es un mosquetón, no un nudo. Un nudo se hace con la cuerda."
         }
       ]
     },
-
     {
       "id": "tres-nudos",
-      "eyebrow": "Escena 6 · Tres nudos",
+      "eyebrow": "Escena 7 · Tres nudos",
       "title": "¿Con cuál te atas?",
-      "lead": "Los tres son nudos de verdad, pero cada uno sirve para una cosa.",
+      "lead": "Carlos muestra tres nudos. Diego intenta recordar cuál acaba de ver.",
       "speaker": "carlos",
       "speakerLabel": "Carlos",
-      "dialogEs": "Muy bien. Ahora el nudo correcto: para atarte al arnés se usa el ocho. ¿Cuál de los tres es?",
+      "dialogEs": "Para atarte al arnés usamos el ocho. Diego dice que es el de la izquierda, pero no está seguro. Escucha el nombre, no su posición.",
       "questionEs": "¿Cuál es el ocho?",
       "kind": "choice",
       "options": [
@@ -265,139 +486,240 @@
           "art": "knot:ballestrinque",
           "es": "A",
           "sayEs": "El ballestrinque.",
-          "accept": ["el ballestrinque", "ballestrinque", "ballestrique", "el ballestrique", "vallestrinque", "el vallestrinque", "valle strinte", "ballestrinte"],
-          "feedbackEs": "Ese es el ballestrinque. Sirve para asegurarte arriba, en la reunión. Para atarte al arnés usa el ocho."
+          "accept": [
+            "el ballestrinque",
+            "ballestrinque",
+            "ballestrique",
+            "el ballestrique",
+            "vallestrinque",
+            "el vallestrinque",
+            "valle strinte",
+            "ballestrinte",
+            "vallestente",
+            "el vallestente"
+          ],
+          "feedbackEs": "Ese es el ballestrinque, no el ocho. Diego se ha guiado por la posición y se ha equivocado. Busca el nudo que Carlos ha llamado «ocho»."
         },
         {
           "id": "ocho",
           "art": "knot:ocho8",
           "es": "B",
           "sayEs": "El ocho.",
-          "accept": ["el ocho", "ocho", "el nudo de ocho", "nudo de ocho"],
+          "accept": [
+            "el ocho",
+            "ocho",
+            "el nudo de ocho",
+            "nudo de ocho"
+          ],
           "correct": true,
-          "feedbackEs": "¡Exacto! El ocho. Con este nudo te atas a la cuerda. ¡Ya puedes subir!"
+          "feedbackEs": "¡Exacto! El ocho. Diego sonríe: ahora los dos lo reconocéis."
         },
         {
           "id": "pescador",
           "art": "knot:pescador",
           "es": "C",
           "sayEs": "El pescador doble.",
-          "accept": ["el pescador doble", "pescador doble", "el pescador", "pescador"],
-          "feedbackEs": "Ese es el pescador doble. Sirve para unir dos cuerdas. Para atarte al arnés usa el ocho."
+          "accept": [
+            "el pescador doble",
+            "pescador doble",
+            "el pescador",
+            "pescador"
+          ],
+          "feedbackEs": "Ese es el pescador doble, no el ocho. Para este reto tienes que reconocer el ocho."
+        }
+      ],
+      "pinFirst": "ballestrinque"
+    },
+    {
+      "id": "turno",
+      "eyebrow": "Escena 8 · El primer turno",
+      "title": "¿A quién le toca?",
+      "lead": "Carlos decide el orden. Diego escucha contigo.",
+      "speaker": "carlos",
+      "speakerLabel": "Carlos",
+      "dialogEs": "Tú subes primero. Diego espera abajo y después le toca a él.",
+      "questionEs": "¿Qué le dices a Diego?",
+      "kind": "choice",
+      "options": [
+        {
+          "id": "me-toca",
+          "es": "Me toca primero.",
+          "accept": [
+            "me toca primero",
+            "me toca",
+            "subo primero",
+            "yo primero"
+          ],
+          "correct": true,
+          "speaker": "diego",
+          "speakerState": "contento",
+          "feedbackEs": "Sí. Tú primero y yo después. Te ayudo a buscar la última pista desde abajo."
+        },
+        {
+          "id": "te-toca",
+          "es": "Te toca primero.",
+          "accept": [
+            "te toca primero",
+            "te toca",
+            "tu primero",
+            "sube tu primero"
+          ],
+          "speaker": "diego",
+          "speakerState": "pensativo",
+          "feedbackEs": "Carlos ha dicho que tú subes primero. A mí me toca después."
+        },
+        {
+          "id": "nos-vamos",
+          "es": "Nos vamos a casa.",
+          "accept": [
+            "nos vamos a casa",
+            "vamos a casa",
+            "nos vamos",
+            "a casa"
+          ],
+          "speaker": "diego",
+          "speakerState": "pensativo",
+          "feedbackEs": "¿A casa? Todavía no hemos probado la ruta. Tú subes primero y yo espero abajo."
         }
       ]
     },
-
     {
       "id": "desafio",
-      "eyebrow": "Escena 7 · El desafío",
+      "eyebrow": "Escena 9 · El desafío",
       "title": "¿Estás listo?",
-      "lead": "Carlos ya tiene la cuerda. Tú decides.",
-      "art": "belay",
+      "lead": "Carlos tiene la cuerda. Diego espera su turno.",
+      "art": "belay-with-diego",
       "speaker": "carlos",
       "speakerLabel": "Carlos",
-      "dialogEs": "Nudo comprobado. Yo voy a asegurarte. ¿Quieres intentarlo?",
+      "dialogEs": "Nudo comprobado. Yo voy a asegurarte y Diego mirará desde abajo. ¿Quieres intentarlo?",
       "questionEs": "¿Qué le dices a Carlos?",
       "kind": "choice",
       "options": [
         {
           "id": "subir",
           "es": "Quiero subir.",
-          "accept": ["quiero subir", "subir", "voy a subir"],
+          "accept": [
+            "quiero subir",
+            "subir",
+            "voy a subir"
+          ],
           "correct": true,
-          "feedbackEs": "¡Perfecto! Te aseguro. ¡Puedes subir!"
+          "feedbackEs": "¡Perfecto! Te aseguro. ¡Puedes subir! Diego dice: «¡Nos vemos arriba!»"
         },
         {
           "id": "bajar",
           "es": "Quiero bajar.",
-          "accept": ["quiero bajar", "bajar", "voy a bajar"],
+          "accept": [
+            "quiero bajar",
+            "bajar",
+            "voy a bajar"
+          ],
           "feedbackEs": "¿Bajar? Todavía estás en el suelo. Primero hay que subir."
         },
         {
           "id": "descansar",
           "es": "Quiero descansar.",
-          "accept": ["quiero descansar", "descansar"],
+          "accept": [
+            "quiero descansar",
+            "descansar"
+          ],
           "feedbackEs": "Todavía no has escalado nada. ¿Quieres subir?"
         }
       ]
     },
-
     {
       "id": "escalar",
-      "eyebrow": "Escena 8 · ¡A escalar!",
+      "eyebrow": "Escena 10 · ¡A escalar!",
       "title": "La presa está lejos.",
-      "lead": "Subes unos metros. La siguiente presa queda lejos y la cuerda está tensa.",
-      "art": "climb-low",
+      "lead": "Subes unos metros. Carlos te asegura y Diego observa desde abajo.",
+      "art": "climb-low-with-diego",
       "speaker": "carlos",
       "speakerLabel": "Carlos",
-      "dialogEs": "Estoy asegurándote. ¡Puedes subir! La siguiente presa está lejos y necesitas más cuerda.",
+      "dialogEs": "La siguiente presa está lejos. Si necesitas más cuerda, tienes que pedírmela.",
       "questionEs": "¿Qué le dices a Carlos?",
       "kind": "choice",
       "options": [
         {
           "id": "dame",
           "es": "¡Dame cuerda!",
-          "accept": ["dame cuerda", "mas cuerda", "dame mas cuerda"],
+          "accept": [
+            "dame cuerda",
+            "mas cuerda",
+            "dame mas cuerda"
+          ],
           "correct": true,
-          "feedbackEs": "¡Voy! Te doy cuerda. Coge la presa."
+          "feedbackEs": "¡Voy! Te doy más cuerda. Diego escucha la frase para recordarla después."
         },
         {
           "id": "pilla",
           "es": "¡Pilla!",
-          "accept": ["pilla"],
+          "accept": [
+            "pilla"
+          ],
           "feedbackEs": "«¡Pilla!» significa que recojo la cuerda. Pero ahora necesitas más cuerda."
         },
         {
           "id": "bajame",
           "es": "¡Bájame!",
-          "accept": ["bajame", "quiero bajar"],
-          "feedbackEs": "«¡Bájame!» significa que quieres bajar. Todavía te queda vía."
+          "accept": [
+            "bajame",
+            "quiero bajar"
+          ],
+          "feedbackEs": "«¡Bájame!» significa que quieres volver al suelo. Pero ahora necesitas más cuerda."
         }
       ]
     },
-
     {
       "id": "descanso",
-      "eyebrow": "Escena 9 · Casi arriba",
+      "eyebrow": "Escena 11 · Casi arriba",
       "title": "Estás cansado.",
-      "lead": "Quieres colgarte de la cuerda y descansar un momento.",
-      "art": "climb-high",
+      "lead": "Quieres descansar un momento. Diego no puede responder por ti.",
+      "art": "climb-high-with-diego",
       "speaker": "carlos",
       "speakerLabel": "Carlos",
-      "dialogEs": "¡Muy bien! Ya estás casi arriba. Estás cansado y quieres descansar colgado de la cuerda.",
+      "dialogEs": "Estás cansado y quieres descansar colgado de la cuerda. Dime la orden correcta.",
       "questionEs": "¿Qué le dices a Carlos?",
       "kind": "choice",
       "options": [
         {
           "id": "dame2",
           "es": "¡Dame cuerda!",
-          "accept": ["dame cuerda", "mas cuerda", "dame mas cuerda"],
+          "accept": [
+            "dame cuerda",
+            "mas cuerda",
+            "dame mas cuerda"
+          ],
           "feedbackEs": "Con más cuerda no puedes descansar. Pídele que recoja la cuerda."
         },
         {
           "id": "pilla2",
           "es": "¡Pilla! Necesito descansar.",
-          "accept": ["pilla", "pilla necesito descansar", "necesito descansar"],
+          "accept": [
+            "pilla",
+            "pilla necesito descansar",
+            "necesito descansar"
+          ],
           "correct": true,
-          "feedbackEs": "¡Te tengo! Tranquilo, el nudo aguanta. Descansa y después llegas hasta arriba."
+          "feedbackEs": "¡Te tengo! «¡Pilla!» sirve para pedirme que recoja la cuerda. Descansa. Diego aplaude desde abajo."
         },
         {
           "id": "bajame2",
           "es": "¡Bájame!",
-          "accept": ["bajame"],
+          "accept": [
+            "bajame"
+          ],
           "feedbackEs": "«¡Bájame!» te lleva al suelo. Solo quieres descansar."
         }
       ]
     },
-
     {
       "id": "movimiento",
-      "eyebrow": "Escena 10 · El último movimiento",
+      "eyebrow": "Escena 12 · La pista de Diego",
       "title": "Un movimiento más.",
-      "lead": "Dos presas: una verde y una roja. Escucha a Carlos.",
-      "speaker": "carlos",
-      "speakerLabel": "Carlos",
-      "dialogEs": "¡Solo queda un movimiento! La presa verde está a tu izquierda. ¡Cógela con la mano izquierda!",
+      "lead": "Desde abajo, Diego ve la última presa y te ayuda con palabras.",
+      "speaker": "diego",
+      "speakerLabel": "Diego",
+      "dialogEs": "¡Te ayudo! La última presa es verde y está a tu izquierda. ¡Cógela con la mano izquierda!",
       "questionEs": "¿Qué presa coges?",
       "kind": "choice",
       "options": [
@@ -406,68 +728,253 @@
           "art": "hold:izquierda",
           "es": "A",
           "sayEs": "La presa de la izquierda.",
-          "accept": ["la izquierda", "izquierda", "la presa verde", "presa verde", "la mano izquierda"],
+          "accept": [
+            "la izquierda",
+            "izquierda",
+            "la presa verde",
+            "presa verde",
+            "la mano izquierda"
+          ],
           "correct": true,
-          "feedbackEs": "¡Perfecto! La presa verde. ¡Sigues subiendo hasta arriba!"
+          "feedbackEs": "¡Sí! La verde, a tu izquierda. ¡Has llegado arriba!",
+          "speakerState": "contento"
         },
         {
           "id": "derecha",
           "art": "hold:derecha",
           "es": "B",
           "sayEs": "La presa de la derecha.",
-          "accept": ["la derecha", "derecha", "la presa roja", "presa roja", "la mano derecha"],
-          "feedbackEs": "Esa es la presa roja. La verde está a tu izquierda."
+          "accept": [
+            "la derecha",
+            "derecha",
+            "la presa roja",
+            "presa roja",
+            "la mano derecha"
+          ],
+          "feedbackEs": "Esa es la roja y está a tu derecha. La verde está a tu izquierda.",
+          "speakerState": "atento"
+        }
+      ],
+      "speakerState": "atento"
+    },
+    {
+      "id": "ayuda-diego",
+      "eyebrow": "Escena 13 · El turno de Diego",
+      "title": "Ahora le toca a él.",
+      "lead": "Diego empieza la ruta. Una presa queda lejos.",
+      "speaker": "diego",
+      "speakerLabel": "Diego",
+      "speakerState": "pensativo",
+      "dialogEs": "Ahora me toca a mí. La siguiente presa está lejos y necesito más cuerda. Ayúdame: ¿qué le digo a Carlos?",
+      "questionEs": "Elige la frase para Diego.",
+      "kind": "choice",
+      "options": [
+        {
+          "id": "dame-diego",
+          "es": "¡Dame cuerda!",
+          "accept": [
+            "dame cuerda",
+            "mas cuerda",
+            "dame mas cuerda"
+          ],
+          "correct": true,
+          "speakerState": "contento",
+          "feedbackEs": "¡Eso es! «¡Dame cuerda!». Carlos me da más cuerda y puedo continuar."
+        },
+        {
+          "id": "pilla-diego",
+          "es": "¡Pilla!",
+          "accept": [
+            "pilla",
+            "pia"
+          ],
+          "speakerState": "pensativo",
+          "feedbackEs": "Si digo «¡Pilla!», Carlos recoge la cuerda. Yo necesito más cuerda para llegar a la presa."
+        },
+        {
+          "id": "bajame-diego",
+          "es": "¡Bájame!",
+          "accept": [
+            "bajame"
+          ],
+          "speakerState": "pensativo",
+          "feedbackEs": "Si digo «¡Bájame!», Carlos me baja al suelo. Yo quiero continuar."
         }
       ]
     },
-
     {
       "id": "final",
       "eyebrow": "Ruta completada",
-      "title": "¡Lo has conseguido!",
-      "lead": "Una última pregunta antes de bajar.",
-      "art": "badge",
-      "speaker": "carlos",
-      "speakerLabel": "Carlos",
-      "dialogEs": "¡Muy bien! Has terminado la vía secreta. ¡Buen trabajo!",
-      "questionEs": "¿Cómo se llama el lugar donde has escalado?",
+      "title": "Dos mitades, una aventura.",
+      "lead": "Tú y Diego unís las dos mitades de la insignia.",
+      "speaker": "diego",
+      "speakerLabel": "Diego",
+      "dialogEs": "¡Lo hemos conseguido! Tú me has ayudado y yo te he ayudado. La ruta era secreta, pero no era para hacerla solo.",
+      "questionEs": "¿Cómo se llama el lugar donde habéis escalado?",
       "kind": "recall",
       "answerPattern": "rocodromo",
-      "successEs": "¡Exacto! Un rocódromo. Has completado La ruta secreta.",
-      "failEs": "Piensa en el nombre que viste en la recepción: «Bienvenido al r…»."
+      "successEs": "¡Exacto! Un rocódromo. Tú y Diego habéis completado La ruta secreta.",
+      "failEs": "Piensa en el nombre que viste en la recepción: «Bienvenido al r…».",
+      "speakerState": "contento",
+      "artOnSuccess": "finish-with-diego"
     }
   ],
-
   "vocabulary": [
-    { "es": "rocódromo", "ru": "скалодром" },
-    { "es": "vía", "ru": "трасса" },
-    { "es": "presas", "ru": "зацепки" },
-    { "es": "pared", "ru": "стена" },
-    { "es": "cuerda", "ru": "верёвка" },
-    { "es": "arnés", "ru": "страховочная система" },
-    { "es": "pies de gato", "ru": "скальные туфли" },
-    { "es": "casco", "ru": "каска" },
-    { "es": "mosquetón", "ru": "карабин" },
-    { "es": "nudo", "ru": "узел" },
-    { "es": "atarse", "ru": "привязываться" },
-    { "es": "el ocho", "ru": "восьмёрка (узел)" },
-    { "es": "el ballestrinque", "ru": "стремя (узел)" },
-    { "es": "el pescador doble", "ru": "грейпвайн (узел)" },
-    { "es": "asegurar", "ru": "страховать" },
-    { "es": "asegurador", "ru": "страхующий" },
-    { "es": "entrenador", "ru": "тренер" },
-    { "es": "recepcionista", "ru": "администратор" },
-    { "es": "búlder", "ru": "боулдеринг" },
-    { "es": "dificultad", "ru": "сложность" },
-    { "es": "reunión", "ru": "верхняя станция" },
-    { "es": "subir", "ru": "подниматься" },
-    { "es": "bajar", "ru": "спускаться" },
-    { "es": "descansar", "ru": "отдыхать" },
-    { "es": "¡Pilla!", "ru": "выбери слабину" },
-    { "es": "¡Dame cuerda!", "ru": "выдай верёвку" },
-    { "es": "¡Bájame!", "ru": "спусти меня" },
-    { "es": "izquierda", "ru": "лево" },
-    { "es": "derecha", "ru": "право" },
-    { "es": "amarilla · roja · azul · verde", "ru": "жёлтая · красная · синяя · зелёная" }
+    {
+      "es": "rocódromo",
+      "ru": "скалодром"
+    },
+    {
+      "es": "vía",
+      "ru": "трасса"
+    },
+    {
+      "es": "presas",
+      "ru": "зацепки"
+    },
+    {
+      "es": "pared",
+      "ru": "стена"
+    },
+    {
+      "es": "cuerda",
+      "ru": "верёвка"
+    },
+    {
+      "es": "arnés",
+      "ru": "страховочная система"
+    },
+    {
+      "es": "pies de gato",
+      "ru": "скальные туфли"
+    },
+    {
+      "es": "casco",
+      "ru": "каска"
+    },
+    {
+      "es": "mosquetón",
+      "ru": "карабин"
+    },
+    {
+      "es": "nudo",
+      "ru": "узел"
+    },
+    {
+      "es": "atarse",
+      "ru": "привязываться"
+    },
+    {
+      "es": "el ocho",
+      "ru": "восьмёрка (узел)"
+    },
+    {
+      "es": "el ballestrinque",
+      "ru": "стремя (узел)"
+    },
+    {
+      "es": "el pescador doble",
+      "ru": "грейпвайн (узел)"
+    },
+    {
+      "es": "asegurar",
+      "ru": "страховать"
+    },
+    {
+      "es": "asegurador",
+      "ru": "страхующий"
+    },
+    {
+      "es": "entrenador",
+      "ru": "тренер"
+    },
+    {
+      "es": "recepcionista",
+      "ru": "администратор"
+    },
+    {
+      "es": "búlder",
+      "ru": "боулдеринг"
+    },
+    {
+      "es": "dificultad",
+      "ru": "сложность"
+    },
+    {
+      "es": "subir",
+      "ru": "подниматься"
+    },
+    {
+      "es": "bajar",
+      "ru": "спускаться"
+    },
+    {
+      "es": "descansar",
+      "ru": "отдыхать"
+    },
+    {
+      "es": "¡Pilla!",
+      "ru": "выбери слабину"
+    },
+    {
+      "es": "¡Dame cuerda!",
+      "ru": "выдай верёвку"
+    },
+    {
+      "es": "¡Bájame!",
+      "ru": "спусти меня"
+    },
+    {
+      "es": "izquierda",
+      "ru": "лево"
+    },
+    {
+      "es": "derecha",
+      "ru": "право"
+    },
+    {
+      "es": "amarilla · roja · azul · verde",
+      "ru": "жёлтая · красная · синяя · зелёная"
+    },
+    {
+      "es": "compañero / compañera",
+      "ru": "напарник / напарница"
+    },
+    {
+      "es": "juntos",
+      "ru": "вместе"
+    },
+    {
+      "es": "solo",
+      "ru": "один, в одиночку"
+    },
+    {
+      "es": "una pista",
+      "ru": "подсказка, ключ к разгадке"
+    },
+    {
+      "es": "te toca",
+      "ru": "твоя очередь"
+    },
+    {
+      "es": "me toca",
+      "ru": "моя очередь"
+    },
+    {
+      "es": "ayudar · ¡ayúdame!",
+      "ru": "помогать · помоги мне"
+    },
+    {
+      "es": "primero",
+      "ru": "первым, сначала"
+    },
+    {
+      "es": "después",
+      "ru": "потом"
+    },
+    {
+      "es": "desde abajo",
+      "ru": "снизу"
+    }
   ]
 }

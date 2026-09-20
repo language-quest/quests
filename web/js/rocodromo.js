@@ -140,14 +140,14 @@ function shake(el) {
  * Отдельной строкой внизу он был бы вторым голосом, а наверху оставался бы
  * вопрос, на который уже ответили.
  */
-function reply(text, speakerId, label, status) {
+function reply(text, speakerId, label, status, state) {
   const d = $("dialog");
   if (!d || !text) { speak(text, speakerId); feedback(text, status === "ok"); return; }
 
   d.className = "dialog" + (status ? ` ${status}` : "");
   const old = d.querySelector(".avatar");
   if (hasAvatar(speakerId)) {
-    const node = avatarNode(speakerId);
+    const node = avatarNode(speakerId, state);
     old ? old.replaceWith(node) : d.prepend(node);
   } else if (old) {
     old.remove();
@@ -164,12 +164,12 @@ function reply(text, speakerId, label, status) {
   speak(text, speakerId);
 }
 
-/** Круглый портрет говорящего. Есть только у Карлоса и администраторши. */
-function avatarNode(speakerId) {
+/** Круглый портрет говорящего. Есть у администраторши, Карлоса и Диего; у Диего — четыре состояния лица. */
+function avatarNode(speakerId, state) {
   const span = document.createElement("span");
   span.className = "avatar";
   span.setAttribute("aria-hidden", "true");
-  span.innerHTML = art(`avatar:${speakerId}`);
+  span.innerHTML = art(state ? `avatar:${speakerId}:${state}` : `avatar:${speakerId}`);
   return span;
 }
 
@@ -189,12 +189,17 @@ function speakBtn(text, speakerId) {
  * Буквы A/B/C выдаются по месту, а не по автору — иначе они бы ехали вместе
  * с карточкой и по-прежнему выдавали ответ.
  */
-function shuffled(options) {
-  const out = options.map((o) => ({ ...o }));
+function shuffled(options, pinFirst) {
+  const all = options.map((o) => ({ ...o }));
+  // pinFirst: сюжетная ошибка Диего («el de la izquierda») обязана указывать на ту же
+  // карточку, что и в реплике, поэтому она не участвует в перемешивании.
+  const pinned = all.filter((o) => o.id === pinFirst);
+  const out = all.filter((o) => o.id !== pinFirst);
   for (let i = out.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [out[i], out[j]] = [out[j], out[i]];
   }
+  out.unshift(...pinned);
   out.forEach((o, i) => { if (o.art && /^[A-C]$/.test(o.es ?? "")) o.es = "ABC"[i]; });
   return out;
 }
@@ -257,12 +262,9 @@ function render() {
   scene.appendChild(head);
 
   // картинка сцены
-  if (S.kind === "recall") {
-    const badge = document.createElement("div");
-    badge.className = "badge";
-    badge.textContent = "🏔️";
-    scene.appendChild(badge);
-  } else if (S.art && art(S.art)) {
+  // Финальная сцена: картинка (две половины эмблемы вместе) появляется только после
+  // верного слова; до него — ничего, кроме реплики. Гора-эмодзи была бы подсказкой.
+  if (S.art && art(S.art)) {
     const box = document.createElement("div");
     box.className = "stageart";
     box.innerHTML = art(S.art);
@@ -274,7 +276,7 @@ function render() {
     const d = document.createElement("div");
     d.className = "dialog";
     d.id = "dialog";
-    if (hasAvatar(S.speaker)) d.appendChild(avatarNode(S.speaker));
+    if (hasAvatar(S.speaker)) d.appendChild(avatarNode(S.speaker, S.speakerState));
     const said = document.createElement("div");
     said.className = "said";
     said.innerHTML = `<span class="who">${esc(labelOf(S.speaker, S.speakerLabel))}</span><span class="line">${esc(S.dialogEs)}</span>`;
@@ -312,12 +314,13 @@ function renderChoice(scene, S) {
   grid.className = "choices" + (S.options.length === 2 ? " two" : "");
   const byId = new Map();
 
-  for (const o of shuffled(S.options)) {
+  for (const o of shuffled(S.options, S.pinFirst)) {
     const b = document.createElement("button");
     // Либо картинка с нейтральной подписью, либо фраза без картинки (CLAUDE.md):
     // картинка рядом с фразой переводила бы её, и выбирать было бы нечего.
     b.className = "choice" + (o.art ? "" : " text");
     b.type = "button";
+    b.dataset.id = o.id;   // для tools/rocodromo-browser-check.js; на вид и озвучку не влияет
     if (o.art) b.appendChild(artNode(o.art));
     if (o.es) {
       const strong = document.createElement("strong");
@@ -337,6 +340,9 @@ function renderChoice(scene, S) {
   const row = document.createElement("div");
   row.className = "row";
   row.appendChild(micButton(functionsOf(S.options), choose));
+  // Режим «отвечаю голосом»: фразы прячутся, остаётся только микрофон. Картинные карточки
+  // прятать нельзя — без них ответить нечем, а голос тогда не проверяет ничего.
+  if (!S.options.some((o) => o.art) && asrAvailable()) row.appendChild(hideToggle(grid));
   scene.appendChild(row);
 
   function choose(id) {
@@ -345,7 +351,7 @@ function renderChoice(scene, S) {
     const { option, el } = entry;
     const who = option.speaker ?? S.speaker;
     feedback("");
-    reply(option.feedbackEs, who, labelOf(who, S.speakerLabel), option.correct ? "ok" : "wrong");
+    reply(option.feedbackEs, who, labelOf(who, S.speakerLabel), option.correct ? "ok" : "wrong", option.speakerState);
     if (!option.correct) shake(el);
     if (option.correct) {
       el.classList.add("selected");
@@ -358,16 +364,42 @@ function renderChoice(scene, S) {
   }
 }
 
+/** Кнопка «Ocultar respuestas». Выбор помнится между сценами; без хранилища просто не запоминается. */
+const HIDE_KEY = "rocodromo.hideAnswers";
+function hideToggle(grid) {
+  let hidden = false;
+  try { hidden = localStorage.getItem(HIDE_KEY) === "1"; } catch {}
+  const b = document.createElement("button");
+  b.className = "mic hide-toggle";
+  b.type = "button";
+  b.id = "hideToggle";
+  const apply = () => {
+    grid.hidden = hidden;
+    b.setAttribute("aria-pressed", String(hidden));
+    b.setAttribute("aria-controls", "choices");
+    b.textContent = hidden ? UI.showAnswers : UI.hideAnswers;
+  };
+  grid.id = "choices";
+  b.onclick = () => {
+    hidden = !hidden;
+    try { localStorage.setItem(HIDE_KEY, hidden ? "1" : "0"); } catch {}
+    apply();
+  };
+  apply();
+  return b;
+}
+
 /** Снаряжение: несколько предметов, подписей под картинками нет. */
 function renderMulti(scene, S) {
   const grid = document.createElement("div");
   grid.className = "choices gear";
   const byId = new Map();
 
-  for (const o of shuffled(S.options)) {
+  for (const o of shuffled(S.options, S.pinFirst)) {
     const b = document.createElement("button");
     b.className = "choice";
     b.type = "button";
+    b.dataset.id = o.id;
     b.setAttribute("aria-pressed", "false");
     b.setAttribute("aria-label", "Objeto");
     b.appendChild(artNode(o.art));
@@ -487,7 +519,14 @@ function renderRecall(scene, S) {
   function check(value) {
     const ok = new RegExp(`\\b${S.answerPattern}\\b`).test(normalize(value));
     feedback("");
-    reply(ok ? S.successEs : S.failEs, S.speaker, labelOf(S.speaker, S.speakerLabel), ok ? "ok" : "wrong");
+    reply(ok ? S.successEs : S.failEs, S.speaker, labelOf(S.speaker, S.speakerLabel), ok ? "ok" : "wrong", S.speakerState);
+    if (ok && S.artOnSuccess && !$("finishArt")) {
+      const box = document.createElement("div");
+      box.className = "stageart";
+      box.id = "finishArt";
+      box.innerHTML = art(S.artOnSuccess);
+      $("dialog").before(box);
+    }
     if (!ok) {
       shake(input);
       // Следующая попытка — сразу печатать (или жать 🎙): старый текст выделен и затрётся.

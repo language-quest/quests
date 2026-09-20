@@ -42,6 +42,38 @@ const cases = [
   ["entrenador", "azul", "azul"],
   ["entrenador", "No lo sé", null],
 
+  // 2 · компаньон (T-004): juntos / solo / primero+después не должны путаться
+  ["companero", "sí, vamos juntos", "juntos"],
+  ["companero", "vamos juntos", "juntos"],
+  ["companero", "buscamos juntos la ruta", "juntos"],
+  ["companero", "prefiero ir solo", "solo"],
+  ["companero", "voy solo", "solo"],
+  ["companero", "tú primero, yo después", "despues"],
+  ["companero", "tu primero yo voy despues", "despues"],
+  ["companero", "primero", null],                     // общее слово не выбирает вариант
+  ["companero", "Diego", null],
+  ["companero", "vamos a casa", null],
+  ["companero", "no lo sé", null],
+
+  // 8 · чья очередь: me toca ≠ te toca
+  ["turno", "me toca primero", "me-toca"],
+  ["turno", "me toca", "me-toca"],
+  ["turno", "te toca primero", "te-toca"],
+  ["turno", "te toca", "te-toca"],
+  ["turno", "nos vamos a casa", "nos-vamos"],
+  ["turno", "vamos a casa", "nos-vamos"],
+  ["turno", "primero", null],
+  ["turno", "Diego", null],
+  ["turno", "después", null],
+
+  // 13 · игрок помогает Диего: та же команда, что в сцене 10
+  ["ayuda-diego", "dame cuerda", "dame-diego"],
+  ["ayuda-diego", "¡Dame cuerda!", "dame-diego"],
+  ["ayuda-diego", "pilla", "pilla-diego"],
+  ["ayuda-diego", "bájame", "bajame-diego"],
+  ["ayuda-diego", "cuerda", null],                    // «cuerda» без команды — не ответ
+  ["ayuda-diego", "Diego", null],
+
   // 3 — снаряжение: называем предметы, потом подтверждаем
   ["equipo", "El arnés", "arnes"],
   ["equipo", "el arnes", "arnes"],
