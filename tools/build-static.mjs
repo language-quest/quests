@@ -18,6 +18,9 @@ const COPY = [
   "assets/catalog",
   "assets/coworking",
   "assets/rocodromo/quest.json",
+  "assets/rocodromo/place-banco.png",
+  "assets/rocodromo/place-pared.png",
+  "assets/rocodromo/place-taquilla.png",
   "assets/caperucita/quest.json",
   "assets/caperucita/web",
 ];

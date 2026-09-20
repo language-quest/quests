@@ -394,6 +394,7 @@ export function art(key) {
   if (key.includes(":")) {
     const [kind, value, variant] = key.split(":");
     if (kind === "wall") return wallCard(value);
+    if (kind === "img") return `<img src="../assets/rocodromo/${value}.png" alt="" loading="eager">`;
     if (kind === "route") return routeCard(value);
     if (kind === "gear") return gearOne(value);
     if (kind === "hold") return holdCard(value);

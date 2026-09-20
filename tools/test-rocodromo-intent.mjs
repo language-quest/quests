@@ -36,10 +36,10 @@ const cases = [
   ["recepcion", "¿Dónde está el baño?", null],
 
   // 2 — цвет стены. Подписи на карточках нейтральные (A/B/C), голосом нужен цвет.
-  ["entrenador", "La pared roja", "roja"],
-  ["entrenador", "Voy a la pared roja", "roja"],
-  ["entrenador", "la pared amarilla", "amarilla"],
-  ["entrenador", "azul", "azul"],
+  ["entrenador", "La pared", "pared"],
+  ["entrenador", "Voy a la pared", "pared"],
+  ["entrenador", "el banco", "banco"],
+  ["entrenador", "la taquilla", "taquilla"],
   ["entrenador", "No lo sé", null],
 
   // 2 · компаньон (T-004): juntos / solo / primero+después не должны путаться
