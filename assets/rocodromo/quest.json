@@ -157,7 +157,12 @@
             "bulgar",
             "buldear",
             "hacer bulldog",
-            "bulldog"
+            "bulldog",
+            "quiero boulder",
+            "boulder",
+            "prefiero búlder",
+            "quiero probar el búlder",
+            "voy a hacer búlder"
           ],
           "feedbackEs": "¿Búlder? ¿Sin cuerda? Hoy buscamos una vía con cuerda. Diego y tú necesitáis encontrar esa vía."
         },
@@ -167,7 +172,12 @@
           "accept": [
             "quiero escalar con cuerda",
             "escalar con cuerda",
-            "con cuerda"
+            "con cuerda",
+            "prefiero cuerda",
+            "quiero probar con cuerda",
+            "escalada con cuerda",
+            "voy a escalar con cuerda",
+            "quiero la ruta con cuerda"
           ],
           "correct": true,
           "feedbackEs": "¡Perfecto! La ruta secreta es con cuerda. Diego tiene una mitad de la insignia y tú, la otra."
@@ -180,7 +190,13 @@
             "no se",
             "es mi primera vez",
             "primera vez",
-            "soy nuevo"
+            "soy nuevo",
+            "no lo sé",
+            "soy principiante",
+            "nunca he escalado",
+            "no tengo experiencia",
+            "es mi primera vez aquí",
+            "no sé qué elegir"
           ],
           "feedbackEs": "¡Tranquilo! El búlder es bajo y sin cuerda. En la ruta de hoy se sube con cuerda. Diego también está aprendiendo. ¿Qué eliges?"
         }
@@ -212,7 +228,15 @@
             "claro que sí",
             "vale",
             "de acuerdo",
-            "buena idea"
+            "buena idea",
+            "sí claro",
+            "sí vale",
+            "sí de acuerdo",
+            "sí por supuesto",
+            "sí",
+            "venga",
+            "buscamos la ruta juntos",
+            "vamos a buscarla juntos"
           ],
           "correct": true,
           "speakerState": "contento",
@@ -225,7 +249,13 @@
             "prefiero ir solo",
             "ir solo",
             "voy solo",
-            "solo"
+            "solo",
+            "quiero ir solo",
+            "voy yo solo",
+            "prefiero estar solo",
+            "mejor solo",
+            "no gracias",
+            "prefiero ir yo solo"
           ],
           "speakerState": "pensativo",
           "feedbackEs": "Solo tienes media pista y yo tengo la otra mitad. Si vamos juntos, podemos continuar."
@@ -239,7 +269,13 @@
             "tu primero",
             "yo voy despues",
             "yo despues",
-            "despues"
+            "despues",
+            "ve tú primero",
+            "ve primero",
+            "tú primero yo después",
+            "después voy yo",
+            "voy después",
+            "tú vas primero"
           ],
           "speakerState": "pensativo",
           "feedbackEs": "Todavía no toca subir. Primero buscamos juntos a Carlos, el entrenador."
@@ -265,7 +301,12 @@
           "accept": [
             "la pared amarilla",
             "pared amarilla",
-            "amarilla"
+            "amarilla",
+            "vamos a la pared amarilla",
+            "a la pared amarilla",
+            "vamos a la amarilla",
+            "junto a la pared amarilla",
+            "es la pared amarilla"
           ],
           "speaker": "escalador",
           "feedbackEs": "¡Hola! No soy Carlos. Carlos está junto a la pared roja. Diego vuelve contigo para buscarlo."
@@ -278,7 +319,12 @@
           "accept": [
             "la pared roja",
             "pared roja",
-            "roja"
+            "roja",
+            "vamos a la pared roja",
+            "a la pared roja",
+            "vamos a la roja",
+            "junto a la pared roja",
+            "es la pared roja"
           ],
           "correct": true,
           "speaker": "carlos",
@@ -292,7 +338,12 @@
           "accept": [
             "la pared azul",
             "pared azul",
-            "azul"
+            "azul",
+            "vamos a la pared azul",
+            "a la pared azul",
+            "vamos a la azul",
+            "junto a la pared azul",
+            "es la pared azul"
           ],
           "speaker": "escalador",
           "feedbackEs": "¡Hola! No soy Carlos. Carlos está junto a la pared roja. Diego vuelve contigo para buscarlo."
@@ -389,7 +440,11 @@
           "accept": [
             "la via amarilla",
             "via amarilla",
-            "amarilla"
+            "amarilla",
+            "es la vía amarilla",
+            "es la amarilla",
+            "es amarilla",
+            "la vía amarilla es la secreta"
           ],
           "feedbackEs": "Esta vía tiene presas amarillas. La secreta tiene presas verdes."
         },
@@ -401,7 +456,14 @@
           "accept": [
             "la via verde",
             "via verde",
-            "verde"
+            "verde",
+            "es la vía verde",
+            "es la verde",
+            "es verde",
+            "la vía verde es la secreta",
+            "la vía de las presas verdes",
+            "la de las presas verdes",
+            "presas verdes"
           ],
           "correct": true,
           "feedbackEs": "¡Muy bien! Presas verdes, entre la amarilla y la azul. Diego y tú habéis encontrado la vía."
@@ -414,7 +476,11 @@
           "accept": [
             "la via azul",
             "via azul",
-            "azul"
+            "azul",
+            "es la vía azul",
+            "es la azul",
+            "es azul",
+            "la vía azul es la secreta"
           ],
           "feedbackEs": "Esta vía tiene presas azules. La secreta tiene presas verdes."
         }
@@ -439,7 +505,10 @@
           "accept": [
             "la cuerda suelta",
             "cuerda suelta",
-            "suelta"
+            "suelta",
+            "la cuerda no está atada",
+            "está suelta",
+            "la cuerda está suelta"
           ],
           "feedbackEs": "Ahí no hay nudo: la cuerda solo pasa por el arnés y está suelta."
         },
@@ -456,7 +525,13 @@
             "el nudo",
             "la cuerda atala",
             "cuerda atala",
-            "atala"
+            "atala",
+            "la atada al arnés",
+            "atada al arnés",
+            "cuerda atada al arnés",
+            "la cuerda está atada",
+            "está atada",
+            "el nudo del arnés"
           ],
           "correct": true,
           "feedbackEs": "¡Eso es un nudo! La cuerda está atada al arnés. Se llama «ocho». Diego lo mira con atención."
@@ -470,7 +545,9 @@
             "el mosqueton",
             "mosqueton",
             "un mosqueton",
-            "mosquito"
+            "mosquito",
+            "es el mosquetón",
+            "el mosquetón"
           ],
           "feedbackEs": "Eso es un mosquetón, no un nudo. Un nudo se hace con la cuerda."
         }
@@ -502,7 +579,9 @@
             "valle strinte",
             "ballestrinte",
             "vallestente",
-            "el vallestente"
+            "el vallestente",
+            "es el ballestrinque",
+            "el nudo ballestrinque"
           ],
           "feedbackEs": "Ese es el ballestrinque, no el ocho. Diego se ha guiado por la posición y se ha equivocado. Busca el nudo que Carlos ha llamado «ocho»."
         },
@@ -515,7 +594,13 @@
             "el ocho",
             "ocho",
             "el nudo de ocho",
-            "nudo de ocho"
+            "nudo de ocho",
+            "la atada al arnés",
+            "atada al arnés",
+            "cuerda atada al arnés",
+            "la cuerda está atada",
+            "está atada",
+            "el nudo del arnés"
           ],
           "correct": true,
           "feedbackEs": "¡Exacto! El ocho. Diego sonríe: ahora los dos lo reconocéis."
@@ -529,7 +614,9 @@
             "el pescador doble",
             "pescador doble",
             "el pescador",
-            "pescador"
+            "pescador",
+            "es el pescador doble",
+            "el nudo pescador"
           ],
           "feedbackEs": "Ese es el pescador doble, no el ocho. Para este reto tienes que reconocer el ocho."
         }
@@ -554,7 +641,14 @@
             "me toca primero",
             "me toca",
             "subo primero",
-            "yo primero"
+            "yo primero",
+            "voy yo primero",
+            "yo subo primero",
+            "subo yo primero",
+            "es mi turno",
+            "mi turno",
+            "me toca a mí",
+            "empiezo yo"
           ],
           "correct": true,
           "speaker": "diego",
@@ -568,7 +662,14 @@
             "te toca primero",
             "te toca",
             "tu primero",
-            "sube tu primero"
+            "sube tu primero",
+            "sube tú",
+            "tú subes primero",
+            "es tu turno",
+            "tu turno",
+            "te toca a ti",
+            "sube tú primero",
+            "empiezas tú"
           ],
           "speaker": "diego",
           "speakerState": "pensativo",
@@ -581,7 +682,13 @@
             "nos vamos a casa",
             "vamos a casa",
             "nos vamos",
-            "a casa"
+            "a casa",
+            "vámonos a casa",
+            "vámonos",
+            "me voy a casa",
+            "quiero irme a casa",
+            "quiero ir a casa",
+            "nos vamos ya"
           ],
           "speaker": "diego",
           "speakerState": "pensativo",
@@ -607,7 +714,17 @@
           "accept": [
             "quiero subir",
             "subir",
-            "voy a subir"
+            "voy a subir",
+            "quiero intentarlo",
+            "voy a intentarlo",
+            "intentarlo",
+            "sí quiero subir",
+            "sí quiero",
+            "sí",
+            "quiero escalar",
+            "estoy listo",
+            "vamos",
+            "listo"
           ],
           "correct": true,
           "feedbackEs": "¡Perfecto! Te aseguro. ¡Puedes subir! Diego dice: «¡Nos vemos arriba!»"
@@ -618,7 +735,11 @@
           "accept": [
             "quiero bajar",
             "bajar",
-            "voy a bajar"
+            "voy a bajar",
+            "quiero bajarme",
+            "me bajo",
+            "voy a bajarme",
+            "quiero bajar ya"
           ],
           "feedbackEs": "¿Bajar? Todavía estás en el suelo. Primero hay que subir."
         },
@@ -627,7 +748,12 @@
           "es": "Quiero descansar.",
           "accept": [
             "quiero descansar",
-            "descansar"
+            "descansar",
+            "quiero descansar un poco",
+            "necesito descansar",
+            "voy a descansar",
+            "estoy cansado",
+            "quiero un descanso"
           ],
           "feedbackEs": "Todavía no has escalado nada. ¿Quieres subir?"
         }
@@ -651,7 +777,12 @@
           "accept": [
             "dame cuerda",
             "mas cuerda",
-            "dame mas cuerda"
+            "dame mas cuerda",
+            "necesito más cuerda",
+            "quiero más cuerda",
+            "dame cuerda por favor",
+            "más cuerda por favor",
+            "dame un poco de cuerda"
           ],
           "correct": true,
           "feedbackEs": "¡Voy! Te doy más cuerda. Diego escucha la frase para recordarla después."
@@ -660,7 +791,10 @@
           "id": "pilla",
           "es": "¡Pilla!",
           "accept": [
-            "pilla"
+            "pilla",
+            "pilla por favor",
+            "píllame",
+            "pillame"
           ],
           "feedbackEs": "«¡Pilla!» significa que recojo la cuerda. Pero ahora necesitas más cuerda."
         },
@@ -669,7 +803,11 @@
           "es": "¡Bájame!",
           "accept": [
             "bajame",
-            "quiero bajar"
+            "quiero bajar",
+            "bájame por favor",
+            "bájame ya",
+            "quiero bajarme",
+            "me quiero bajar"
           ],
           "feedbackEs": "«¡Bájame!» significa que quieres volver al suelo. Pero ahora necesitas más cuerda."
         }
@@ -693,7 +831,12 @@
           "accept": [
             "dame cuerda",
             "mas cuerda",
-            "dame mas cuerda"
+            "dame mas cuerda",
+            "necesito más cuerda",
+            "quiero más cuerda",
+            "dame cuerda por favor",
+            "más cuerda por favor",
+            "dame un poco de cuerda"
           ],
           "feedbackEs": "Con más cuerda no puedes descansar. Pídele que recoja la cuerda."
         },
@@ -703,7 +846,13 @@
           "accept": [
             "pilla",
             "pilla necesito descansar",
-            "necesito descansar"
+            "necesito descansar",
+            "pilla por favor",
+            "píllame",
+            "pillame",
+            "estoy cansado",
+            "quiero descansar",
+            "pilla estoy cansado"
           ],
           "correct": true,
           "feedbackEs": "¡Te tengo! «¡Pilla!» sirve para pedirme que recoja la cuerda. Descansa. Diego aplaude desde abajo."
@@ -712,7 +861,9 @@
           "id": "bajame2",
           "es": "¡Bájame!",
           "accept": [
-            "bajame"
+            "bajame",
+            "bájame por favor",
+            "bájame ya"
           ],
           "feedbackEs": "«¡Bájame!» te lleva al suelo. Solo quieres descansar."
         }
@@ -739,7 +890,14 @@
             "izquierda",
             "la presa verde",
             "presa verde",
-            "la mano izquierda"
+            "la mano izquierda",
+            "a la izquierda",
+            "con la izquierda",
+            "cojo la izquierda",
+            "cojo la presa verde",
+            "la de la izquierda",
+            "la verde",
+            "verde"
           ],
           "correct": true,
           "feedbackEs": "¡Sí! La verde, a tu izquierda. ¡Has llegado arriba!",
@@ -755,7 +913,13 @@
             "derecha",
             "la presa roja",
             "presa roja",
-            "la mano derecha"
+            "la mano derecha",
+            "a la derecha",
+            "con la derecha",
+            "cojo la derecha",
+            "la de la derecha",
+            "la roja",
+            "roja"
           ],
           "feedbackEs": "Esa es la roja y está a tu derecha. La verde está a tu izquierda.",
           "speakerState": "atento"
@@ -781,7 +945,12 @@
           "accept": [
             "dame cuerda",
             "mas cuerda",
-            "dame mas cuerda"
+            "dame mas cuerda",
+            "necesito más cuerda",
+            "quiero más cuerda",
+            "dame cuerda por favor",
+            "más cuerda por favor",
+            "dame un poco de cuerda"
           ],
           "correct": true,
           "speakerState": "contento",
@@ -792,7 +961,10 @@
           "es": "¡Pilla!",
           "accept": [
             "pilla",
-            "pia"
+            "pia",
+            "pilla por favor",
+            "píllame",
+            "pillame"
           ],
           "speakerState": "pensativo",
           "feedbackEs": "Si digo «¡Pilla!», Carlos recoge la cuerda. Yo necesito más cuerda para llegar a la presa."
@@ -801,7 +973,9 @@
           "id": "bajame-diego",
           "es": "¡Bájame!",
           "accept": [
-            "bajame"
+            "bajame",
+            "bájame por favor",
+            "bájame ya"
           ],
           "speakerState": "pensativo",
           "feedbackEs": "Si digo «¡Bájame!», Carlos me baja al suelo. Yo quiero continuar."
