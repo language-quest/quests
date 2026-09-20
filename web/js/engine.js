@@ -35,11 +35,26 @@ const words = (s) => normalize(s).split(" ").filter(Boolean);
 const ARTICLES = new Set(["el","la","los","las","un","una"]);
 const noArticles = (ws) => { const r = ws.filter((w) => !ARTICLES.has(w)); return r.length ? r : ws; };
 
-/** Схожесть отдельных СЛОВ. Короткие слова — только точное совпадение. */
+/**
+ * Фонетический ключ: ASR путает не буквы, а звуки («bulder» → «bullber»).
+ * Двойные буквы, b/v, h, k/qu/c, z/c/s, g/j сводятся к одному представителю.
+ */
+function phon(w) {
+  return w
+    .replace(/(.)\1+/g, "$1")
+    .replace(/qu/g, "k").replace(/c(?=[aou]|$)/g, "k").replace(/c(?=[ei])/g, "s").replace(/z/g, "s")
+    .replace(/g(?=[ei])/g, "j").replace(/v/g, "b").replace(/h/g, "");
+}
+
+/** Схожесть отдельных СЛОВ: по буквам или по звучанию. Короткие слова — только точное совпадение. */
 function wordSim(a, b) {
   if (a === b) return 1;
   if (a.length <= 3 || b.length <= 3) return 0;
-  return 1 - levenshtein(a, b) / Math.max(a.length, b.length);
+  const pa = phon(a), pb = phon(b);
+  const byLetters = 1 - levenshtein(a, b) / Math.max(a.length, b.length);
+  const bySound = pa.length <= 3 || pb.length <= 3 ? (pa === pb ? 1 : 0)
+    : 1 - levenshtein(pa, pb) / Math.max(pa.length, pb.length);
+  return Math.max(byLetters, bySound);
 }
 const WORD_MIN = 0.82;   // "despasio"~"despacio" = 0.875 проходит, "espacio" = 0.75 нет
 
@@ -62,6 +77,12 @@ function findPattern(toks, pat) {
       if (wordSim(toks[i + j], pat[j]) < WORD_MIN) { ok = false; break; }
     }
     if (ok) return { at: i, len: pat.length };
+  }
+  // ASR режет длинное слово пополам: «bul der» = «bulder». Только для однословных шаблонов.
+  if (pat.length === 1 && pat[0].length >= 5) {
+    for (let i = 0; i + 1 < toks.length; i++) {
+      if (wordSim(toks[i] + toks[i + 1], pat[0]) >= WORD_MIN) return { at: i, len: 2 };
+    }
   }
   return null;
 }

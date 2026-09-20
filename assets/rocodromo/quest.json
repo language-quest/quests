@@ -131,7 +131,11 @@
       "es",
       "soy",
       "nuevo",
-      "nueva"
+      "nueva",
+      "gusta",
+      "escalar",
+      "hacer",
+      "probar"
     ]
   },
   "scenes": [
@@ -211,14 +215,12 @@
       "speaker": "diego",
       "speakerLabel": "Diego",
       "speakerState": "normal",
+      "image": "diego/companero.jpg",
+      "video": "diego/companero.mp4",
       "dialogEs": "Hola, soy Diego. Parece que somos compañeros. ¿Buscamos juntos la ruta secreta?",
       "questionEs": "¿Qué le dices a Diego?",
       "kind": "choice",
       "options": [
-      "image": "diego/companero.jpg",
-      "video": "diego/companero.mp4",
-      "image": "diego/companero.png",
-      "video": "diego/companero.mp4",
         {
           "id": "juntos",
           "es": "Sí, vamos juntos.",

@@ -34,6 +34,12 @@ const cases = [
   ["recepcion", "soy nuevo", "primera"],
   ["recepcion", "quiero hacer búlgar", "bulder"],   // живая ошибка ASR: «búlder» → «búlgar»
   ["recepcion", "¿Dónde está el baño?", null],
+  ["recepcion", "me gusta escalar bullber", "bulder"],   // живая ошибка ASR: «búlder» → «bullber»
+  ["recepcion", "me gusta hacer bulder", "bulder"],
+  ["recepcion", "quiero bul der", "bulder"],
+  ["recepcion", "me gusta escalar", null],
+  ["recepcion", "quiero hacer bullying", null],
+  ["recepcion", "no quiero bulder", null],
 
   // 2 — цвет стены. Подписи на карточках нейтральные (A/B/C), голосом нужен цвет.
   ["entrenador", "La pared", "pared"],
