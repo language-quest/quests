@@ -124,7 +124,7 @@ function showStep() {
   locked = false;
   stopAudio();
   setProgress();
-  $('reaction').hidden = true; $('next').hidden = true; $('next').disabled = true;
+  $('reaction').hidden = true; $('reaction').className = 'reaction'; $('next').hidden = true; $('next').disabled = true;
   const lines = stepLines(step);
   const q = $('question');
   q.innerHTML = lines.map(l => `<p class="line"><span class="who">${l.who === 'narr' ? '' : l.who}</span>${l.text}</p>`).join('');
@@ -183,6 +183,7 @@ async function choose(step, card, btn) {
   setTimeout(() => $('stage').classList.remove('pop'), 600);
   const r = $('reaction');
   r.textContent = card.react.text; r.hidden = false;
+  r.className = 'reaction ' + (card.best ? 'ok' : 'bad');
   current = { ids: [card.react.id] };
   next.focus();
   await speak(current.ids, false);
