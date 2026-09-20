@@ -4,6 +4,7 @@ import { setupQuestNavigation } from './quest-navigation.js';
 const $ = id => document.getElementById(id);
 const AUDIO_DIR = '../assets/coworking/audio/';
 
+let stepBase = null, pickToken = 0;
 let idx = 0, state, locked, order, current, audioToken = 0, audioEl = null, started = false;
 const blobs = {};
 
@@ -129,6 +130,8 @@ function showStep(push = true) {
   const step = STEPS[idx];
   if (push !== null) setUrl(step.id, push);
   locked = false;
+  pickToken++;
+  stepBase = { ...state };
   stopAudio();
   setProgress();
   $('reaction').hidden = true; $('reaction').className = 'reaction'; $('next').hidden = true; $('next').disabled = true;
@@ -175,17 +178,30 @@ function apply(fx) {
 
 async function choose(step, card, btn) {
   if (locked) return;
-  locked = true;
-  document.querySelectorAll('.card-btn').forEach(b => { b.disabled = true; });
+  const token = ++pickToken;
+  stopAudio();
+  // Ошибка не запирает вопрос: можно сразу выбрать другой ответ (CLAUDE.md — перебор и есть механика).
+  // Эффект прошлого неверного выбора откатываем, чтобы сцена не хранила его следы.
+  const { mistakes, log } = state;
+  for (const k of Object.keys(state)) if (!(k in stepBase)) delete state[k];
+  Object.assign(state, stepBase, { mistakes, log });
+  if (card.best) {
+    locked = true;
+    document.querySelectorAll('.card-btn').forEach(b => { b.disabled = true; });
+  } else {
+    btn.disabled = true;
+  }
   btn.classList.add('chosen');
   if (!card.best) state.mistakes++;
   state.log.push({ step: step.id, card: card.id, text: card.kind === 'text' ? card.text : null, letter: 'ABC'[order.indexOf(card)], react: card.react.text, best: card.best });
   apply(card.fx);
   const next = $('next');
   next.hidden = false; next.disabled = true;
+  $('reaction').hidden = true;
   btn.classList.add(card.best ? 'right' : 'wrong');
   if (card.kind === 'img' && card.name) btn.insertAdjacentHTML('beforeend', `<span class="pname">${card.name}</span>`);
   await sfx(card.best);
+  if (token !== pickToken) return;
   renderStage(step);
   $('stage').classList.add('pop');
   setTimeout(() => $('stage').classList.remove('pop'), 600);
@@ -193,10 +209,11 @@ async function choose(step, card, btn) {
   r.textContent = card.react.text; r.hidden = false;
   r.className = 'reaction ' + (card.best ? 'ok' : 'bad');
   current = { ids: [card.react.id] };
-  next.focus();
+  if (card.best) next.focus();
   await speak(current.ids, false);
+  if (token !== pickToken) return;
   next.disabled = false;
-  next.focus();
+  if (card.best) next.focus();
 }
 
 $('again').addEventListener('click', () => { if (current) speak(current.ids, false); });
