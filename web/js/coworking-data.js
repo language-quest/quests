@@ -20,15 +20,15 @@ const R = (id, text) => ({ id, text });
 export const STEPS = [
   { id: 's0', scene: 0, type: 'choice',
     lines: [
-      L('s0.intro', 'narr', 'Es tu primer día en un coworking. Hoy, a las cuatro, tienes una videollamada.'),
+      L('s0.intro', 'narr', 'Es tu primer día en un coworking. Hoy, a las cuatro, tienes una videollamada en tu portátil.'),
       L('s0.lucia', 'Lucía', 'Hola, soy Lucía. Si no sabes algo, pregunta.'),
       L('s0.client', 'Cliente', 'Hola. Hoy la reunión es a las cuatro.'),
       L('s0.lucia2', 'Lucía', '¿Qué haces?'),
     ],
     cards: [
-      T('s0.a', 'Me voy a casa.', R('s0.a.r', 'Tu casa está lejos. Mejor te quedas aquí.')),
+      T('s0.a', 'Me voy a casa.', R('s0.a.r', 'Tu casa está lejos y la reunión es a las cuatro. Mejor te quedas aquí.')),
       T('s0.b', 'Me quedo aquí.', R('s0.b.r', 'Me quedo aquí.'), {}, true),
-      T('s0.c', 'No hago nada.', R('s0.c.r', 'Si no haces nada, no pasa nada. Vamos a empezar.')),
+      T('s0.c', 'Me voy a la playa.', R('s0.c.r', '¿A la playa? Hoy tienes una reunión a las cuatro. Mejor te quedas aquí.')),
     ] },
 
   { id: 's1', scene: 1, type: 'choice', usage: ['recepción'],
@@ -104,15 +104,15 @@ export const STEPS = [
     ] },
 
   { id: 's7a', scene: 7, type: 'choice', usage: ['cabina', 'sala'],
-    lines: [L('s7a.lucia', 'Lucía', 'Quieres hablar por teléfono a solas. Elige un lugar pequeño para una persona.')],
+    lines: [L('s7a.lucia', 'Lucía', 'Vas a hablar por teléfono. Elige un lugar pequeño para una persona.')],
     cards: [
       P('s7a.a', IMG.booth, R('s7a.a.r', 'Esta es una cabina. Es pequeña. Es para una persona.'), {}, true, 'la cabina'),
       P('s7a.b', IMG.meeting, R('s7a.b.r', 'Esta es una sala de reuniones. Es para muchas personas. Para una persona, usa la cabina.'), { peek: 'room' }, false, 'la sala de reuniones'),
-      P('s7a.c', IMG.outletDesk, R('s7a.c.r', 'Este es un puesto abierto. Todos te oyen. Para hablar a solas, usa la cabina.'), { peek: 'open' }, false, 'un puesto abierto'),
+      P('s7a.c', IMG.outletDesk, R('s7a.c.r', 'Este es un puesto abierto. Todos te oyen. Para hablar por teléfono, usa la cabina.'), { peek: 'open' }, false, 'un puesto abierto'),
     ] },
 
   { id: 's7b', scene: 7, type: 'choice', usage: ['cabina'],
-    lines: [L('s7b.lucia', 'Lucía', 'Ahora sois tres. Necesitáis una pantalla. ¿Qué pedís?')],
+    lines: [L('s7b.lucia', 'Lucía', 'Ahora sois tres. ¿Qué necesitáis?')],
     cards: [
       T('s7b.a', 'Necesitamos una cabina.', R('s7b.a.r', 'La cabina es para una persona. Sois tres. Necesitáis una sala de reuniones.'), { crowd: true }),
       T('s7b.b', 'Necesitamos una sala de reuniones.', R('s7b.b.r', 'La sala de reuniones tiene sitio para tres personas y una pantalla.'), {}, true),
@@ -160,7 +160,7 @@ export const STEPS = [
     lines: [L('s11a.new', 'Visitante', 'Hola, es mi primer día. ¿Dónde está mi tarjeta?')],
     cards: [
       T('s11a.a', 'La recepción está junto a la entrada.', R('s11a.a.r', 'Gracias. Ya veo la recepción.'), {}, true),
-      T('s11a.b', 'La cabina está dentro de la tarjeta.', R('s11a.b.r', 'La cabina es para hablar a solas. Las tarjetas están en la recepción.'), {}),
+      T('s11a.b', 'La cabina está dentro de la tarjeta.', R('s11a.b.r', 'La cabina es para una persona. Las tarjetas están en la recepción.'), {}),
       T('s11a.c', 'El puesto está ocupado por la recepción.', R('s11a.c.r', 'La recepción es el lugar de la entrada. Ahí dan la tarjeta.'), {}),
     ] },
 
