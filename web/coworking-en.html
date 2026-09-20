@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Connected by Four · Language Quest</title>
+<style>
+:root{--paper:#f4f1e9;--ink:#213b32;--muted:#637267;--line:#d7dbce;--terra:#c05c32;--sage:#69905b}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:Arial,Helvetica,sans-serif;line-height:1.5}
+.wrap{max-width:860px;margin:auto;padding:0 20px 60px}
+header{display:flex;justify-content:space-between;align-items:center;min-height:64px;border-bottom:1px solid var(--line);gap:12px}
+a{color:inherit}a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--terra);outline-offset:3px}
+h1{font-family:Georgia,serif;font-weight:400;font-size:clamp(32px,7vw,52px);letter-spacing:-1.5px;margin:.4em 0 .2em}
+.cover{width:100%;height:auto;border-radius:16px;display:block;margin-top:16px}
+button{font:inherit;cursor:pointer}
+.primary{background:var(--ink);color:var(--paper);border:0;border-radius:10px;padding:14px 22px;font-weight:bold;min-height:48px}
+.primary:disabled{opacity:.45;cursor:default}
+.ghost{background:none;border:1px solid var(--line);border-radius:10px;padding:9px 14px;min-height:44px;color:var(--ink)}
+.stage{margin:18px 0;border-radius:14px;overflow:hidden;background:#f3e9d8;border:1px solid var(--line)}
+.stage svg{display:block;width:100%;height:clamp(150px,26vh,230px)}.stage .opening{display:block;width:100%;max-height:42vh;object-fit:cover}.stage[hidden]{display:none}.slots{display:flex;gap:8px;padding:8px 12px;background:#fff;flex-wrap:wrap}
+.slot{font-family:monospace;font-size:13px;border:1px solid var(--line);border-radius:6px;padding:4px 8px}.slot.fixed{border-color:var(--ink)}
+.stage.pop{animation:pop .5s}@keyframes pop{50%{transform:scale(1.015)}}
+#printer-art{width:min(260px,70%);border-radius:12px;display:block;margin:0 auto 14px}
+.line{margin:10px 0;font-size:19px;padding:10px 16px 12px;border-radius:16px;max-width:88%;border:1px solid var(--line);background:#fff}
+.who{font-family:monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:2px}
+.line.narr{max-width:100%;background:none;border:0;border-left:4px solid var(--line);border-radius:0;color:var(--muted);font-style:italic;padding:2px 0 2px 14px}
+.line.lucia{border-bottom-left-radius:4px;background:#e9f2dc;border-color:#b9cfa3}
+.line.hero{margin-left:auto;border-bottom-right-radius:4px;background:var(--ink);color:var(--paper);border-color:var(--ink)}.line.hero .who{color:#c9d6c4}
+.line.other{margin-left:auto;border-bottom-right-radius:4px;background:#f6e6d6;border-color:#dfc3a4}
+#question:focus{outline:none}
+.cards{display:grid;gap:12px;margin:18px 0}.cards.imgs{grid-template-columns:repeat(3,1fr)}
+.card-btn{border:2px solid var(--line);background:#fff;border-radius:14px;padding:0;text-align:left;overflow:hidden;position:relative;min-height:56px;color:var(--ink)}
+.cards.texts .card-btn{padding:16px 18px;font-size:18px}
+.card-btn img{width:100%;display:block;aspect-ratio:4/3;object-fit:cover}
+.letter{position:absolute;left:8px;top:8px;background:var(--paper);border-radius:8px;padding:2px 9px;font-weight:bold}
+.card-btn:hover:not(:disabled){border-color:var(--ink)}.card-btn:disabled{cursor:default;opacity:.55}.card-btn.chosen{opacity:1;border-color:var(--ink)}
+.reaction.ok{border-left-color:#2e8b4f}.reaction.bad{border-left-color:#9aa898}
+.reaction{background:#fff;border-left:5px solid #9aa898;padding:14px 18px;border-radius:8px;font-size:18px;margin:14px 0}
+.tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:8px 0}.note{color:var(--muted);font-size:14px}
+#final-stage{position:relative;border-radius:14px;overflow:hidden;background:#f3e9d8}.final-cover{width:100%;display:block}
+.jw{border-top:1px solid var(--line);padding:12px 0}.jw h3{font-family:Georgia,serif;margin:0 0 6px}.ju{margin:6px 0 8px 12px}.jc{font-weight:bold;margin:0}.jr{margin:2px 0;color:var(--muted)}
+details{margin-top:28px;border:1px solid var(--line);border-radius:10px;padding:10px 14px}
+dialog{border:0;border-radius:14px;padding:24px;max-width:360px}dialog::backdrop{background:rgba(0,0,0,.4)}dialog div{display:flex;gap:10px;margin-top:16px}
+.card-btn.wrong{border-color:#c05c32;box-shadow:0 0 0 3px rgba(192,92,50,.35);animation:nope .5s}
+.card-btn.wrong img{filter:saturate(.6) sepia(.25)}
+.card-btn.right{border-color:#2e8b4f;box-shadow:0 0 0 3px rgba(46,139,79,.35);animation:yes .5s}
+.card-btn.right .pname{background:#2e8b4f}
+.cards.texts .card-btn.wrong{background:#fbeee8}.cards.texts .card-btn.right{background:#e8f4ec}
+@keyframes yes{40%{transform:scale(1.03)}}
+.pname{position:absolute;left:0;right:0;bottom:0;background:#c05c32;color:#fff;font-weight:bold;padding:8px 10px;text-align:center}
+@keyframes nope{20%{transform:translateX(-8px) rotate(-1.5deg)}40%{transform:translateX(8px) rotate(1.5deg)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+@media(max-width:560px){.cards.imgs{grid-template-columns:1fr 1fr 1fr;gap:8px}.line{font-size:17px}.letter{font-size:13px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head><body><div class="wrap">
+<header><a href="./quests.html" data-quest-exit>← All stories</a><span id="progress" class="note" aria-hidden="true"></span></header>
+<main>
+<section id="start"><img class="cover" id="cover-img" src="../assets/coworking/cover.png" alt="" width="1200" height="800">
+<h1>Connected by Four</h1>
+<p class="line">Today is your first day at a coworking space. At four o'clock you have an important video call.</p>
+<button id="begin" class="primary" type="button">Start</button></section>
+
+<section id="play" hidden>
+<div class="stage" id="stage"></div>
+<img id="printer-art" alt="" hidden>
+<div id="question" class="q" aria-live="polite"></div>
+<div class="tools"><button id="again" class="ghost" type="button">Listen again</button><button id="slow" class="ghost" type="button">Slower</button><span id="audio-note" class="note" role="status"></span></div>
+<div id="cards" class="cards"></div>
+<div id="reaction" class="reaction" role="status" hidden></div>
+<button id="next" class="primary" type="button" hidden disabled>Continue</button>
+</section>
+
+<section id="final" hidden>
+<h1 id="final-title" tabindex="-1">Your first day</h1>
+<div id="final-stage"></div>
+<p class="line" id="final-msg"></p>
+<div class="tools"><button id="final-listen" class="ghost" type="button">Listen again</button><button id="final-slow" class="ghost" type="button">Slower</button></div>
+<section id="journal-wrap" hidden><h2>Your English in use</h2><div id="journal"></div></section>
+<button id="replay" class="primary" type="button" style="margin-top:20px">Play again</button>
+</section>
+
+<details><summary>vocabulary</summary><ul id="vocab-list"></ul></details>
+</main>
+<dialog id="leave-quest"><p class="line">Leave the story?</p><div><button class="ghost" type="button" data-stay>Stay</button><button class="primary" type="button" data-leave>Leave</button></div></dialog>
+</div>
+<script type="module" src="./js/coworking-en.js"></script>
+</body></html>
