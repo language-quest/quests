@@ -1,0 +1,15 @@
+{
+  "id": "T-004",
+  "branch": "task/T-004",
+  "status": "ready-for-qa",
+  "round": 1,
+  "dev": {
+    "sessionId": "b5a278aa-dd3d-4087-81ff-1c5f03a3a875",
+    "rounds": 1,
+    "worktree": "/Users/andreyryazanov/Desktop/apps/language_quest/pm/worktrees/T-004-dev"
+  },
+  "qa": {
+    "sessionId": null,
+    "rounds": 0
+  }
+}

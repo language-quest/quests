@@ -5,6 +5,7 @@
 | T-001 | Предзаписанная озвучка всех квестов | dev-failed | 1 | task/T-001 | 2026-09-20 |
 | T-002 | Два игровых квеста: велосипед и барбершоп | ready-for-qa | 4 | task/T-002 | 2026-09-20 |
 | T-003 | Первый день в коворкинге | ready-for-qa | 1 | task/T-003 | 2026-09-20 |
+| T-004 | Диего и цельный сюжет «La ruta secreta» | ready-for-qa | 1 | task/T-004 | 2026-09-20 |
 
 Статусы: `todo` · `in-dev` · `ready-for-qa` · `qa-passed` · `qa-failed` · `rework` · `accepted`
 Сессия упала, не сдав отчёт: `dev-failed` · `qa-failed` → `pm-run.mjs retry`
