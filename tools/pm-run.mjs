@@ -125,6 +125,14 @@ const BOARD_HEAD =
   "# Доска\n\n| ID | Тема | Статус | Раунд | Ветка | Обновлено |\n|---|---|---|---|---|---|\n";
 if (!existsSync(BOARD)) writeFileSync(BOARD, BOARD_HEAD);
 
+// Статус на доске пишет сессия, состояние — лаунчер, и они расходятся: после
+// успешного раунда доска говорит ready-for-qa, а состояние всё ещё in-dev.
+// Доска первична — её заполняет тот, кто делал работу.
+function boardStatus(id) {
+  const row = readFileSync(BOARD, "utf8").split("\n").find((l) => l.startsWith(`| ${id} |`));
+  return row?.split("|")[3]?.trim();
+}
+
 function setBoard(id, { status, round, branch }) {
   const today = new Date().toISOString().slice(0, 10);
   const row = `| ${id} | ${taskTitle(id)} | ${status} | ${round} | ${branch} | ${today} |`;
@@ -421,8 +429,10 @@ function finish(id, role, { code, output }) {
   const wrote = readdirSync(DIRS.reports).some((f) => f.startsWith(`${id}.${role}-r${s?.round ?? 1}`));
 
   if (code === 0 && wrote) {
+    const onBoard = boardStatus(id);
+    if (s && onBoard && onBoard !== s.status) { s.status = onBoard; saveState(s); }
     console.log(`\n✓ ${who} отработал. Отчёты: ${DIRS.reports}`);
-    console.log(`  статус на доске: ${s.status} · раунд ${s.round}`);
+    console.log(`  статус на доске: ${onBoard ?? s?.status} · раунд ${s?.round}`);
     process.exit(0);
   }
 
