@@ -1,0 +1,16 @@
+{
+  "id": "T-002",
+  "branch": "task/T-002",
+  "status": "ready-for-qa",
+  "round": 4,
+  "dev": {
+    "sessionId": "e8f348dc-1e54-49b6-9dfc-1d1837e26256",
+    "rounds": 4,
+    "worktree": "/Users/andreyryazanov/Desktop/apps/language_quest/pm/worktrees/T-002-dev"
+  },
+  "qa": {
+    "sessionId": "40b4c971-b117-4fbd-a765-9407ff791e2b",
+    "rounds": 3,
+    "worktree": "/Users/andreyryazanov/Desktop/apps/language_quest/pm/worktrees/T-002-qa"
+  }
+}
