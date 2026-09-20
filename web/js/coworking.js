@@ -88,26 +88,27 @@ function renderStage(step) {
 }
 
 
-// Efecto de sonido para una elección equivocada: trombón triste sintetizado (no es voz ni TTS).
-function sadTrombone() {
+// Efectos de sonido sintetizados (no son voz ni TTS): trombón triste al fallar, campanilla al acertar.
+function sfx(good) {
   return new Promise(resolve => {
     try {
       const Ctx = window.AudioContext || window.webkitAudioContext;
       const ctx = new Ctx();
-      const notes = [[293.7, .28], [277.2, .28], [261.6, .28], [233.1, .9]];
+      const notes = good ? [[523.3, .12], [659.3, .12], [784, .12], [1046.5, .4]] : [[293.7, .28], [277.2, .28], [261.6, .28], [233.1, .9]];
       let t = ctx.currentTime + .02;
       notes.forEach(([f, d], i) => {
         const o = ctx.createOscillator(), g = ctx.createGain(), lp = ctx.createBiquadFilter();
-        o.type = 'sawtooth'; o.frequency.setValueAtTime(f, t);
-        if (i === notes.length - 1) {
+        o.type = good ? 'triangle' : 'sawtooth'; o.frequency.setValueAtTime(f, t);
+        if (!good && i === notes.length - 1) {
           o.frequency.linearRampToValueAtTime(f * .9, t + d);
           const v = ctx.createOscillator(), vg = ctx.createGain(); v.frequency.value = 6; vg.gain.value = 6; v.connect(vg); vg.connect(o.frequency); v.start(t); v.stop(t + d);
         }
-        lp.type = 'lowpass'; lp.frequency.value = 900;
-        g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.22, t + .04); g.gain.setValueAtTime(.22, t + d - .06); g.gain.linearRampToValueAtTime(0, t + d);
+        lp.type = 'lowpass'; lp.frequency.value = good ? 4000 : 900;
+        const peak = good ? .2 : .22;
+        g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(peak, t + .02); g.gain.setValueAtTime(peak, t + d - .05); g.gain.linearRampToValueAtTime(0, t + d);
         o.connect(lp).connect(g).connect(ctx.destination);
         o.start(t); o.stop(t + d + .02);
-        t += d + .04;
+        t += d + (good ? .01 : .04);
       });
       setTimeout(() => { ctx.close(); resolve(); }, (t - ctx.currentTime) * 1000 + 100);
     } catch { resolve(); }
@@ -174,11 +175,9 @@ async function choose(step, card, btn) {
   apply(card.fx);
   const next = $('next');
   next.hidden = false; next.disabled = true;
-  if (card.kind === 'img' && !card.best) {
-    btn.classList.add('wrong');
-    if (card.name) btn.insertAdjacentHTML('beforeend', `<span class="pname">${card.name}</span>`);
-    await sadTrombone();
-  }
+  btn.classList.add(card.best ? 'right' : 'wrong');
+  if (card.kind === 'img' && card.name) btn.insertAdjacentHTML('beforeend', `<span class="pname">${card.name}</span>`);
+  await sfx(card.best);
   renderStage(step);
   $('stage').classList.add('pop');
   setTimeout(() => $('stage').classList.remove('pop'), 600);

@@ -33,7 +33,7 @@ export const STEPS = [
   { id: 's1', scene: 1, type: 'choice', usage: ['recepción'],
     lines: [L('s1.hero', 'Tú', 'Me quedo. Voy paso a paso.'), L('s1.lucia', 'Lucía', 'Recoge tu tarjeta en recepción.')],
     cards: [
-      P('s1.a', IMG.reception, R('s1.a.r', 'Sí, esta es la recepción. Aquí te dan la tarjeta de entrada.'), { card: true }, true),
+      P('s1.a', IMG.reception, R('s1.a.r', 'Sí, esta es la recepción. Aquí te dan la tarjeta de entrada.'), { card: true }, true, 'la recepción'),
       P('s1.b', IMG.booth, R('s1.b.r', 'Esta es una cabina para hablar a solas. Aquí no dan tarjetas. La recepción está junto a la entrada.'), { card: true, peek: 'booth' }, false, 'la cabina'),
       P('s1.c', IMG.meeting, R('s1.c.r', 'Esta es una sala de reuniones para trabajar en grupo. La tarjeta se recoge en recepción.'), { card: true, peek: 'room' }, false, 'la sala de reuniones'),
     ] },
@@ -42,7 +42,7 @@ export const STEPS = [
     lines: [L('s2.lucia', 'Lucía', 'Tu portátil tiene muy poca batería. Busca un puesto con enchufe.')],
     cards: [
       P('s2.a', IMG.windowDesk, R('s2.a.r', 'Este puesto está junto a la ventana, pero no tiene enchufe. El portátil sigue sin cargarse. Buscamos un cable alargador.'), { desk: 'window', cable: 'long' }, false, 'un puesto sin enchufe'),
-      P('s2.b', IMG.outletDesk, R('s2.b.r', 'Este puesto tiene enchufe. Conectas el portátil y empieza a cargarse.'), { desk: 'outlet', cable: 'direct', charge: true }, true),
+      P('s2.b', IMG.outletDesk, R('s2.b.r', 'Este puesto tiene enchufe. Conectas el portátil y empieza a cargarse.'), { desk: 'outlet', cable: 'direct', charge: true }, true, 'un puesto con enchufe'),
       P('s2.c', IMG.sofa, R('s2.c.r', 'Este sofá está libre, pero no es un puesto de trabajo y aquí no hay enchufe. Llevamos una mesa pequeña y un cable alargador.'), { desk: 'sofa', cable: 'long' }, false, 'el sofá'),
     ] },
 
@@ -89,7 +89,7 @@ export const STEPS = [
   { id: 's7a', scene: 7, type: 'choice', usage: ['cabina', 'sala'],
     lines: [L('s7a.lucia', 'Lucía', 'Quieres practicar solo y hablar en voz alta. Elige un espacio pequeño para una persona.')],
     cards: [
-      P('s7a.a', IMG.booth, R('s7a.a.r', 'Esta es una cabina. Es un espacio pequeño para hablar a solas sin molestar.'), {}, true),
+      P('s7a.a', IMG.booth, R('s7a.a.r', 'Esta es una cabina. Es un espacio pequeño para hablar a solas sin molestar.'), {}, true, 'la cabina'),
       P('s7a.b', IMG.meeting, R('s7a.b.r', 'Esta es una sala de reuniones. Hay sitio para varias personas. Para practicar solo basta una cabina.'), { peek: 'room' }, false, 'la sala de reuniones'),
       P('s7a.c', IMG.outletDesk, R('s7a.c.r', 'Este es un puesto abierto. Si hablas en voz alta, te oyen todos. Para hablar a solas usa una cabina.'), { peek: 'open' }, false, 'un puesto abierto'),
     ] },
