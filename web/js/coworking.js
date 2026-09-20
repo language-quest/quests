@@ -78,8 +78,11 @@ function renderStage(step) {
   const bk = [];
   if (state.book) bk.push(`<span class="slot">${state.book}</span>`);
   if (state.fixed) bk.push('<span class="slot fixed">16:00–16:30</span>');
-  $('stage').innerHTML = sceneSvg(state, false) + (bk.length ? `<div class="slots">${bk.join('')}</div>` : '');
-  $('stage').classList.toggle('hidden', false);
+  const has = ['card', 'desk', 'phone', 'papers', 'crowd', 'chair', 'call', 'newDesk', 'net', 'book'].some(k => state[k]);
+  const st = $('stage');
+  if (step && step.id === 's0') st.innerHTML = `<img class="opening" src="${imgSrc(IMG.cover)}" alt="">`;
+  else st.innerHTML = has ? sceneSvg(state, false) + (bk.length ? `<div class="slots">${bk.join('')}</div>` : '') : '';
+  st.hidden = !st.innerHTML;
   $('printer-art').hidden = !(step && step.printer);
   if (step && step.printer) $('printer-art').src = imgSrc(IMG.printer);
 }
