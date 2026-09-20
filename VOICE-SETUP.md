@@ -119,3 +119,13 @@ curl -s http://localhost:5179/api/slng/catalog | node -e "let s='';process.stdin
 
 Каталог показывает весь ассортимент, а не развёрнутое в регионе — проверять фактическим
 запросом.
+
+## Деплой на Cloudflare Workers (статика)
+
+`wrangler.jsonc` раздаёт `dist/`, который собирает `node tools/build-static.mjs`
+(страницы + только нужные картинки, ~39 МБ; раскладка `web/` и `assets/` та же,
+что в репозитории, поэтому `../assets/...` работает). В Cloudflare: Workers & Pages →
+Create → Import a repository → ветка `main`, Build command `node tools/build-static.mjs`,
+Deploy command `npx wrangler deploy`. Каждый push в `main` выкатывается сам.
+Игра открывается с `/` (редирект на `/web/quests.html`). Голос (`/api/*`) на статике
+не работает — там нужен прокси; без него игра идёт без озвучки.
