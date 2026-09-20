@@ -12,7 +12,8 @@
  *
  * Флаги: --dry показать команду сессии и не запускать её,
  *        --skip-health не требовать поднятого прокси на 5179,
- *        --model <alias> переопределить модель для этого запуска.
+ *        --model <alias> переопределить модель для этого запуска,
+ *        --effort low|medium|high|max переопределить усилие рассуждения.
  *
  * Три вещи, которые здесь неочевидны и появились не просто так.
  *
@@ -63,9 +64,37 @@ const die = (msg) => { console.error(`✗ ${msg}`); process.exit(1); };
 // придумать реплику-ловушку не реализация, запускай его с --model opus.
 const MODEL = { dev: "sonnet", qa: "opus" };
 
-function modelFor(role) {
-  const i = process.argv.indexOf("--model");
-  return i > 0 && process.argv[i + 1] ? process.argv[i + 1] : MODEL[role];
+// Усилие рассуждения (CLAUDE_CODE_EFFORT_LEVEL). Та же логика, что и с моделью.
+// Разработчик реализует зафиксированное ТЗ — medium; low мало, потому что он всё
+// равно обязан держать правило «картинка не переводит слово» и сам сверяться
+// с критериями приёмки перед сдачей. QA ведёт состязательный поиск в коде, который
+// не писал, и его провал — ложный PASS, поэтому max: лишнее рассуждение покупает
+// ровно ту полноту, ради которой роль и существует, а токенов QA тратит мало —
+// он читает и пишет один отчёт, а не правит файлы по кругу.
+const EFFORT = { dev: "medium", qa: "max" };
+const EFFORT_LEVELS = ["low", "medium", "high", "max"];
+
+const flag = (name) => {
+  const i = process.argv.indexOf(name);
+  return i > 0 && process.argv[i + 1] && !process.argv[i + 1].startsWith("--")
+    ? process.argv[i + 1]
+    : undefined;
+};
+
+const modelFor = (role) => flag("--model") ?? MODEL[role];
+
+function checkEffortFlag() {
+  const override = flag("--effort");
+  if (override && !EFFORT_LEVELS.includes(override)) {
+    die(`--effort принимает ${EFFORT_LEVELS.join(" | ")}, а не «${override}»`);
+  }
+}
+
+function effortFor(role, round) {
+  const override = flag("--effort");
+  // Доработка означает, что первый раунд что-то упустил: дефект по определению
+  // не лежал на поверхности. Раунды редки, поднять усилие здесь дёшево.
+  return override ?? (role === "dev" && round > 1 ? "high" : EFFORT[role]);
 }
 
 // ── состояние задачи ──────────────────────────────────────────────────────────
@@ -184,7 +213,10 @@ function runSession({ id, role, cwd, sessionId, fresh, round, note }) {
   ];
 
   if (process.argv.includes("--dry")) {
-    console.log(`\n[dry] ${cwd}\n[dry] PM_ROOT=${MAIN} PM_ROUND=${round}${note ? ` PM_NOTE=${JSON.stringify(note)}` : ""}`);
+    console.log(
+      `\n[dry] ${cwd}\n[dry] PM_ROOT=${MAIN} PM_ROUND=${round} ` +
+      `CLAUDE_CODE_EFFORT_LEVEL=${effortFor(role, round)}${note ? ` PM_NOTE=${JSON.stringify(note)}` : ""}`
+    );
     console.log(`[dry] ${CLAUDE} ${args.map((a) => (/\s/.test(a) ? JSON.stringify(a) : a)).join(" ")}`);
     return Promise.resolve(0);
   }
@@ -197,7 +229,13 @@ function runSession({ id, role, cwd, sessionId, fresh, round, note }) {
   const out = createWriteStream(log);
   const child = spawn(CLAUDE, args, {
     cwd,
-    env: { ...process.env, PM_ROOT: MAIN, PM_ROUND: String(round), ...(note ? { PM_NOTE: note } : {}) },
+    env: {
+      ...process.env,
+      PM_ROOT: MAIN,
+      PM_ROUND: String(round),
+      CLAUDE_CODE_EFFORT_LEVEL: effortFor(role, round),
+      ...(note ? { PM_NOTE: note } : {}),
+    },
   });
   child.stdout.on("data", (d) => { process.stdout.write(d); out.write(d); });
   child.stderr.on("data", (d) => { process.stderr.write(d); out.write(d); });
@@ -207,10 +245,7 @@ function runSession({ id, role, cwd, sessionId, fresh, round, note }) {
 
 // ── подкоманды ────────────────────────────────────────────────────────────────
 
-function argNote() {
-  const i = process.argv.indexOf("--note");
-  return i > 0 ? process.argv[i + 1] : undefined;
-}
+const argNote = () => flag("--note");
 
 async function cmdDev(id) {
   taskFile(id);
@@ -345,6 +380,7 @@ const needsId = { dev: cmdDev, qa: cmdQa, rework: cmdRework, retest: cmdRetest, 
 if (cmd === "status") cmdStatus(id);
 else if (needsId[cmd]) {
   if (!id) die(`${cmd} требует ID задачи, например: node tools/pm-run.mjs ${cmd} T-007`);
+  checkEffortFlag(); // до создания worktree, а не в момент запуска сессии
   await needsId[cmd](id);
 } else {
   console.log(readFileSync(new URL(import.meta.url)).toString().split("\n").slice(2, 15).join("\n").replace(/^ \* ?/gm, ""));
