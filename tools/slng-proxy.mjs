@@ -188,7 +188,7 @@ const PUBLIC_DIRS = ["web", "assets"];
 function serveStatic(req, res) {
   let p = decodeURIComponent(new URL(req.url, "http://x").pathname);
   // Превью открывает origin, а index.html в корне проекта нет — уводим в приложение.
-  if (p === "/") { res.writeHead(302, { location: "/web/" }); return res.end(); }
+  if (p === "/") { res.writeHead(302, { location: "/web/quests.html" }); return res.end(); }
   if (p.endsWith("/")) p += "index.html";
 
   const rel = normalize(p).replace(/^[/\\]+/, "");

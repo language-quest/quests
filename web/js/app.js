@@ -1,3 +1,4 @@
+import { setupQuestNavigation } from "./quest-navigation.js";
 import {
   createSession, matchIntent, matchChildWord, grantClue, clueOf, clueText,
   heldAttrs, allCluesIn, isTarget, ladderStep, survivors, log, ROUTES,
@@ -86,6 +87,11 @@ const T = {
 };
 
 const ART = (f) => `../assets/caperucita/web/${String(f).replace(/\.png$/, ".jpg")}`;
+
+setupQuestNavigation({
+  isInProgress: () => S && !["prologue", "finale"].includes(S.phase),
+  onLeave: () => { sceneToken++; activeListen?.cancel?.(); pendingTransition = null; clearInterval(ladderTimer); stopSpeaking(); },
+});
 
 let Q, S;
 let sceneStart = 0, failedOnce = false, ladderTimer = null, speaking = false;

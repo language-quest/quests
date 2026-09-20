@@ -124,18 +124,26 @@ h1{font-size:clamp(2.2rem,7vw,5rem);line-height:.95;letter-spacing:-.07em;margin
   .vocab dd{margin-bottom:8px}
 }
 </style>
+<link rel="stylesheet" href="./css/quest-navigation.css">
 </head>
 <body>
 <div class="app">
+  <nav class="quest-nav" aria-label="Navegación de historias"><a href="./quests.html" data-quest-exit>← Todas las historias</a><span aria-current="page">La ruta secreta</span></nav>
   <header>
-    <button class="peak" id="home" aria-label="Volver al inicio">⛰</button>
+    <button class="peak" id="home" aria-label="Volver al inicio de esta historia" title="Volver al inicio de esta historia">⛰</button>
     <div class="brand">La ruta secreta</div>
     <span class="voz" id="voz" title="">voz: …</span>
     <div class="progress" id="progress" aria-label="Progreso"></div>
   </header>
   <main id="stage" aria-live="polite"></main>
+  
   <div class="tiny" id="tiny">Toca 🔊 para escuchar · Habla para responder · Audio en español</div>
 </div>
 <script type="module" src="./js/rocodromo.js?v=3"></script>
+<dialog class="leave-quest" id="leave-quest" aria-labelledby="leave-title" aria-describedby="leave-description">
+  <h2 id="leave-title">¿Volver a las historias?</h2>
+  <p id="leave-description">El progreso no se guarda. Si vuelves a entrar desde el catálogo, empezarás de nuevo.</p>
+  <div class="leave-actions"><button type="button" data-stay autofocus>Seguir jugando</button><button type="button" data-leave>Salir al catálogo</button></div>
+</dialog>
 </body>
 </html>

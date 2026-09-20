@@ -1,3 +1,4 @@
+import { setupQuestNavigation } from "./quest-navigation.js";
 // «La ruta secreta» — взрослый квест про скалодром.
 // Линейная цепочка сцен; голос берём из общего стека проекта:
 // TTS/STT идут через tools/slng-proxy.mjs, интент-гейт — общий с Каперусиной.
@@ -498,6 +499,11 @@ const functionsOf = (options) =>
   }));
 
 /* ---------------- старт ---------------- */
+
+setupQuestNavigation({
+  isInProgress: () => idx > 0 && idx < LAST,
+  onLeave: () => { sceneToken++; activeListen?.cancel?.(); stopSpeaking(); },
+});
 
 $("home").onclick = () => goto(0);
 $("tiny").innerHTML =
