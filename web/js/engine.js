@@ -31,6 +31,10 @@ function levenshtein(a, b) {
 
 const words = (s) => normalize(s).split(" ").filter(Boolean);
 
+// Артикли внутри фразы не мешают: «con la cuerda» = «con cuerda». Убираем с обеих сторон.
+const ARTICLES = new Set(["el","la","los","las","un","una"]);
+const noArticles = (ws) => { const r = ws.filter((w) => !ARTICLES.has(w)); return r.length ? r : ws; };
+
 /** Схожесть отдельных СЛОВ. Короткие слова — только точное совпадение. */
 function wordSim(a, b) {
   if (a === b) return 1;
@@ -76,7 +80,7 @@ function findPattern(toks, pat) {
  * @returns {{fn:string, score:number}|null}
  */
 export function matchIntent(transcript, speechFunctions, lex = {}) {
-  const toks = words(transcript);
+  const toks = noArticles(words(transcript));
   if (!toks.length) return null;
   const ext = (base, extra) => (extra?.length ? new Set([...base, ...extra.map((w) => normalize(w))]) : base);
   const fillers = ext(FILLERS, lex.fillers);
@@ -86,7 +90,7 @@ export function matchIntent(transcript, speechFunctions, lex = {}) {
   let best = null;
   for (const [fn, def] of Object.entries(speechFunctions)) {
     for (const raw of def.accept) {
-      const pat = words(raw);
+      const pat = noArticles(words(raw));
       if (!pat.length) continue;
       const found = findPattern(toks, pat);
       if (!found) continue;
