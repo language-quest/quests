@@ -264,7 +264,36 @@ function render() {
   // картинка сцены
   // Финальная сцена: картинка (две половины эмблемы вместе) появляется только после
   // верного слова; до него — ничего, кроме реплики. Гора-эмодзи была бы подсказкой.
-  if (S.art && art(S.art)) {
+  if (S.video) {
+    const box = document.createElement("div");
+    box.className = "stageart clip";
+    const v = document.createElement("video");
+    v.src = `../assets/rocodromo/${S.video}`;
+    v.playsInline = true;
+    v.preload = "auto";
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "clipbtn";
+    btn.setAttribute("aria-label", "▶");
+    v.muted = true;   // голос — наш TTS, тот же, что у администраторши в остальных сценах
+    const sync = () => { btn.hidden = !v.paused; btn.textContent = v.currentTime > 0 ? "↻" : "▶"; };
+    v.addEventListener("play", sync);
+    v.addEventListener("pause", sync);
+    v.addEventListener("ended", () => { v.currentTime = Math.max(0, v.duration - 0.05); sync(); });   // держим последний кадр
+    const start = () => {
+      unlockAudio();
+      v.currentTime = 0;
+      v.play().catch(() => {});
+      speak(S.dialogEs, S.speaker);
+    };
+    btn.onclick = start;
+    v.onclick = () => { if (v.paused) start(); };
+    box.append(v, btn);
+    scene.appendChild(box);
+    // до первого жеста озвучка заблокирована, поэтому ролик стартует сам только после него; иначе — кнопка ▶
+    if (gestured) start();
+    sync();
+  } else if (S.art && art(S.art)) {
     const box = document.createElement("div");
     box.className = "stageart";
     box.innerHTML = art(S.art);
@@ -283,7 +312,7 @@ function render() {
     d.appendChild(said);
     d.appendChild(speakBtn(S.dialogEs, S.speaker));
     scene.appendChild(d);
-    if (gestured) speak(S.dialogEs, S.speaker);
+    if (gestured && !S.video) speak(S.dialogEs, S.speaker);   // в сцене с роликом реплику запускает сам ролик
   }
 
   if (S.questionEs) {
