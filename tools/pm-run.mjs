@@ -7,6 +7,7 @@
  *   node tools/pm-run.mjs qa     T-007              # worktree на коммите ветки, сессия QA
  *   node tools/pm-run.mjs rework T-007 --note "…"   # раунд N+1, та же сессия разработчика
  *   node tools/pm-run.mjs retest T-007 [--note "…"] # раунд N+1, та же сессия QA
+ *   node tools/pm-run.mjs retry  T-007 [--role qa]  # перезапустить упавший раунд, не сдвигая счётчик
  *   node tools/pm-run.mjs accept T-007              # merge --no-ff в main, снос worktree
  *   node tools/pm-run.mjs status  [T-007]           # сводка по доске
  *
@@ -218,7 +219,7 @@ function runSession({ id, role, cwd, sessionId, fresh, round, note }) {
       `CLAUDE_CODE_EFFORT_LEVEL=${effortFor(role, round)}${note ? ` PM_NOTE=${JSON.stringify(note)}` : ""}`
     );
     console.log(`[dry] ${CLAUDE} ${args.map((a) => (/\s/.test(a) ? JSON.stringify(a) : a)).join(" ")}`);
-    return Promise.resolve(0);
+    return Promise.resolve({ code: 0, output: "" });
   }
 
   const log = join(DIRS.logs, `${id}.${role}-r${round}.log`);
@@ -227,7 +228,18 @@ function runSession({ id, role, cwd, sessionId, fresh, round, note }) {
   console.log(`  лог: ${log}\n`);
 
   const out = createWriteStream(log);
+  // Шапка пишется до запуска: если сессия умрёт на первом вдохе, в логе должно
+  // остаться, что именно запускали. Первый живой прогон оставил ровно 0 байт —
+  // по такому логу нельзя отличить «не стартовало» от «стартовало и молчало».
+  out.write(
+    `# ${id} · ${role} · раунд ${round} · ${new Date().toISOString()}\n` +
+    `# cwd: ${cwd}\n# ${CLAUDE} ${args.join(" ")}\n\n`
+  );
+
   const child = spawn(CLAUDE, args, {
+    // stdin закрыт: `claude -p` берёт промпт из argv, а открытая труба на stdin
+    // оставляет ему повод чего-то ждать.
+    stdio: ["ignore", "pipe", "pipe"],
     cwd,
     env: {
       ...process.env,
@@ -237,10 +249,19 @@ function runSession({ id, role, cwd, sessionId, fresh, round, note }) {
       ...(note ? { PM_NOTE: note } : {}),
     },
   });
-  child.stdout.on("data", (d) => { process.stdout.write(d); out.write(d); });
-  child.stderr.on("data", (d) => { process.stderr.write(d); out.write(d); });
+  let seen = "";
+  const tap = (d) => { seen += d; };
+  child.stdout.on("data", (d) => { process.stdout.write(d); out.write(d); tap(d); });
+  child.stderr.on("data", (d) => { process.stderr.write(d); out.write(d); tap(d); });
 
-  return new Promise((done) => child.on("close", (code) => { out.end(); done(code ?? 1); }));
+  return new Promise((done) => {
+    child.on("error", (e) => { out.write(`\n# spawn error: ${e.message}\n`); out.end(); done(1); });
+    child.on("close", (code) => {
+      out.write(`\n# exit=${code}\n`);
+      out.end();
+      done({ code: code ?? 1, output: seen });
+    });
+  });
 }
 
 // ── подкоманды ────────────────────────────────────────────────────────────────
@@ -263,8 +284,8 @@ async function cmdDev(id) {
   saveState(s);
   setBoard(id, { status: "in-dev", round: 1, branch });
 
-  const code = await runSession({ id, role: "dev", cwd, sessionId: s.dev.sessionId, fresh: true, round: 1 });
-  finish(id, code, "разработчик");
+  const r = await runSession({ id, role: "dev", cwd, sessionId: s.dev.sessionId, fresh: true, round: 1 });
+  finish(id, "dev", r);
 }
 
 async function cmdQa(id) {
@@ -278,10 +299,10 @@ async function cmdQa(id) {
   s.qa.worktree = cwd;
   saveState(s);
 
-  const code = await runSession({
+  const r = await runSession({
     id, role: "qa", cwd, sessionId: s.qa.sessionId, fresh, round: s.round, note: argNote(),
   });
-  finish(id, code, "QA");
+  finish(id, "qa", r);
 }
 
 async function cmdRework(id) {
@@ -297,16 +318,47 @@ async function cmdRework(id) {
   saveState(s);
   setBoard(id, { status: "rework", round: s.round, branch: s.branch });
 
-  const code = await runSession({
+  const r = await runSession({
     id, role: "dev", cwd, sessionId: s.dev.sessionId, fresh: false, round: s.round, note,
   });
-  finish(id, code, "разработчик");
+  finish(id, "dev", r);
 }
 
 async function cmdRetest(id) {
   const s = loadState(id) ?? die(`${id} не заведена`);
   if (!s.qa.sessionId) die(`по ${id} ещё не было QA, начни с: qa ${id}`);
   return cmdQa(id);
+}
+
+// Сессия, упавшая до первой строчки (истёкший токен, убитый процесс), не должна
+// стоить раунда: раунд считает попытки разработчика, а не попытки запуска.
+// Если транскрипта нет, значит продолжать нечего — заводим сессию заново.
+function sessionStarted(uuid) {
+  const root = join(process.env.HOME, ".claude", "projects");
+  if (!existsSync(root)) return false;
+  return readdirSync(root).some((d) => existsSync(join(root, d, `${uuid}.jsonl`)));
+}
+
+async function cmdRetry(id) {
+  const s = loadState(id) ?? die(`${id} не заведена`);
+  const role = flag("--role") ?? "dev";
+  if (!["dev", "qa"].includes(role)) die("--role принимает dev или qa");
+  if (role === "qa" && !s.qa.sessionId) die(`по ${id} ещё не было QA, начни с: qa ${id}`);
+  checkProxy();
+
+  const fresh = !sessionStarted(s[role].sessionId);
+  if (fresh) s[role].sessionId = randomUUID();
+  const cwd = role === "dev" ? devWorktree(id, s.branch) : qaWorktree(id, s.branch);
+  s[role].worktree = cwd;
+  s.status = role === "dev" ? "in-dev" : "ready-for-qa";
+  saveState(s);
+  setBoard(id, { status: s.status, round: s.round, branch: s.branch });
+
+  console.log(fresh ? "  прошлая сессия не стартовала — завожу новую" : "  продолжаю прошлую сессию");
+  const r = await runSession({
+    id, role, cwd, sessionId: s[role].sessionId, fresh, round: s.round, note: argNote(),
+  });
+  finish(id, role, r);
 }
 
 function cmdAccept(id) {
@@ -361,21 +413,41 @@ function cmdStatus(id) {
   }
 }
 
-function finish(id, code, who) {
+// Сессия могла упасть, не написав ни строчки отчёта. Молча оставить на доске
+// «in-dev» нельзя: PM будет ждать работу, которой не происходит.
+function finish(id, role, { code, output }) {
   const s = loadState(id);
-  console.log(
-    code === 0
-      ? `\n✓ ${who} отработал. Отчёты: ${DIRS.reports}`
-      : `\n✗ сессия ${who}а завершилась с кодом ${code} — смотри лог в ${DIRS.logs}`
-  );
-  if (s) console.log(`  статус на доске: ${s.status} · раунд ${s.round}`);
-  process.exit(code);
+  const who = role === "dev" ? "разработчик" : "QA";
+  const wrote = readdirSync(DIRS.reports).some((f) => f.startsWith(`${id}.${role}-r${s?.round ?? 1}`));
+
+  if (code === 0 && wrote) {
+    console.log(`\n✓ ${who} отработал. Отчёты: ${DIRS.reports}`);
+    console.log(`  статус на доске: ${s.status} · раунд ${s.round}`);
+    process.exit(0);
+  }
+
+  const failed = `${role}-failed`;
+  if (s) { s.status = failed; saveState(s); setBoard(id, { status: failed, round: s.round, branch: s.branch }); }
+
+  console.error(`\n✗ ${who} не сдал работу (код ${code}${wrote ? "" : ", отчёта нет"}).`);
+  console.error(`  статус на доске: ${failed}. Лог: ${DIRS.logs}`);
+
+  if (/OAuth access token has expired|authentication_error|Failed to authenticate|Invalid API key/i.test(output)) {
+    console.error(
+      "\n  Причина — истёкшая авторизация claude, а не задача.\n" +
+      "  Починить может только человек, интерактивно: запустить `claude` и выполнить /login.\n" +
+      "  После этого: node tools/pm-run.mjs retry " + id
+    );
+  } else if (!output.trim()) {
+    console.error("  Сессия не выдала ни байта — смотри шапку лога, там полная команда запуска.");
+  }
+  process.exit(code || 1);
 }
 
 // ── разбор командной строки ───────────────────────────────────────────────────
 
 const [cmd, id] = process.argv.slice(2);
-const needsId = { dev: cmdDev, qa: cmdQa, rework: cmdRework, retest: cmdRetest, accept: cmdAccept };
+const needsId = { dev: cmdDev, qa: cmdQa, rework: cmdRework, retest: cmdRetest, retry: cmdRetry, accept: cmdAccept };
 
 if (cmd === "status") cmdStatus(id);
 else if (needsId[cmd]) {
