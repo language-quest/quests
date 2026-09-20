@@ -88,38 +88,30 @@ function renderStage(step) {
 }
 
 
-// ---- gag: sigue a una elección equivocada; se dibuja sin texto ----
-function gagSvg(kind) {
-  const bg = '<rect width="480" height="250" fill="#f3e9d8"/><rect y="200" width="480" height="50" fill="#e4d3b8"/>';
-  if (kind === 'booth') return `<svg viewBox="0 0 480 250" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${bg}
-    <rect x="190" y="30" width="100" height="175" rx="12" fill="#5b7a8f"/><rect x="200" y="42" width="80" height="150" rx="8" fill="#dfe8ec"/>
-    <circle cx="240" cy="100" r="20" fill="#e8b98a"/><path d="M216 98 a24 24 0 0 1 48 0" stroke="#213b32" stroke-width="5" fill="none"/><rect x="211" y="96" width="9" height="16" rx="3" fill="#213b32"/><rect x="260" y="96" width="9" height="16" rx="3" fill="#213b32"/>
-    <rect x="228" y="122" width="24" height="46" rx="8" fill="#c05c32"/><rect x="238" y="112" width="4" height="16" fill="#e8b98a"/>
-    <g class="gdoor"><rect x="200" y="42" width="80" height="150" rx="8" fill="#a9c3cf" opacity=".95"/></g>
-    <circle cx="120" cy="150" r="14" fill="#c9835f"/><rect x="108" y="164" width="24" height="38" rx="8" fill="#213b32"/><g class="gsweat"><path d="M140 132 q4 8 0 12 q-4 -4 0 -12" fill="#8fb4cc"/></g></svg>`;
-  return `<svg viewBox="0 0 480 250" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${bg}
-    <rect x="150" y="40" width="240" height="160" rx="10" fill="#c9d9c8" stroke="#213b32" stroke-width="2"/><ellipse cx="270" cy="140" rx="60" ry="22" fill="#a7562f"/>
-    <g class="ghead"><circle cx="205" cy="105" r="17" fill="#e8b98a"/><rect x="192" y="122" width="26" height="30" rx="8" fill="#5b7a8f"/></g>
-    <g class="ghead"><circle cx="270" cy="95" r="17" fill="#d99a72"/><rect x="257" y="112" width="26" height="30" rx="8" fill="#c05c32"/></g>
-    <g class="ghead"><circle cx="335" cy="105" r="17" fill="#c9835f"/><rect x="322" y="122" width="26" height="30" rx="8" fill="#6f8c69"/><rect x="345" y="126" width="14" height="16" rx="3" fill="#fff" stroke="#213b32"/></g>
-    <circle cx="90" cy="150" r="14" fill="#c9835f"/><rect x="78" y="164" width="24" height="38" rx="8" fill="#213b32"/></svg>`;
-}
-const pause = ms => new Promise(r => setTimeout(r, ms));
-async function playGag(card) {
-  const g = card.gag;
-  const st = $('stage');
-  st.hidden = false; st.innerHTML = gagSvg(g.kind); st.classList.add('gagging');
-  const box = $('gag'); box.hidden = false; box.innerHTML = '';
-  for (const l of g.lines) {
-    const p = document.createElement('p');
-    p.className = 'line gagline';
-    p.innerHTML = `<span class="who">${l.who}</span>${l.text}`;
-    box.appendChild(p);
-    const started = Date.now();
-    const ok = await speak([l.id], false);
-    if (!ok) await pause(Math.max(0, 1600 - (Date.now() - started)));
-  }
-  st.classList.remove('gagging');
+// Efecto de sonido para una elección equivocada: trombón triste sintetizado (no es voz ni TTS).
+function sadTrombone() {
+  return new Promise(resolve => {
+    try {
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      const ctx = new Ctx();
+      const notes = [[293.7, .28], [277.2, .28], [261.6, .28], [233.1, .9]];
+      let t = ctx.currentTime + .02;
+      notes.forEach(([f, d], i) => {
+        const o = ctx.createOscillator(), g = ctx.createGain(), lp = ctx.createBiquadFilter();
+        o.type = 'sawtooth'; o.frequency.setValueAtTime(f, t);
+        if (i === notes.length - 1) {
+          o.frequency.linearRampToValueAtTime(f * .9, t + d);
+          const v = ctx.createOscillator(), vg = ctx.createGain(); v.frequency.value = 6; vg.gain.value = 6; v.connect(vg); vg.connect(o.frequency); v.start(t); v.stop(t + d);
+        }
+        lp.type = 'lowpass'; lp.frequency.value = 900;
+        g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.22, t + .04); g.gain.setValueAtTime(.22, t + d - .06); g.gain.linearRampToValueAtTime(0, t + d);
+        o.connect(lp).connect(g).connect(ctx.destination);
+        o.start(t); o.stop(t + d + .02);
+        t += d + .04;
+      });
+      setTimeout(() => { ctx.close(); resolve(); }, (t - ctx.currentTime) * 1000 + 100);
+    } catch { resolve(); }
+  });
 }
 
 // ---- pasos ----
@@ -131,7 +123,7 @@ function showStep() {
   locked = false;
   stopAudio();
   setProgress();
-  $('reaction').hidden = true; $('gag').hidden = true; $('next').hidden = true; $('next').disabled = true;
+  $('reaction').hidden = true; $('next').hidden = true; $('next').disabled = true;
   const lines = stepLines(step);
   const q = $('question');
   q.innerHTML = lines.map(l => `<p class="line"><span class="who">${l.who === 'narr' ? '' : l.who}</span>${l.text}</p>`).join('');
@@ -182,7 +174,11 @@ async function choose(step, card, btn) {
   apply(card.fx);
   const next = $('next');
   next.hidden = false; next.disabled = true;
-  if (card.gag) await playGag(card);
+  if (card.kind === 'img' && !card.best) {
+    btn.classList.add('wrong');
+    if (card.name) btn.insertAdjacentHTML('beforeend', `<span class="pname">${card.name}</span>`);
+    await sadTrombone();
+  }
   renderStage(step);
   $('stage').classList.add('pop');
   setTimeout(() => $('stage').classList.remove('pop'), 600);

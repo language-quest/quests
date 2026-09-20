@@ -32,12 +32,10 @@ button{font:inherit;cursor:pointer}
 .jw{border-top:1px solid var(--line);padding:12px 0}.jw h3{font-family:Georgia,serif;margin:0 0 6px}.ju{margin:6px 0 8px 12px}.jc{font-weight:bold;margin:0}.jr{margin:2px 0;color:var(--muted)}
 details{margin-top:28px;border:1px solid var(--line);border-radius:10px;padding:10px 14px}
 dialog{border:0;border-radius:14px;padding:24px;max-width:360px}dialog::backdrop{background:rgba(0,0,0,.4)}dialog div{display:flex;gap:10px;margin-top:16px}
-#gag{background:#fff;border-left:5px solid #c9a24b;border-radius:8px;padding:6px 18px;margin:14px 0}
-.gagline{animation:rise .35s}@keyframes rise{from{opacity:0;transform:translateY(6px)}}
-.gdoor{animation:door 1.2s .5s both}@keyframes door{from{transform:translateX(90px)}to{transform:translateX(0)}}
-.gsweat{animation:shake .5s 4}@keyframes shake{25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
-.ghead{transform-box:fill-box;transform-origin:center;animation:turn 1s both}@keyframes turn{0%{transform:scaleX(-1)}60%{transform:scaleX(-1)}100%{transform:scaleX(1)}}
-.gagging svg{animation:none}
+.card-btn.wrong{border-color:#c05c32;box-shadow:0 0 0 3px rgba(192,92,50,.35);animation:nope .5s}
+.card-btn.wrong img{filter:saturate(.6) sepia(.25)}
+.pname{position:absolute;left:0;right:0;bottom:0;background:#c05c32;color:#fff;font-weight:bold;padding:8px 10px;text-align:center}
+@keyframes nope{20%{transform:translateX(-8px) rotate(-1.5deg)}40%{transform:translateX(8px) rotate(1.5deg)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
 @media(max-width:560px){.cards.imgs{grid-template-columns:1fr 1fr 1fr;gap:8px}.line{font-size:17px}.letter{font-size:13px}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style></head><body><div class="wrap">
@@ -54,7 +52,6 @@ dialog{border:0;border-radius:14px;padding:24px;max-width:360px}dialog::backdrop
 <div id="question" class="q" aria-live="polite"></div>
 <div class="tools"><button id="again" class="ghost" type="button">Volver a escuchar</button><button id="slow" class="ghost" type="button">Más despacio</button><span id="audio-note" class="note" role="status"></span></div>
 <div id="cards" class="cards"></div>
-<div id="gag" hidden></div>
 <div id="reaction" class="reaction" role="status" hidden></div>
 <button id="next" class="primary" type="button" hidden disabled>Continuar</button>
 </section>

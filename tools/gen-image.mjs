@@ -43,6 +43,8 @@ const model = flag("model", "fal-ai/flux/dev");
 const size = flag("size", "landscape_4_3");
 const seed = flag("seed", undefined);
 const n = Number(flag("n", "1"));
+const imageArg = flag("image", undefined); // референс: файл -> image_url (для правки и image-to-video)
+const duration = flag("duration", undefined);
 const [prompt, out] = args;
 
 if (!prompt || !out) {
@@ -55,7 +57,15 @@ if (!KEY) {
   process.exit(2);
 }
 
-const body = { prompt, image_size: size, num_images: n };
+const body = { prompt };
+if (imageArg) {
+  const mime = /\.jpe?g$/i.test(imageArg) ? "image/jpeg" : "image/png";
+  body.image_url = `data:${mime};base64,${readFileSync(resolve(imageArg)).toString("base64")}`;
+} else {
+  body.image_size = size;
+  body.num_images = n;
+}
+if (duration) body.duration = duration;
 if (seed !== undefined) body.seed = Number(seed);
 
 const res = await fetch(`https://fal.run/${model}`, {
@@ -68,7 +78,7 @@ if (!res.ok) {
   process.exit(1);
 }
 const data = await res.json();
-const images = data.images || [];
+const images = data.images || (data.image ? [data.image] : data.video ? [data.video] : []);
 if (!images.length) {
   console.error("fal не вернул картинок:", JSON.stringify(data).slice(0, 500));
   process.exit(1);
@@ -77,6 +87,7 @@ if (!images.length) {
 const target = resolve(out);
 mkdirSync(dirname(target), { recursive: true });
 const ext = extname(target) || ".png";
+if (data.cost !== undefined) console.log(`cost ${data.cost}`);
 const stem = target.slice(0, target.length - ext.length);
 for (const [i, img] of images.entries()) {
   const dest = images.length === 1 ? target : `${stem}-${i + 1}${ext}`;
