@@ -119,8 +119,15 @@ function sfx(good) {
 function stepLines(step) { return step.linesFn ? step.linesFn(state) : step.lines; }
 function setProgress() { $('progress').textContent = `${Math.min(idx + 1, STEPS.length)} / ${STEPS.length}`; }
 
-function showStep() {
+function setUrl(value, push) {
+  const url = `${location.pathname}?step=${value}`;
+  if (location.search === `?step=${value}`) return;
+  history[push ? 'pushState' : 'replaceState']({}, '', url);
+}
+
+function showStep(push = true) {
   const step = STEPS[idx];
+  if (push !== null) setUrl(step.id, push);
   locked = false;
   stopAudio();
   setProgress();
@@ -217,8 +224,9 @@ function usesFor(key) {
   }
   return out;
 }
-function showFinal() {
+function showFinal(push = true) {
   stopAudio();
+  setUrl('final', push);
   $('play').hidden = true; $('final').hidden = false;
   $('again').hidden = true; $('slow').hidden = true; $('audio-note').textContent = '';
   const msgId = state.mistakes ? FINAL.mixedId : FINAL.cleanId;
@@ -242,13 +250,13 @@ function showFinal() {
 $('final-listen').addEventListener('click', () => speak(current.ids, false));
 $('final-slow').addEventListener('click', () => speak(current.ids, true));
 
-function restart() {
+function restart(push = true) {
   stopAudio();
   idx = 0; state = freshState(); started = true;
   $('final').hidden = true; $('journal-wrap').hidden = true; $('start').hidden = true; $('play').hidden = false;
-  showStep();
+  showStep(push ? true : null);
 }
-$('replay').addEventListener('click', restart);
+$('replay').addEventListener('click', () => restart());
 $('begin').addEventListener('click', () => { restart(); });
 
 // vocabulario (único lugar con ruso)
@@ -257,6 +265,18 @@ $('vocab-list').innerHTML = TARGETS.map(t => `<li><b>${t.es}</b> — ${t.ru}</li
 setupQuestNavigation({ isInProgress: () => started, onLeave: stopAudio });
 state = freshState();
 preload();
-// ?step=s1 abre el quest directamente en ese paso (atajo para pruebas).
-const jump = STEPS.findIndex(st => st.id === new URLSearchParams(location.search).get('step'));
-if (jump > 0) preload().then(() => { restart(); idx = jump; showStep(); });
+// Cada paso tiene su URL: ?step=<id> o ?step=final. El estado se reinicia al entrar directo.
+function openFromUrl(push) {
+  const id = new URLSearchParams(location.search).get('step');
+  if (id === 'final') { restart(false); showFinal(false); return; }
+  const at = STEPS.findIndex(st => st.id === id);
+  if (at < 0) return;
+  restart(false); idx = at;
+  if (STEPS[idx].id === 's11a') state.newcomerSeen = true;
+  showStep(push);
+}
+if (new URLSearchParams(location.search).get('step')) preload().then(() => openFromUrl(false));
+addEventListener('popstate', () => {
+  if (new URLSearchParams(location.search).get('step')) openFromUrl(false);
+  else { stopAudio(); started = false; $('play').hidden = true; $('final').hidden = true; $('journal-wrap').hidden = true; $('start').hidden = false; }
+});
