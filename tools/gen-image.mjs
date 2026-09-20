@@ -9,6 +9,7 @@
  * Картинки сохраняются локально, ничего наружу не публикуется.
  * Промпт не должен просить текст внутри картинки (правило квестов).
  */
+import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, extname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -16,8 +17,12 @@ import { fileURLToPath } from "node:url";
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
 // Тот же разбор .env.local, что и в tools/slng-proxy.mjs; окружение приоритетнее файла.
-for (const f of [".env.local", ".env"]) {
-  const file = join(ROOT, f);
+// В worktree своего .env.local может не быть — берём из главного чекаута.
+const MAIN = (() => {
+  try { return dirname(resolve(ROOT, execFileSync("git", ["-C", ROOT, "rev-parse", "--git-common-dir"], { encoding: "utf8" }).trim())); }
+  catch { return ROOT; }
+})();
+for (const file of [join(ROOT, ".env.local"), join(MAIN, ".env.local"), join(ROOT, ".env"), join(MAIN, ".env")]) {
   if (!existsSync(file)) continue;
   for (const line of readFileSync(file, "utf8").split("\n")) {
     const m = line.match(/^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*?)\s*$/);
