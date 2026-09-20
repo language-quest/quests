@@ -1,0 +1,15 @@
+{
+  "id": "T-001",
+  "branch": "task/T-001",
+  "status": "dev-failed",
+  "round": 1,
+  "dev": {
+    "sessionId": "09967e65-5c80-46bd-9ba5-9855b8404679",
+    "rounds": 1,
+    "worktree": "/Users/andreyryazanov/Desktop/apps/language_quest/pm/worktrees/T-001-dev"
+  },
+  "qa": {
+    "sessionId": null,
+    "rounds": 0
+  }
+}
