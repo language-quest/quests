@@ -215,6 +215,8 @@
       "questionEs": "¿Qué le dices a Diego?",
       "kind": "choice",
       "options": [
+      "image": "diego/companero.jpg",
+      "video": "diego/companero.mp4",
       "image": "diego/companero.png",
       "video": "diego/companero.mp4",
         {
