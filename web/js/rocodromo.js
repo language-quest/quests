@@ -54,10 +54,19 @@ const voiceOf = (speakerId) => Q.voices?.[speakerId];
 /** Подпись идёт от говорящего: в сцене 2 отвечает не тот, кто задал вопрос. */
 const labelOf = (speakerId, fallback) => Q.speakerLabels?.[speakerId] ?? fallback ?? "";
 
+/**
+ * Только 1.0×. preservesPitch у <audio> включён по умолчанию, поэтому любой
+ * rate ≠ 1 гонит клип через тайм-стретчер браузера: на моно-24 кГц он даёт
+ * металлический призвук и смазывает согласные — сильнее всего на коротких
+ * словах и именах («Diego» на 0.95 звучал кривее всей остальной реплики).
+ * Заодно 0.95 разводило голос с роликом в сценах 1 и 2: видео идёт 1.0×,
+ * и к концу реплики Диего губы обгоняли голос на ~0.26 с.
+ * Медленного повтора в рокодромо нет — замедлять нечего, платить тембром не за что.
+ */
 function speak(text, speakerId, opts = {}) {
   if (!text) return;
   unlockAudio();
-  say(text, { voice: voiceOf(speakerId), rate: 0.95, ...opts });
+  say(text, { voice: voiceOf(speakerId), rate: 1, ...opts });
 }
 
 function showVoz() {
