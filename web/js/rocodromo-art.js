@@ -82,8 +82,89 @@ const personCarlos = (x, y, s = 1) =>
   `<path d="M${x + 14 * s} ${y + 24 * s} q${5 * s} ${4 * s} ${2 * s} ${9 * s}"
      stroke="#6b7d73" stroke-width="${2.4 * s}" fill="none" stroke-linecap="round"/>`;
 
+
+/* ---------------- Диего ---------------- */
+// Напарник-новичок: тёмные кудри, оранжевая футболка, тёмно-синие брюки, магнезийный мешок.
+// Силуэт не совпадает с Карлосом (бини + борода + чёрная куртка). Оранжевый не равен цвету
+// ни одной «правильной» карточки: секретная трасса зелёная, стена — красная.
+// Состояния лица: normal | pensativo | atento | contento.
+
+const DIEGO_SHIRT = "#f08a2e";
+const DIEGO_PANTS = "#243a5e";
+const CURL = "#2b1d16";
+const INK = "#1d2723";
+
+function diegoFace(x, y, s, state) {
+  const eye = (dx, r = 1.8) => `<circle cx="${x + dx * s}" cy="${y - 1 * s}" r="${r * s}" fill="${INK}"/>`;
+  const stroke = `stroke="${INK}" stroke-width="${1.6 * s}" stroke-linecap="round" fill="none"`;
+  if (state === "contento") {
+    return `<path d="M${x - 6.5 * s} ${y - 0.5 * s} q${2.5 * s} ${-3.5 * s} ${5 * s} 0 M${x + 1.5 * s} ${y - 0.5 * s} q${2.5 * s} ${-3.5 * s} ${5 * s} 0" ${stroke}/>
+      <path d="M${x - 5 * s} ${y + 3.5 * s} q${5 * s} ${7 * s} ${10 * s} 0Z" fill="#7a2f22" stroke="${INK}" stroke-width="${1.2 * s}" stroke-linejoin="round"/>`;
+  }
+  if (state === "pensativo") {
+    return `${eye(-4.5)}${eye(4.5)}
+      <path d="M${x - 8 * s} ${y - 5.5 * s} l${6 * s} ${-2 * s} M${x + 2 * s} ${y - 7 * s} l${6 * s} ${2 * s}" ${stroke}/>
+      <path d="M${x - 3 * s} ${y + 6 * s} q${3 * s} ${-2 * s} ${6 * s} ${0.6 * s}" ${stroke}/>`;
+  }
+  if (state === "atento") {
+    return `${eye(-4.5, 2.3)}${eye(4.5, 2.3)}
+      <path d="M${x - 8 * s} ${y - 6 * s} h${7 * s} M${x + 1 * s} ${y - 6 * s} h${7 * s}" ${stroke}/>
+      <path d="M${x - 2.5 * s} ${y + 5.5 * s} h${5 * s}" ${stroke}/>`;
+  }
+  return `${eye(-4.5)}${eye(4.5)}
+    <path d="M${x - 4.5 * s} ${y + 4 * s} q${4.5 * s} ${3.6 * s} ${9 * s} 0" ${stroke}/>`;
+}
+
+/** Кудри: гроздь кругов над лбом и у висков. */
+function diegoHead(x, y, s = 1, state = "normal") {
+  const c = (dx, dy, r) => `<circle cx="${x + dx * s}" cy="${y + dy * s}" r="${r * s}" fill="${CURL}"/>`;
+  return `<g>${c(-10, -6, 5.5)}${c(-5, -12, 6)}${c(2, -14, 6.5)}${c(9, -10, 6)}${c(12, -3, 4.5)}${c(-12, 1, 4)}
+    ${diegoFace(x, y, s, state)}</g>`;
+}
+
+/** Диего в рост: руки опущены, ничего и никуда не показывает. Мешок с магнезией на поясе. */
+function personDiego(x, y, s = 1, state = "normal") {
+  const p = (dx, dy) => `${x + dx * s} ${y + dy * s}`;
+  const limb = (d, color, w) => `<path d="${d}" fill="none" stroke="${color}" stroke-width="${w * s}" stroke-linecap="round"/>`;
+  return `<g>
+    ${limb(`M${p(-9, 48)} L${p(-12, 78)} M${p(9, 48)} L${p(12, 78)}`, DIEGO_PANTS, 9)}
+    ${limb(`M${p(-12, 20)} L${p(-27, 40)} M${p(12, 20)} L${p(27, 40)}`, SKIN[0], 6)}
+    <circle cx="${x}" cy="${y}" r="${11 * s}" fill="${SKIN[0]}"/>
+    <path d="M${p(-12, 15)} Q${p(0, 7)} ${p(12, 15)} L${p(15, 48)} H${x - 15 * s}Z" fill="${DIEGO_SHIRT}"/>
+    ${limb(`M${p(-12, 19)} L${p(-19, 29)} M${p(12, 19)} L${p(19, 29)}`, DIEGO_SHIRT, 9)}
+    <path d="M${p(-13, 44)} q${-6 * s} ${8 * s} ${1 * s} ${13 * s} q${8 * s} ${2 * s} ${10 * s} ${-7 * s}Z" fill="#e9e3d2" stroke="${INK}" stroke-width="${1.6 * s}"/>
+    ${diegoHead(x, y, s, state)}
+  </g>`;
+}
+
+/** Половина бумажной эмблемы. Без надписей и цветов ответов: только знак. */
+function emblemHalf(cx, cy, side, r = 34) {
+  const arc = side === "left" ? 0 : 1;
+  const k = side === "left" ? -1 : 1;
+  const zig = `L${k * -6} 22 L${k * 6} 8 L${k * -6} -6 L${k * 6} -20`;
+  const path = `M0 ${-r} A${r} ${r} 0 0 ${arc} 0 ${r} ${zig}Z`;
+  return `<g transform="translate(${cx} ${cy})" aria-hidden="true">
+    <path d="${path}" fill="${side === "left" ? "#26342c" : "#2f4237"}" stroke="${LIME}" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M${k * 9} -10 q${k * 8} 12 ${k * 2} 26" fill="none" stroke="${ROPE}" stroke-width="4" stroke-linecap="round"/>
+  </g>`;
+}
+
+const emblemWhole = (cx, cy, r = 34) => `<g aria-hidden="true">${emblemHalf(cx - 1, cy, "left", r)}${emblemHalf(cx + 1, cy, "right", r)}</g>`;
+
 /** Круглый портрет для реплики. Ключи: "avatar:recepcionista" | "avatar:carlos". */
-function avatarCard(who) {
+function diegoAvatar(state) {
+  return svg("0 0 96 96", `
+    <circle cx="48" cy="48" r="48" fill="#26342c"/>
+    <path d="M6 96 Q11 68 34 60 L62 60 Q85 68 90 96Z" fill="${SKIN[0]}"/>
+    <path d="M17 96 Q22 71 38 63 L48 76 L58 63 Q74 71 79 96Z" fill="${DIEGO_SHIRT}"/>
+    <rect x="41" y="52" width="14" height="14" fill="${SKIN[0]}"/>
+    <circle cx="48" cy="42" r="21" fill="${SKIN[0]}"/>
+    ${diegoHead(48, 42, 1.9, state)}
+  `, `Diego, ${{ normal: "con gesto tranquilo", pensativo: "pensativo", atento: "concentrado", contento: "contento" }[state] ?? "con gesto tranquilo"}`);
+}
+
+function avatarCard(who, state = "normal") {
+  if (who === "diego") return diegoAvatar(state);
   const carlos = who === "carlos";
   const skin = carlos ? SKIN[1] : SKIN[0];
   const head = carlos ? carlosHead(48, 42, 1.9) : recepHead(48, 42, 1.9);
@@ -101,7 +182,7 @@ function avatarCard(who) {
   `, carlos ? "Carlos, el entrenador" : "La recepcionista");
 }
 
-export const hasAvatar = (who) => who === "carlos" || who === "recepcionista";
+export const hasAvatar = (who) => who === "carlos" || who === "recepcionista" || who === "diego";
 
 /* ---------------- стены, вия, снаряжение ---------------- */
 
@@ -112,7 +193,7 @@ const holdsOn = (x, w, top, n, color, seed = 0) =>
     return `<path d="M${px - 8} ${py} q10 -15 21 0 q-5 13 -21 0" fill="${color}" opacity=".92"/>`;
   }).join("");
 
-function reception() {
+function reception(withDiego = false) {
   return svg("0 0 720 260", `
     <rect width="720" height="260" fill="#16201b"/>
     <rect width="720" height="74" fill="#0d1410"/>
@@ -124,7 +205,8 @@ function reception() {
     ${personRecep(360, 112, 1)}
     <rect x="196" y="172" width="330" height="88" rx="14" fill="#2a3a31"/>
     <rect x="196" y="171" width="330" height="12" rx="6" fill="#3f5447"/>
-  `, "La recepcionista en el mostrador del rocódromo");
+    ${withDiego ? `${personDiego(150, 122, 1)}${emblemHalf(184, 160, "right", 20)}` : ""}
+  `, withDiego ? "La recepcionista en el mostrador y Diego con media insignia" : "La recepcionista en el mostrador del rocódromo");
 }
 
 const WALL_COLORS = { amarilla: "#f2c53d", roja: "#ff5d45", azul: "#5eb8ff", verde: "#57d38c" };
@@ -242,7 +324,7 @@ function knotCard(kind) {
 
 /* ---------------- сцены на стене ---------------- */
 
-function climber(level) {
+function climber(level, withDiego = false) {
   const y = level === "high" ? 40 : 150;
   return svg("0 0 720 260", `
     <rect width="720" height="260" fill="#16201b"/>
@@ -254,11 +336,12 @@ function climber(level) {
     <path d="M362 0 V${y + 10}" stroke="#dfff4f" stroke-width="4"/>
     ${person(362, y, 1.1, "#5eb8ff")}
     ${personCarlos(600, 196, 0.9)}
+    ${withDiego ? personDiego(190, 176, 0.9, "atento") : ""}
     <path d="M362 ${y + 20} Q480 ${y + 120} 600 200" fill="none" stroke="#dfff4f" stroke-width="3" opacity=".8"/>
-  `, "Escalador en la vía, Carlos asegura desde abajo");
+  `, withDiego ? "Escalador en la vía, Carlos asegura y Diego mira desde abajo" : "Escalador en la vía, Carlos asegura desde abajo");
 }
 
-function belay() {
+function belay(withDiego = false) {
   return svg("0 0 720 240", `
     <rect width="720" height="240" fill="#16201b"/>
     <rect x="80" y="0" width="560" height="240" rx="8" fill="#26342c"/>
@@ -267,7 +350,22 @@ function belay() {
     ${personCarlos(470, 128, 1.1)}
     <path d="M300 148 Q385 210 470 156" fill="none" stroke="#dfff4f" stroke-width="4"/>
     <circle cx="300" cy="148" r="9" fill="none" stroke="#dfff4f" stroke-width="4"/>
-  `, "Carlos asegura al escalador desde abajo");
+    ${withDiego ? personDiego(590, 132, 1.05) : ""}
+  `, withDiego ? "Carlos con la cuerda; Diego espera a un lado" : "Carlos asegura al escalador desde abajo");
+}
+
+/** Final: jugador, Diego y Carlos; las dos mitades de la insignia ya forman una. */
+function finish() {
+  return svg("0 0 720 260", `
+    <rect width="720" height="260" fill="#16201b"/>
+    <rect x="80" y="0" width="560" height="260" rx="8" fill="#26342c"/>
+    ${holdsOn(80, 560, 0, 8, "#57d38c", 5)}
+    ${person(268, 138, 1.15, "#5eb8ff")}${face(268, 138, 1.15)}
+    ${personDiego(452, 138, 1.15, "contento")}
+    ${personCarlos(600, 168, 0.9)}
+    ${emblemWhole(360, 70, 40)}
+    <path d="M292 160 Q330 118 356 96 M428 160 Q392 118 364 96" fill="none" stroke="#e0ae85" stroke-width="8" stroke-linecap="round"/>
+  `, "El escalador, Diego y Carlos unen las dos mitades de la insignia");
 }
 
 function holdCard(side) {
@@ -283,23 +381,30 @@ function holdCard(side) {
 // Картинки сцены нет там, где карточки ответов показывают то же самое
 // (стены, вии, снаряжение, две презы) — см. README, «Что соблюдено буквально» §5.
 
-const SCENE = { reception, belay };
+const SCENE = {
+  reception, belay,
+  "reception-with-diego": () => reception(true),
+  "belay-with-diego": () => belay(true),
+  "finish-with-diego": finish,
+};
 
 /** `art(key)` → строка SVG. Ключи: "reception" | "wall:roja" | "knot:ocho" | "avatar:carlos" | … */
 export function art(key) {
   if (!key) return "";
   if (key.includes(":")) {
-    const [kind, value] = key.split(":");
+    const [kind, value, variant] = key.split(":");
     if (kind === "wall") return wallCard(value);
     if (kind === "route") return routeCard(value);
     if (kind === "gear") return gearOne(value);
     if (kind === "hold") return holdCard(value);
     if (kind === "knot") return knotCard(value);
-    if (kind === "avatar") return avatarCard(value);
+    if (kind === "avatar") return avatarCard(value, variant);
     return "";
   }
   if (key === "climb-low") return climber("low");
   if (key === "climb-high") return climber("high");
+  if (key === "climb-low-with-diego") return climber("low", true);
+  if (key === "climb-high-with-diego") return climber("high", true);
   if (key === "badge") return "";
   return SCENE[key] ? SCENE[key]() : "";
 }
