@@ -183,6 +183,22 @@ function speakBtn(text, speakerId) {
   return b;
 }
 
+/**
+ * Порядок карточек случайный на каждый заход в сцену: в авторском паке правильная
+ * картинка всегда стояла второй («B»), и пройти четыре сцены можно было не слушая.
+ * Буквы A/B/C выдаются по месту, а не по автору — иначе они бы ехали вместе
+ * с карточкой и по-прежнему выдавали ответ.
+ */
+function shuffled(options) {
+  const out = options.map((o) => ({ ...o }));
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  out.forEach((o, i) => { if (o.art && /^[A-C]$/.test(o.es ?? "")) o.es = "ABC"[i]; });
+  return out;
+}
+
 function artNode(value) {
   const span = document.createElement("span");
   span.className = "art";
@@ -296,7 +312,7 @@ function renderChoice(scene, S) {
   grid.className = "choices" + (S.options.length === 2 ? " two" : "");
   const byId = new Map();
 
-  for (const o of S.options) {
+  for (const o of shuffled(S.options)) {
     const b = document.createElement("button");
     // Либо картинка с нейтральной подписью, либо фраза без картинки (CLAUDE.md):
     // картинка рядом с фразой переводила бы её, и выбирать было бы нечего.
@@ -308,9 +324,11 @@ function renderChoice(scene, S) {
       strong.textContent = o.es;
       b.appendChild(strong);
     }
-    b.appendChild(speakBtn(o.sayEs ?? o.es, S.speaker));
+    // 🔊 и aria-label на картинной карточке произнесли бы её название вслух —
+    // это тот же перевод картинки, только звуком. Читаем лишь карточки-фразы.
+    if (!o.art) b.appendChild(speakBtn(o.es, S.speaker));
     b.onclick = () => choose(o.id);
-    b.setAttribute("aria-label", o.sayEs ?? o.es);
+    b.setAttribute("aria-label", o.art ? `Opción ${o.es}` : o.es);
     grid.appendChild(b);
     byId.set(o.id, { option: o, el: b });
   }
@@ -346,14 +364,13 @@ function renderMulti(scene, S) {
   grid.className = "choices gear";
   const byId = new Map();
 
-  for (const o of S.options) {
+  for (const o of shuffled(S.options)) {
     const b = document.createElement("button");
     b.className = "choice";
     b.type = "button";
     b.setAttribute("aria-pressed", "false");
-    b.setAttribute("aria-label", o.sayEs);
+    b.setAttribute("aria-label", "Objeto");
     b.appendChild(artNode(o.art));
-    b.appendChild(speakBtn(o.sayEs, S.speaker));
     b.onclick = () => toggle(o.id);
     grid.appendChild(b);
     byId.set(o.id, b);
