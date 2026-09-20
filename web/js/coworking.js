@@ -260,3 +260,6 @@ $('vocab-list').innerHTML = TARGETS.map(t => `<li><b>${t.es}</b> — ${t.ru}</li
 setupQuestNavigation({ isInProgress: () => started, onLeave: stopAudio });
 state = freshState();
 preload();
+// ?step=s1 abre el quest directamente en ese paso (atajo para pruebas).
+const jump = STEPS.findIndex(st => st.id === new URLSearchParams(location.search).get('step'));
+if (jump > 0) preload().then(() => { restart(); idx = jump; showStep(); });
