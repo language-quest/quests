@@ -9,7 +9,7 @@ export function normalize(s) {
     .toLowerCase()
     .normalize("NFD")
     .replace(/[̀-ͯ]/g, "")
-    .replace(/[¿?¡!.,;:]/g, " ")
+    .replace(/[¿?¡!.,;:«»„“”…—–"']/g, " ")
     .replace(/\s+/g, " ")
     .trim();
 }
@@ -29,10 +29,10 @@ function levenshtein(a, b) {
   return prev[n];
 }
 
-const words = (s) => normalize(s).split(" ").filter(Boolean);
+export const words = (s) => normalize(s).split(" ").filter(Boolean);
 
 // Артикли внутри фразы не мешают: «con la cuerda» = «con cuerda». Убираем с обеих сторон.
-const ARTICLES = new Set(["el","la","los","las","un","una"]);
+export const ARTICLES = new Set(["el","la","los","las","un","una"]);
 const noArticles = (ws) => { const r = ws.filter((w) => !ARTICLES.has(w)); return r.length ? r : ws; };
 
 /**
@@ -58,6 +58,23 @@ function wordSim(a, b) {
 }
 const WORD_MIN = 0.82;   // "despasio"~"despacio" = 0.875 проходит, "espacio" = 0.75 нет
 
+// Общая основа: «buscar» и «buscamos» — одно слово в разных лицах, wordSim их не роднит
+// (0.63). Пяти звуков хватает, чтобы спряжение совпало, а «solo»/«sola» не слиплись.
+const STEM_MIN = 5;
+const sameFamily = (a, b) =>
+  wordSim(a, b) >= WORD_MIN ||
+  (Math.min(a.length, b.length) >= STEM_MIN &&
+    phon(a).slice(0, STEM_MIN) === phon(b).slice(0, STEM_MIN));
+
+/** Словарь варианта: все слова всех его шаблонов. Строится из тех же данных, что и гейт. */
+function vocabularies(speechFunctions) {
+  return Object.fromEntries(Object.entries(speechFunctions).map(([fn, def]) => {
+    const set = new Set();
+    for (const raw of def.accept) for (const w of words(raw)) set.add(w);
+    return [fn, [...set]];
+  }));
+}
+
 // Вежливые добавления и обёртки просьбы — допустимы как остаток.
 const FILLERS = new Set(["por","favor","porfavor","puedes","podrias","puede","podria","me","lo","la",
   "un","una","poco","perdona","perdon","oye","ahora","si","vale","pues","eh","que","a","el","tu",
@@ -69,20 +86,46 @@ const MARKERS = new Set(["puedes","podrias","puede","podria","te","le","favor","
 const IMPERATIVE = new Set(["repite","repites","repitelo","habla","hablas","di","dime","dilo"]);
 const NEGATIONS = new Set(["no","nunca","tampoco","nada"]);
 
-/** Ищет шаблон как непрерывную последовательность слов. */
-function findPattern(toks, pat) {
+// Сколько бесплатных слов разрешено вставить внутрь шаблона: «dame un poco más de
+// cuerda» — это три вставки между «dame» и «cuerda». Больше — фраза уже не про шаблон,
+// а про что-то своё, куда его слова попали случайно.
+const GAP_MAX = 3;
+
+/**
+ * Ищет шаблон в распознанном.
+ *
+ * Три попытки, в порядке убывающей строгости; первая же удача выигрывает, поэтому
+ * точное совпадение всегда предпочтительнее натянутого.
+ *   1. непрерывная последовательность слов;
+ *   2. однословный шаблон, разрезанный ASR пополам («bul der» = «bulder»);
+ *   3. последовательность с разрывами, но разорвать её могут ТОЛЬКО бесплатные слова —
+ *      вежливость, обращения и собственный словарь варианта (isFree). Отрицания
+ *      бесплатными не бывают, иначе «no» уехало бы внутрь окна мимо проверки C.
+ */
+function findPattern(toks, pat, isFree) {
   for (let i = 0; i + pat.length <= toks.length; i++) {
     let ok = true;
     for (let j = 0; j < pat.length; j++) {
       if (wordSim(toks[i + j], pat[j]) < WORD_MIN) { ok = false; break; }
     }
-    if (ok) return { at: i, len: pat.length };
+    if (ok) return { at: i, len: pat.length, gaps: 0 };
   }
   // ASR режет длинное слово пополам: «bul der» = «bulder». Только для однословных шаблонов.
   if (pat.length === 1 && pat[0].length >= 5) {
     for (let i = 0; i + 1 < toks.length; i++) {
-      if (wordSim(toks[i] + toks[i + 1], pat[0]) >= WORD_MIN) return { at: i, len: 2 };
+      if (wordSim(toks[i] + toks[i + 1], pat[0]) >= WORD_MIN) return { at: i, len: 2, gaps: 0 };
     }
+  }
+  if (pat.length < 2 || !isFree) return null;
+  for (let i = 0; i < toks.length; i++) {
+    if (wordSim(toks[i], pat[0]) < WORD_MIN) continue;
+    let j = 1, k = i + 1, gaps = 0;
+    while (j < pat.length && k < toks.length) {
+      if (wordSim(toks[k], pat[j]) >= WORD_MIN) { j++; k++; continue; }
+      if (gaps >= GAP_MAX || !isFree(toks[k])) break;
+      gaps++; k++;
+    }
+    if (j === pat.length) return { at: i, len: k - i, gaps };
   }
   return null;
 }
@@ -98,7 +141,12 @@ function findPattern(toks, pat) {
  *   C. отрицание допустимо только у шаблонов, которые сами отрицательные
  *      ("no te oigo", "no entiendo").
  *
- * @returns {{fn:string, score:number}|null}
+ * Посторонним считается только слово, чужое варианту. Игрок свободно пересобирает
+ * его собственные формулы: «sí por supuesto vamos a buscar juntos» — это «sí por
+ * supuesto» плюс слова из соседних шаблонов того же варианта, а не три лишних слова.
+ * Бюджет в одно постороннее слово остаётся: он и отделяет вариант от вариантов-соседей.
+ *
+ * @returns {{fn:string, score:number, matched:string[], pattern:string, strays:string[]}|null}
  */
 export function matchIntent(transcript, speechFunctions, lex = {}) {
   const toks = noArticles(words(transcript));
@@ -107,13 +155,20 @@ export function matchIntent(transcript, speechFunctions, lex = {}) {
   const fillers = ext(FILLERS, lex.fillers);
   // Обращение по имени — само по себе адресация: «Más alto, Lolo».
   const markers = ext(MARKERS, [...(lex.markers ?? []), ...(lex.vocatives ?? [])]);
+  const vocab = vocabularies(speechFunctions);
 
   let best = null;
   for (const [fn, def] of Object.entries(speechFunctions)) {
+    const own = vocab[fn];
+    // Бесплатное слово: вежливость, обращение или слово из словаря самого варианта.
+    const isFree = (w) => fillers.has(w) || markers.has(w) || own.some((v) => sameFamily(w, v));
+    // Внутрь шаблона отрицание не пускаем ни под каким видом: «nada» числится и вежливым
+    // остатком, и отрицанием, а спрятавшись в окне оно проскочило бы мимо проверки C.
+    const isGapFree = (w) => !NEGATIONS.has(w) && isFree(w);
     for (const raw of def.accept) {
       const pat = noArticles(words(raw));
       if (!pat.length) continue;
-      const found = findPattern(toks, pat);
+      const found = findPattern(toks, pat, isGapFree);
       if (!found) continue;
 
       const patIsNegative = NEGATIONS.has(pat[0]);
@@ -122,8 +177,9 @@ export function matchIntent(transcript, speechFunctions, lex = {}) {
       // C. отрицание вне отрицательного шаблона
       if (!patIsNegative && rest.some((w) => NEGATIONS.has(w))) continue;
 
-      // остаток: вежливые слова и обращения бесплатны, одно постороннее прощаем (ошибки ASR)
-      const strays = rest.filter((w) => !fillers.has(w) && !markers.has(w));
+      // остаток: вежливые слова, обращения и собственный словарь варианта бесплатны,
+      // одно постороннее прощаем (ошибки ASR)
+      const strays = rest.filter((w) => !isFree(w));
 
       // B. обращение к собеседнику
       const addressed = strays.length === 0
@@ -133,13 +189,24 @@ export function matchIntent(transcript, speechFunctions, lex = {}) {
 
       if (strays.length > 1) continue;
 
+      // При равном счёте выигрывает длинный шаблон, а при равной длине — тот, что лёг
+      // без разрывов: натянутое совпадение не должно перебивать точное.
       const score = (pat.length + 1) / (pat.length + 1 + strays.length);
-      if (!best || score > best.score || (score === best.score && pat.length > best.len)) {
-        best = { fn, score, len: pat.length };
+      const better = !best || score > best.score
+        || (score === best.score && pat.length > best.len)
+        || (score === best.score && pat.length === best.len && found.gaps < best.gaps);
+      if (better) {
+        // matched — токены ИЗ РАСПОЗНАННОГО, которые совпали с шаблоном; pattern — сам
+        // авторский шаблон. Оба нужны словарю: когда ASR выдал мусор («bullber»),
+        // засчитать слово можно по шаблону, а когда шаблон длинный — по токенам.
+        best = { fn, score, len: pat.length, pattern: raw, gaps: found.gaps,
+                 matched: toks.slice(found.at, found.at + found.len), strays };
       }
     }
   }
-  return best ? { fn: best.fn, score: best.score } : null;
+  return best
+    ? { fn: best.fn, score: best.score, matched: best.matched, pattern: best.pattern, strays: best.strays }
+    : null;
 }
 
 /** Щадящее сравнение детского слова: совпадение по началу или близость. */

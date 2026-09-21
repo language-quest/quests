@@ -63,6 +63,19 @@ const cases = [
   ["Rita sube al árbol", null],
   ["El agua suena muy fuerte aquí", null],
   ["La abuela vive lejos", null],
+
+  // --- две собственные формулы подряд: словарь варианта не штрафуется ---
+  ["No te oigo, habla más alto", "louder"],
+  ["No entiendo, habla más despacio", "slower"],
+  ["No te oigo, el agua suena fuerte", null],   // чужие слова по-прежнему отказ
+
+  // --- шаблон, разорванный бесплатными словами ---
+  ["Habla un poco más alto, por favor", "louder"],
+  ["¿Puedes hablar un poquito más despacio?", "slower"],
+  ["repite eso otra vez", "repeat"],
+  ["El árbol es más alto que la casa", null],   // разрыв чужими словами не считается
+  ["habla con el lobo más tarde", null],
+  ["más alto está el árbol", null],
 ];
 
 let pass = 0, fail = 0;

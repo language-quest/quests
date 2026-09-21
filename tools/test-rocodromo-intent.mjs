@@ -60,6 +60,23 @@ const cases = [
   ["companero", "Diego", null],
   ["companero", "vamos a casa", null],
   ["companero", "no lo sé", null],
+  // собственный словарь варианта бесплатен: игрок пересобирает его формулы как хочет
+  ["companero", "sí por supuesto vamos a buscar juntos", "juntos"],
+  ["companero", "vamos a buscar juntos", "juntos"],
+  ["companero", "claro, vamos a buscar la ruta juntos", "juntos"],
+  ["companero", "vamos juntos o prefieres ir solo", null],   // чужой вариант в остатке — выбора нет
+  ["turno", "me toca a mí primero", "me-toca"],
+  ["turno", "creo que te toca a ti primero", "te-toca"],
+  ["recepcion", "hola quiero escalar con cuerda por primera vez", "cuerda"],
+  // шаблон, разорванный бесплатными словами: «dame … cuerda» — всё ещё просьба
+  ["escalar", "dame un poco más de cuerda por favor", "dame"],
+  ["escalar", "dame por favor la cuerda", "dame"],
+  ["descanso", "pilla la cuerda que necesito descansar", "pilla2"],
+  ["equipo", "necesito los pies de gato ahora", "gato"],
+  ["recepcion", "quiero escalar hoy con cuerda", "cuerda"],
+  ["movimiento", "la presa que está a la izquierda", "izquierda"],
+  ["recepcion", "me gusta escalar", null],                   // разрыв не создаёт совпадений из ничего
+  ["ayuda-diego", "cuerda", null],
 
   // 8 · чья очередь: me toca ≠ te toca
   ["turno", "me toca primero", "me-toca"],
