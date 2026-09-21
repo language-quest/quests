@@ -77,6 +77,11 @@ const cases = [
   ["movimiento", "la presa que está a la izquierda", "izquierda"],
   ["recepcion", "me gusta escalar", null],                   // разрыв не создаёт совпадений из ничего
   ["ayuda-diego", "cuerda", null],
+  // артикль перед подлежащим не должен мешать существительным-маркерам пака
+  ["entrenador", "voy a la pared", "pared"],
+  ["movimiento", "la mano izquierda", "izquierda"],
+  ["escalar", "dame la cuerda", "dame"],
+  ["ayuda-diego", "Diego, dame cuerda", "dame-diego"],
 
   // 8 · чья очередь: me toca ≠ te toca
   ["turno", "me toca primero", "me-toca"],

@@ -35,6 +35,23 @@ export const words = (s) => normalize(s).split(" ").filter(Boolean);
 export const ARTICLES = new Set(["el","la","los","las","un","una"]);
 const noArticles = (ws) => { const r = ws.filter((w) => !ARTICLES.has(w)); return r.length ? r : ws; };
 
+// Определённый артикль выдаёт подлежащее: «el lobo» — это волк, о котором речь,
+// а «lobo» без артикля — тот, к кому обращаются. Неопределённый такой силы не имеет,
+// иначе «un poco más alto» лишилось бы своего «poco».
+const DEFINITE = new Set(["el","la","los","las"]);
+
+/** Слова без артиклей плюс отметка «перед этим словом стоял определённый артикль». */
+function tokenize(s) {
+  const raw = words(s);
+  const toks = [], articled = [];
+  let def = false;
+  for (const w of raw) {
+    if (ARTICLES.has(w)) { def ||= DEFINITE.has(w); continue; }
+    toks.push(w); articled.push(def); def = false;
+  }
+  return toks.length ? { toks, articled } : { toks: raw, articled: raw.map(() => false) };
+}
+
 /**
  * Фонетический ключ: ASR путает не буквы, а звуки («bulder» → «bullber»).
  * Двойные буквы, b/v, h, k/qu/c, z/c/s, g/j сводятся к одному представителю.
@@ -122,7 +139,7 @@ function findPattern(toks, pat, isFree) {
     let j = 1, k = i + 1, gaps = 0;
     while (j < pat.length && k < toks.length) {
       if (wordSim(toks[k], pat[j]) >= WORD_MIN) { j++; k++; continue; }
-      if (gaps >= GAP_MAX || !isFree(toks[k])) break;
+      if (gaps >= GAP_MAX || !isFree(toks[k], k)) break;
       gaps++; k++;
     }
     if (j === pat.length) return { at: i, len: k - i, gaps };
@@ -139,7 +156,10 @@ function findPattern(toks, pat, isFree) {
  *   B. фраза обращена к собеседнику — есть маркер, либо шаблон сам императив,
  *      либо во фразе нет ничего, кроме шаблона и вежливых слов;
  *   C. отрицание допустимо только у шаблонов, которые сами отрицательные
- *      ("no te oigo", "no entiendo").
+ *      ("no te oigo", "no entiendo");
+ *   D. глагол, перед которым стоит подлежащее с определённым артиклем, — это третье
+ *      лицо, а не императив: «el lobo habla más alto» рассказывает о волке, а не
+ *      просит говорить громче. Там же и обращение теряет силу: «el lobo» — не оклик.
  *
  * Посторонним считается только слово, чужое варианту. Игрок свободно пересобирает
  * его собственные формулы: «sí por supuesto vamos a buscar juntos» — это «sí por
@@ -149,42 +169,61 @@ function findPattern(toks, pat, isFree) {
  * @returns {{fn:string, score:number, matched:string[], pattern:string, strays:string[]}|null}
  */
 export function matchIntent(transcript, speechFunctions, lex = {}) {
-  const toks = noArticles(words(transcript));
+  const { toks, articled } = tokenize(transcript);
   if (!toks.length) return null;
   const ext = (base, extra) => (extra?.length ? new Set([...base, ...extra.map((w) => normalize(w))]) : base);
   const fillers = ext(FILLERS, lex.fillers);
   // Обращение по имени — само по себе адресация: «Más alto, Lolo».
   const markers = ext(MARKERS, [...(lex.markers ?? []), ...(lex.vocatives ?? [])]);
+  const vocatives = new Set((lex.vocatives ?? []).map((w) => normalize(w)));
+  /**
+   * D. Обращается ли слово к собеседнику на самом деле.
+   * Оклик — без артикля: «Lolo, más alto», но «el lobo» — это волк, о котором речь.
+   * Глагол — без подлежащего перед ним: «habla más alto» просит, «el lobo habla más
+   * alto» рассказывает. Про подлежащее спрашиваем только у глаголов: в паках маркерами
+   * записаны и существительные («la pared roja»), у них артикль ничего не меняет.
+   * Слово, не прошедшее проверку, теряет силу дважды: и как признак адресации,
+   * и как бесплатная добавка к остатку.
+   */
+  const addresses = (w, i) =>
+    markers.has(w) && (vocatives.has(w)
+      ? !articled[i]
+      : !(IMPERATIVE.has(w) && i > 0 && articled[i - 1]));
   const vocab = vocabularies(speechFunctions);
 
   let best = null;
   for (const [fn, def] of Object.entries(speechFunctions)) {
     const own = vocab[fn];
     // Бесплатное слово: вежливость, обращение или слово из словаря самого варианта.
-    const isFree = (w) => fillers.has(w) || markers.has(w) || own.some((v) => sameFamily(w, v));
+    const isFree = (w, i) =>
+      fillers.has(w) || addresses(w, i) || own.some((v) => sameFamily(w, v));
     // Внутрь шаблона отрицание не пускаем ни под каким видом: «nada» числится и вежливым
     // остатком, и отрицанием, а спрятавшись в окне оно проскочило бы мимо проверки C.
-    const isGapFree = (w) => !NEGATIONS.has(w) && isFree(w);
+    const isGapFree = (w, i) => !NEGATIONS.has(w) && isFree(w, i);
     for (const raw of def.accept) {
       const pat = noArticles(words(raw));
       if (!pat.length) continue;
       const found = findPattern(toks, pat, isGapFree);
       if (!found) continue;
 
+      // D. «el lobo habla» — подлежащее плюс глагол, то есть третье лицо. Просьбу так
+      // не строят: перед императивом стоит либо ничего, либо оклик без артикля.
+      if (IMPERATIVE.has(pat[0]) && found.at > 0 && articled[found.at - 1]) continue;
+
       const patIsNegative = NEGATIONS.has(pat[0]);
-      const rest = toks.filter((_, i) => i < found.at || i >= found.at + found.len);
+      const rest = toks.map((w, i) => [w, i]).filter(([, i]) => i < found.at || i >= found.at + found.len);
 
       // C. отрицание вне отрицательного шаблона
-      if (!patIsNegative && rest.some((w) => NEGATIONS.has(w))) continue;
+      if (!patIsNegative && rest.some(([w]) => NEGATIONS.has(w))) continue;
 
       // остаток: вежливые слова, обращения и собственный словарь варианта бесплатны,
       // одно постороннее прощаем (ошибки ASR)
-      const strays = rest.filter((w) => !isFree(w));
+      const strays = rest.filter(([w, i]) => !isFree(w, i)).map(([w]) => w);
 
       // B. обращение к собеседнику
       const addressed = strays.length === 0
         || pat.some((w) => IMPERATIVE.has(w))
-        || toks.some((w) => markers.has(w));
+        || toks.some((w, i) => addresses(w, i));
       if (!addressed) continue;
 
       if (strays.length > 1) continue;

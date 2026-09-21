@@ -76,6 +76,16 @@ const cases = [
   ["El árbol es más alto que la casa", null],   // разрыв чужими словами не считается
   ["habla con el lobo más tarde", null],
   ["más alto está el árbol", null],
+
+  // --- третье лицо против императива: решает артикль перед подлежащим ---
+  ["el lobo habla más alto que el árbol", null],
+  ["el lobo habla más alto", null],
+  ["la abuela habla más despacio", null],
+  ["el búho repite otra vez", null],
+  ["Lolo, habla más alto", "louder"],           // оклик без артикля — просьба
+  ["habla más alto, lobo", "louder"],
+  ["lobo, repite por favor", "repeat"],
+  ["abuela, repite por favor", "repeat"],
 ];
 
 let pass = 0, fail = 0;
