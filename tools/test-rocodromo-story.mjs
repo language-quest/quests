@@ -4,7 +4,8 @@
 // ошибки, перемешивание карточек) проверяется в браузере — см. tools/rocodromo-browser-check.js.
 // Запуск из корня проекта: node tools/test-rocodromo-story.mjs
 
-import { readFileSync } from "node:fs";
+import { readFileSync, existsSync } from "node:fs";
+import { resolve } from "node:path";
 import { art, isArtKey, hasAvatar } from "../web/js/rocodromo-art.js";
 import { normalize } from "../web/js/engine.js";
 
@@ -61,8 +62,22 @@ for (const s of q.scenes) {
   for (const k of [s.art, s.artOnSuccess]) if (k) artRefs.push([s.id, k]);
   for (const o of s.options ?? []) if (o.art) artRefs.push([`${s.id}/${o.id}`, o.art]);
 }
+// Арт бывает двух видов: инлайновый SVG и растровый ключ «img:» — для него
+// rocodromo-art.js отдаёт <img src> с путём относительно web/ (оттуда грузится
+// страница). Для растрового проверяем ещё и файл на диске: путь в арт-модуле
+// легко разъезжается с assets/.
+function artExists(key) {
+  if (!isArtKey(key)) return [false, "ключ не распознан как арт"];
+  const html = art(key);
+  if (html.startsWith("<svg")) return [true, ""];
+  const src = html.match(/^<img\s[^>]*src="([^"]+)"/)?.[1];
+  if (!src) return [false, `арт не SVG и не <img>: ${html.slice(0, 60) || "пусто"}`];
+  const file = resolve("web", src);
+  return [existsSync(file), `нет файла ${file}`];
+}
 for (const [where, key] of artRefs) {
-  check(`арт «${key}» (${where}) существует`, isArtKey(key) && art(key).startsWith("<svg"));
+  const [ok, detail] = artExists(key);
+  check(`арт «${key}» (${where}) существует`, ok, detail);
 }
 for (const key of ["reception-with-diego", "belay-with-diego", "climb-high-with-diego", "finish-with-diego"]) {
   check(`сюжетная композиция «${key}» есть в паке`, artRefs.some(([, k]) => k === key));
